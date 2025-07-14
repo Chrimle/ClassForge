@@ -78,10 +78,18 @@
         <maven-javadoc-plugin.version>3.11.2</maven-javadoc-plugin.version>
         <central-publishing-maven-plugin.version>0.7.0</central-publishing-maven-plugin.version>
         <!-- === Dependency Versions === -->
+        <junit-jupiter.version>5.12.2</junit-jupiter.version>
     </properties>
 
     <!-- === Dependencies === -->
-    <dependencies/>
+    <dependencies>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit-jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
     <!-- === Build Plugins === -->
     <build>
