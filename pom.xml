@@ -11,7 +11,6 @@
     <packaging>jar</packaging>
 
     <!-- === Project Metadata === -->
-    <!-- TODO: Update accordingly -->
     <name>ClassForge</name>
     <description>Forge Java Classes!</description>
     <url>https://chrimle.github.io/ClassForge</url>
