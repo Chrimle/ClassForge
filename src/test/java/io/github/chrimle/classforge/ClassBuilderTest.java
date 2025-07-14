@@ -33,11 +33,14 @@ class ClassBuilderTest {
     @ParameterizedTest
     @NullSource
     void testInvalidValues(final String absolutePathPrefix) {
-      assertThrows(
-          NullPointerException.class,
-          () ->
-              new ClassBuilder(absolutePathPrefix, PACKAGE_NAME, "TestInvalidAbsolutePathPrefix")
-                  .build());
+      final var exception =
+          assertThrows(
+              IllegalArgumentException.class,
+              () ->
+                  new ClassBuilder(
+                          absolutePathPrefix, PACKAGE_NAME, "TestInvalidAbsolutePathPrefix")
+                      .build());
+      assertEquals("`absolutePathPrefix` MUST NOT be `null`!", exception.getMessage());
     }
   }
 }
