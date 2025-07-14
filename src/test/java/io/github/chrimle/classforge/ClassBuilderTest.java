@@ -5,7 +5,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import io.github.chrimle.classforge.test.utils.DynamicClassLoader;
 import io.github.chrimle.classforge.test.utils.JavaSourceCompiler;
 import java.nio.file.Path;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullSource;
 
 class ClassBuilderTest {
 
@@ -22,5 +25,19 @@ class ClassBuilderTest {
 
     final Class<?> clazz = DynamicClassLoader.loadClass(outputDir, PACKAGE_NAME + ".ClassName");
     assertNotNull(clazz);
+  }
+
+  @Nested
+  class AbsolutePathPrefixTests {
+
+    @ParameterizedTest
+    @NullSource
+    void testInvalidValues(final String absolutePathPrefix) {
+      assertThrows(
+          NullPointerException.class,
+          () ->
+              new ClassBuilder(absolutePathPrefix, PACKAGE_NAME, "TestInvalidAbsolutePathPrefix")
+                  .build());
+    }
   }
 }

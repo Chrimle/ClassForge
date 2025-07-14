@@ -1,6 +1,8 @@
 package io.github.chrimle.classforge;
 
 import io.github.chrimle.classforge.utils.FileWriter;
+import java.util.Objects;
+import java.util.Optional;
 
 public final class ClassBuilder {
 
@@ -11,10 +13,12 @@ public final class ClassBuilder {
 
   public ClassBuilder(
       final String absolutePathPrefix, final String packageName, final String className) {
-    this.absolutePathPrefix = absolutePathPrefix;
+    this.absolutePathPrefix =
+        Objects.requireNonNull(absolutePathPrefix, "`absolutePathPrefix` MUST NOT be `null`!");
     this.packageName = packageName;
     this.className = className;
-    this.fullyQualifiedClassName = String.join(".", packageName, className);
+    this.fullyQualifiedClassName =
+        Optional.ofNullable(packageName).map(p -> String.join(".", p, className)).orElse(className);
   }
 
   public void build() {
