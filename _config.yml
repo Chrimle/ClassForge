@@ -1,5 +1,4 @@
-remote_theme: pages-themes/cayman@v0.2.0 # TODO: Update with another theme if desired
+remote_theme: pages-themes/cayman@v0.2.0
 
-# TODO: Update the following with the repository details!
-title: Ultimate Maven Repository
-description: The Ultimate Maven Repository Template for your GitHub projects!
+title: ClassForge
+description: Forge Java Classes!

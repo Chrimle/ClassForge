@@ -20,14 +20,14 @@ jobs:
     - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
-        java-version: '17' # TODO: Update accordingly
+        java-version: '17'
         distribution: 'temurin'
 
     - name: Build with Maven
       run: mvn -B package --file pom.xml
 
     - name: Publish to GitHub Packages Apache Maven
-      run: mvn deploy #-Djacoco.skip=true # TODO: Update accordingly, if using Jacoco.
+      run: mvn deploy -Djacoco.skip=true
       env:
         GITHUB_TOKEN: ${{ github.token }}
 
@@ -35,16 +35,16 @@ jobs:
       uses: actions/setup-java@v4
       with: # running setup-java again overwrites the settings.xml
         distribution: 'temurin'
-        java-version: '17' # TODO: Update accordingly
+        java-version: '17'
         server-id: central
         server-username: MAVEN_USERNAME # env variable for username in deploy
         server-password: MAVEN_CENTRAL_TOKEN # env variable for token in deploy
-        gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }} # Value of the GPG private key to import. TODO: Set this in GitHub Secrets!
+        gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }} # Value of the GPG private key to import.
         gpg-passphrase: MAVEN_GPG_PASSPHRASE # env variable for GPG private key passphrase
 
     - name: Publish to Apache Maven Central
-      run: mvn -P deploy-to-maven-central deploy #-Djacoco.skip=true # TODO: Update accordingly, if using Jacoco.
+      run: mvn -P deploy-to-maven-central deploy -Djacoco.skip=true
       env:
-        MAVEN_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }} # TODO: Set this in GitHub Secrets!
-        MAVEN_CENTRAL_TOKEN: ${{ secrets.MAVEN_CENTRAL_PASSWORD }} # TODO: Set this in GitHub Secrets!
-        MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }} # TODO: Set this in GitHub Secrets!
+        MAVEN_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+        MAVEN_CENTRAL_TOKEN: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+        MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
