@@ -21,6 +21,7 @@ public final class ClassBuilder {
                 () -> new IllegalArgumentException("`absolutePathPrefix` MUST NOT be `null`!"));
 
     if (Optional.ofNullable(packageName)
+        .filter(pN -> !pN.isBlank())
         .filter(pN -> !pN.matches(PACKAGE_NAME_REGEX))
         .isPresent()) {
       throw new IllegalArgumentException(
