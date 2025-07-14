@@ -15,6 +15,9 @@ changelog:
     - title: Bug Fixes
       labels:
         - bug
+    - title: JavaDoc Changes
+      labels:
+        - javadoc
     - title: Dependency Updates
       labels:
         - dependencies
