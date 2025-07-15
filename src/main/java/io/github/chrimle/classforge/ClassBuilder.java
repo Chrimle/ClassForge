@@ -65,18 +65,27 @@ public final class ClassBuilder {
   public static final String CLASS_NAME_REGEX = "^[A-Z][A-Za-z_0-9]*$";
   public static final String PACKAGE_NAME_REGEX = "^[A-Za-z_0-9]+(\\.[A-Za-z_0-9]+)*$";
   private final Set<String> reservedClassNames = new HashSet<>();
-  private final String absolutePathPrefix;
-  private final String packageName;
+  private String absolutePathPrefix;
+  private String packageName;
   private String className;
 
   public ClassBuilder(
       final String absolutePathPrefix, final String packageName, final String className) {
 
+    updateAbsolutePathPrefix(absolutePathPrefix);
+    updatePackageName(packageName);
+    updateClassName(className);
+  }
+
+  private ClassBuilder updateAbsolutePathPrefix(final String absolutePathPrefix) {
     this.absolutePathPrefix =
         Optional.ofNullable(absolutePathPrefix)
             .orElseThrow(
                 () -> new IllegalArgumentException("`absolutePathPrefix` MUST NOT be `null`!"));
+    return this;
+  }
 
+  public ClassBuilder updatePackageName(final String packageName) {
     if (Optional.ofNullable(packageName)
         .filter(pN -> !pN.isBlank())
         .filter(pN -> !pN.matches(PACKAGE_NAME_REGEX))
@@ -85,14 +94,7 @@ public final class ClassBuilder {
           "`packageName` MUST match the RegEx: " + PACKAGE_NAME_REGEX);
     }
     this.packageName = packageName;
-
-    updateClassName(className);
-  }
-
-  private String getFullyQualifiedClassName() {
-    return Optional.ofNullable(packageName)
-        .map(pN -> String.join(".", pN, className))
-        .orElse(className);
+    return this;
   }
 
   public ClassBuilder updateClassName(final String className) {
@@ -130,5 +132,11 @@ public final class ClassBuilder {
     FileWriter.writeToFile(absolutePathPrefix, fullyQualifiedClassName, codeBuilder.toString());
     reservedClassNames.add(fullyQualifiedClassName);
     return this;
+  }
+
+  private String getFullyQualifiedClassName() {
+    return Optional.ofNullable(packageName)
+        .map(pN -> String.join(".", pN, className))
+        .orElse(className);
   }
 }
