@@ -1,12 +1,9 @@
 package io.github.chrimle.classforge;
 
-import io.github.chrimle.classforge.utils.FileWriter;
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Predicate;
 
-public final class ClassBuilder implements Builder {
+public final class ClassBuilder extends AbstractBuilder {
 
   private static final Predicate<String> absolutePathPrefixValidator =
       string -> Optional.ofNullable(string).isPresent();
@@ -25,10 +22,6 @@ public final class ClassBuilder implements Builder {
       classBuilder ->
           classNameValidator.test(classBuilder.className)
               && packageNameValidator.test(classBuilder.packageName);
-  private final Set<String> reservedClassNames = new HashSet<>();
-  private String absolutePathPrefix;
-  private String packageName;
-  private String className;
 
   private ClassBuilder() {}
 
@@ -68,12 +61,12 @@ public final class ClassBuilder implements Builder {
   @Override
   public Builder commit() {
     preCommitCheck();
-    final String fullyQualifiedClassName = getFullyQualifiedClassName();
+    final String fullyQualifiedClassName = resolveFullyQualifiedClassName();
     if (reservedClassNames.contains(fullyQualifiedClassName)) {
       throw new IllegalStateException(
           "Class `%s` has already been generated!".formatted(fullyQualifiedClassName));
     }
-    generateClassFile(fullyQualifiedClassName);
+    generateClassFile();
     reservedClassNames.add(fullyQualifiedClassName);
     return this;
   }
@@ -84,7 +77,8 @@ public final class ClassBuilder implements Builder {
     }
   }
 
-  private void generateClassFile(final String fullyQualifiedClassName) {
+  @Override
+  protected String generateFileContent() {
     final StringBuilder codeBuilder = new StringBuilder();
 
     Optional.ofNullable(packageName)
@@ -100,13 +94,6 @@ public final class ClassBuilder implements Builder {
         """
             .formatted(className));
 
-    FileWriter.writeToFile(absolutePathPrefix, fullyQualifiedClassName, codeBuilder.toString());
-  }
-
-  private String getFullyQualifiedClassName() {
-    return Optional.ofNullable(packageName)
-        .filter(pN -> !pN.isBlank())
-        .map(pN -> String.join(".", pN, className))
-        .orElse(className);
+    return codeBuilder.toString();
   }
 }
