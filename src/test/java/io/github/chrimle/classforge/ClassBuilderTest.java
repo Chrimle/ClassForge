@@ -92,4 +92,21 @@ class ClassBuilderTest {
           exception.getMessage());
     }
   }
+
+  @Nested
+  class ClassNameTests {
+
+    @ParameterizedTest
+    @NullSource
+    @ValueSource(strings = {"", ".", " ", "_", "-", "1", "1a", "A-", "A-A", "1_1"})
+    void testInvalidValues(final String className) {
+      final var exception =
+          assertThrows(
+              IllegalArgumentException.class,
+              () -> new ClassBuilder(ABSOLUTE_PATH_PREFIX, PACKAGE_NAME, className));
+      assertEquals(
+          "`className` MUST match the RegEx: " + ClassBuilder.CLASS_NAME_REGEX,
+          exception.getMessage());
+    }
+  }
 }
