@@ -8,8 +8,19 @@ import java.util.Set;
  *
  * @since 0.1.0
  * @author Chrimle
+ * @see #newClassBuilder() Generating a Java class.
  */
 public final class ClassForge {
+
+  /**
+   * Creates a new {@link ClassBuilder} instance for generating Java <i>classes</i>.
+   *
+   * @since 0.1.0
+   * @return a new {@link ClassBuilder} instance.
+   */
+  ClassBuilder newClassBuilder() {
+    return ClassBuilder.newClass();
+  }
 
   /**
    * The <i>RegularExpression (RegEx)</i> for determining validity of <i>class</i>-names.

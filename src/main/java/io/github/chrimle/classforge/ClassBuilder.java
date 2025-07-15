@@ -32,7 +32,7 @@ public final class ClassBuilder {
 
   private ClassBuilder() {}
 
-  public static ClassBuilder newClass() {
+  static ClassBuilder newClass() {
     return new ClassBuilder();
   }
 
