@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
@@ -43,6 +44,42 @@ class ClassBuilderTest {
     new ClassBuilder(ABSOLUTE_PATH_PREFIX, PACKAGE_NAME, className).commit();
 
     assertNotNull(compileAndLoadClass(PACKAGE_NAME, className));
+  }
+
+  @Test
+  void testRenamingUncommittedClass() throws Exception {
+    final var classBuilder =
+        new ClassBuilder(ABSOLUTE_PATH_PREFIX, PACKAGE_NAME, "OriginalNamedClass");
+    assertDoesNotThrow(() -> classBuilder.updateClassName("RenamedClass"));
+    assertDoesNotThrow(classBuilder::commit);
+
+    assertNotNull(compileAndLoadClass(PACKAGE_NAME, "RenamedClass"));
+    assertThrows(Exception.class, () -> compileAndLoadClass(PACKAGE_NAME, "OriginalNamedClass"));
+  }
+
+  @Test
+  void testCommittingTwiceWithoutChanges() {
+    final var className = "ClassTwiceCommitted";
+    final var classBuilder =
+        assertDoesNotThrow(() -> new ClassBuilder(ABSOLUTE_PATH_PREFIX, PACKAGE_NAME, className));
+
+    assertDoesNotThrow(classBuilder::commit);
+
+    final var exception = assertThrows(IllegalStateException.class, classBuilder::commit);
+    assertEquals(
+        "Class `%s.%s` has already been generated!".formatted(PACKAGE_NAME, className),
+        exception.getMessage());
+  }
+
+  @Test
+  void testRenamingCommittedClass() throws Exception {
+    new ClassBuilder(ABSOLUTE_PATH_PREFIX, PACKAGE_NAME, "OriginalCommittedClass")
+        .commit()
+        .updateClassName("RenamedUncommittedClass")
+        .commit();
+
+    assertNotNull(compileAndLoadClass(PACKAGE_NAME, "OriginalCommittedClass"));
+    assertNotNull(compileAndLoadClass(PACKAGE_NAME, "RenamedUncommittedClass"));
   }
 
   @Nested

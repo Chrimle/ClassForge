@@ -1,6 +1,7 @@
 package io.github.chrimle.classforge;
 
 import io.github.chrimle.classforge.utils.FileWriter;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -63,10 +64,10 @@ public final class ClassBuilder {
 
   public static final String CLASS_NAME_REGEX = "^[A-Z][A-Za-z_0-9]*$";
   public static final String PACKAGE_NAME_REGEX = "^[A-Za-z_0-9]+(\\.[A-Za-z_0-9]+)*$";
+  private final Set<String> reservedClassNames = new HashSet<>();
   private final String absolutePathPrefix;
-  private final String fullyQualifiedClassName;
   private final String packageName;
-  private final String className;
+  private String className;
 
   public ClassBuilder(
       final String absolutePathPrefix, final String packageName, final String className) {
@@ -85,21 +86,21 @@ public final class ClassBuilder {
     }
     this.packageName = packageName;
 
-    this.className =
-        Optional.ofNullable(className)
-            .filter(cN -> cN.matches(CLASS_NAME_REGEX))
-            .orElseThrow(
-                () ->
-                    new IllegalArgumentException(
-                        "`className` MUST match the RegEx: " + CLASS_NAME_REGEX));
-
-    this.fullyQualifiedClassName =
-        Optional.ofNullable(packageName)
-            .map(pN -> String.join(".", pN, className))
-            .orElse(className);
+    updateClassName(className);
   }
 
-  public void commit() {
+  private String getFullyQualifiedClassName() {
+    return Optional.ofNullable(packageName)
+        .map(pN -> String.join(".", pN, className))
+        .orElse(className);
+  }
+
+  public ClassBuilder updateClassName(final String className) {
+    this.className = validateClassName(className);
+    return this;
+  }
+
+  public ClassBuilder commit() {
     final StringBuilder codeBuilder = new StringBuilder();
 
     Optional.ofNullable(packageName)
@@ -115,6 +116,22 @@ public final class ClassBuilder {
         """
             .formatted(className));
 
+    final String fullyQualifiedClassName = getFullyQualifiedClassName();
+    if (reservedClassNames.contains(fullyQualifiedClassName)) {
+      throw new IllegalStateException(
+          "Class `%s` has already been generated!".formatted(fullyQualifiedClassName));
+    }
     FileWriter.writeToFile(absolutePathPrefix, fullyQualifiedClassName, codeBuilder.toString());
+    reservedClassNames.add(fullyQualifiedClassName);
+    return this;
+  }
+
+  private static String validateClassName(final String className) {
+    return Optional.ofNullable(className)
+        .filter(cN -> cN.matches(CLASS_NAME_REGEX))
+        .orElseThrow(
+            () ->
+                new IllegalArgumentException(
+                    "`className` MUST match the RegEx: " + CLASS_NAME_REGEX));
   }
 }
