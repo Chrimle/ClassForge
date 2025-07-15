@@ -13,12 +13,12 @@ import java.util.Set;
 public final class ClassForge {
 
   /**
-   * Creates a new {@link ClassBuilder} instance for generating Java <i>classes</i>.
+   * Creates a new {@link Builder} instance for generating Java <i>classes</i>.
    *
    * @since 0.1.0
-   * @return a new {@link ClassBuilder} instance.
+   * @return a new {@link Builder} instance.
    */
-  ClassBuilder newClassBuilder() {
+  Builder newClassBuilder() {
     return ClassBuilder.newClass();
   }
 
