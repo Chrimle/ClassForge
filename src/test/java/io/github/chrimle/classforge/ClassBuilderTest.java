@@ -162,12 +162,12 @@ class ClassBuilderTest {
               IllegalArgumentException.class,
               () -> ClassBuilder.newClass().updateClassName(className));
       assertEquals(
-          "`className` MUST match the RegEx: " + ClassBuilder.CLASS_NAME_REGEX,
+          "`className` MUST match the RegEx: " + ClassForge.VALID_CLASS_NAME_REGEX,
           exception.getMessage());
     }
 
     static Stream<Arguments> testReservedKeywords() {
-      return ClassBuilder.RESERVED_KEYWORDS.stream().map(Arguments::of);
+      return ClassForge.RESERVED_KEYWORDS.stream().map(Arguments::of);
     }
 
     @ParameterizedTest
@@ -178,7 +178,7 @@ class ClassBuilderTest {
               IllegalArgumentException.class,
               () -> ClassBuilder.newClass().updateClassName(className));
       assertEquals(
-          "`className` MUST match the RegEx: " + ClassBuilder.CLASS_NAME_REGEX,
+          "`className` MUST match the RegEx: " + ClassForge.VALID_CLASS_NAME_REGEX,
           exception.getMessage());
     }
   }

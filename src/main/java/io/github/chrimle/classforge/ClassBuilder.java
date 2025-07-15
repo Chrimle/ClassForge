@@ -8,61 +8,6 @@ import java.util.function.Predicate;
 
 public final class ClassBuilder {
 
-  public static final Set<String> RESERVED_KEYWORDS =
-      Set.of(
-          "abstract",
-          "boolean",
-          "break",
-          "byte",
-          "case",
-          "catch",
-          "char",
-          "class",
-          "continue",
-          "default",
-          "do",
-          "double",
-          "else",
-          "enum",
-          "extends",
-          "false",
-          "final",
-          "finally",
-          "float",
-          "for",
-          "if",
-          "implements",
-          "import",
-          "instanceof",
-          "int",
-          "interface",
-          "long",
-          "native",
-          "new",
-          "null",
-          "package",
-          "private",
-          "protected",
-          "public",
-          "record",
-          "return",
-          "sealed",
-          "static",
-          "super",
-          "switch",
-          "synchronized",
-          "this",
-          "throw",
-          "throws",
-          "transient",
-          "true",
-          "try",
-          "var",
-          "void",
-          "volatile",
-          "while",
-          "assert");
-
   public static final String CLASS_NAME_REGEX = "^[A-Z][A-Za-z_0-9]*$";
   public static final String PACKAGE_NAME_REGEX = "^[A-Za-z_0-9]+(\\.[A-Za-z_0-9]+)*$";
   private static final Predicate<String> absolutePathPrefixValidator =
@@ -70,7 +15,7 @@ public final class ClassBuilder {
   private static final Predicate<String> classNameValidator =
       string ->
           Optional.ofNullable(string)
-              .filter(className -> className.matches(CLASS_NAME_REGEX))
+              .filter(className -> className.matches(ClassForge.VALID_CLASS_NAME_REGEX))
               .isPresent();
   private static final Predicate<String> packageNameValidator =
       string ->
@@ -112,7 +57,8 @@ public final class ClassBuilder {
 
   public ClassBuilder updateClassName(final String className) {
     if (!classNameValidator.test(className)) {
-      throw new IllegalArgumentException("`className` MUST match the RegEx: " + CLASS_NAME_REGEX);
+      throw new IllegalArgumentException(
+          "`className` MUST match the RegEx: " + ClassForge.VALID_CLASS_NAME_REGEX);
     }
     this.className = className;
     return this;
