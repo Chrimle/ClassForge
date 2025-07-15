@@ -38,6 +38,11 @@ class ClassBuilderTest {
     return DynamicClassLoader.loadClass(Path.of(ABSOLUTE_PATH_PREFIX), fullyQualifiedName);
   }
 
+  @Test
+  void testCommittingClassWithoutClassName() {
+    assertThrows(IllegalStateException.class, () -> ClassBuilder.newClass().commit());
+  }
+
   @ParameterizedTest
   @ValueSource(strings = {"ClassName"})
   void testCreatingClass(final String className) throws Exception {
