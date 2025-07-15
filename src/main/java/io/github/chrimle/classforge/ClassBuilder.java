@@ -96,7 +96,13 @@ public final class ClassBuilder {
   }
 
   public ClassBuilder updateClassName(final String className) {
-    this.className = validateClassName(className);
+    this.className =
+        Optional.ofNullable(className)
+            .filter(cN -> cN.matches(CLASS_NAME_REGEX))
+            .orElseThrow(
+                () ->
+                    new IllegalArgumentException(
+                        "`className` MUST match the RegEx: " + CLASS_NAME_REGEX));
     return this;
   }
 
@@ -124,14 +130,5 @@ public final class ClassBuilder {
     FileWriter.writeToFile(absolutePathPrefix, fullyQualifiedClassName, codeBuilder.toString());
     reservedClassNames.add(fullyQualifiedClassName);
     return this;
-  }
-
-  private static String validateClassName(final String className) {
-    return Optional.ofNullable(className)
-        .filter(cN -> cN.matches(CLASS_NAME_REGEX))
-        .orElseThrow(
-            () ->
-                new IllegalArgumentException(
-                    "`className` MUST match the RegEx: " + CLASS_NAME_REGEX));
   }
 }
