@@ -60,6 +60,7 @@ public final class ClassBuilder {
           "volatile",
           "while",
           "assert");
+
   public static final String CLASS_NAME_REGEX = "^[A-Z][A-Za-z_0-9]*$";
   public static final String PACKAGE_NAME_REGEX = "^[A-Za-z_0-9]+(\\.[A-Za-z_0-9]+)*$";
   private final String absolutePathPrefix;
@@ -113,6 +114,7 @@ public final class ClassBuilder {
         }
         """
             .formatted(className));
+
     FileWriter.writeToFile(absolutePathPrefix, fullyQualifiedClassName, codeBuilder.toString());
   }
 }
