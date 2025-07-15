@@ -145,7 +145,7 @@ class ClassBuilderTest {
               IllegalArgumentException.class,
               () -> ClassBuilder.newClass().updatePackageName(packageName));
       assertEquals(
-          "`packageName` MUST match the RegEx: " + ClassBuilder.PACKAGE_NAME_REGEX,
+          "`packageName` MUST match the RegEx: " + ClassForge.VALID_PACKAGE_NAME_REGEX,
           exception.getMessage());
     }
   }

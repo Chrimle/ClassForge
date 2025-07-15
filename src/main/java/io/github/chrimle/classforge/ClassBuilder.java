@@ -8,8 +8,6 @@ import java.util.function.Predicate;
 
 public final class ClassBuilder {
 
-  public static final String CLASS_NAME_REGEX = "^[A-Z][A-Za-z_0-9]*$";
-  public static final String PACKAGE_NAME_REGEX = "^[A-Za-z_0-9]+(\\.[A-Za-z_0-9]+)*$";
   private static final Predicate<String> absolutePathPrefixValidator =
       string -> Optional.ofNullable(string).isPresent();
   private static final Predicate<String> classNameValidator =
@@ -21,7 +19,7 @@ public final class ClassBuilder {
       string ->
           Optional.ofNullable(string)
               .filter(packageName -> !packageName.isBlank())
-              .map(packageName -> packageName.matches(PACKAGE_NAME_REGEX))
+              .map(packageName -> packageName.matches(ClassForge.VALID_PACKAGE_NAME_REGEX))
               .orElse(true);
   private static final Predicate<ClassBuilder> classBuilderPredicate =
       classBuilder ->
@@ -49,7 +47,7 @@ public final class ClassBuilder {
   public ClassBuilder updatePackageName(final String packageName) {
     if (!packageNameValidator.test(packageName)) {
       throw new IllegalArgumentException(
-          "`packageName` MUST match the RegEx: " + PACKAGE_NAME_REGEX);
+          "`packageName` MUST match the RegEx: " + ClassForge.VALID_PACKAGE_NAME_REGEX);
     }
     this.packageName = packageName;
     return this;
