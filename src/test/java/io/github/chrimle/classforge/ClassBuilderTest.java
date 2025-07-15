@@ -6,11 +6,10 @@ import io.github.chrimle.classforge.test.utils.DynamicClassLoader;
 import io.github.chrimle.classforge.test.utils.JavaSourceCompiler;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.NullSource;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.*;
 
 class ClassBuilderTest {
 
@@ -100,6 +99,22 @@ class ClassBuilderTest {
     @NullSource
     @ValueSource(strings = {"", ".", " ", "_", "-", "1", "1a", "A-", "A-A", "1_1"})
     void testInvalidValues(final String className) {
+      final var exception =
+          assertThrows(
+              IllegalArgumentException.class,
+              () -> new ClassBuilder(ABSOLUTE_PATH_PREFIX, PACKAGE_NAME, className));
+      assertEquals(
+          "`className` MUST match the RegEx: " + ClassBuilder.CLASS_NAME_REGEX,
+          exception.getMessage());
+    }
+
+    static Stream<Arguments> testReservedKeywords() {
+      return ClassBuilder.RESERVED_KEYWORDS.stream().map(Arguments::of);
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void testReservedKeywords(final String className) {
       final var exception =
           assertThrows(
               IllegalArgumentException.class,

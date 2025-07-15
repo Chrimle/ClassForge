@@ -2,9 +2,64 @@ package io.github.chrimle.classforge;
 
 import io.github.chrimle.classforge.utils.FileWriter;
 import java.util.Optional;
+import java.util.Set;
 
 public final class ClassBuilder {
 
+  public static final Set<String> RESERVED_KEYWORDS =
+      Set.of(
+          "abstract",
+          "boolean",
+          "break",
+          "byte",
+          "case",
+          "catch",
+          "char",
+          "class",
+          "continue",
+          "default",
+          "do",
+          "double",
+          "else",
+          "enum",
+          "extends",
+          "false",
+          "final",
+          "finally",
+          "float",
+          "for",
+          "if",
+          "implements",
+          "import",
+          "instanceof",
+          "int",
+          "interface",
+          "long",
+          "native",
+          "new",
+          "null",
+          "package",
+          "private",
+          "protected",
+          "public",
+          "record",
+          "return",
+          "sealed",
+          "static",
+          "super",
+          "switch",
+          "synchronized",
+          "this",
+          "throw",
+          "throws",
+          "transient",
+          "true",
+          "try",
+          "var",
+          "void",
+          "volatile",
+          "while",
+          "assert");
   public static final String CLASS_NAME_REGEX = "^[A-Z][A-Za-z_0-9]*$";
   public static final String PACKAGE_NAME_REGEX = "^[A-Za-z_0-9]+(\\.[A-Za-z_0-9]+)*$";
   private final String absolutePathPrefix;
