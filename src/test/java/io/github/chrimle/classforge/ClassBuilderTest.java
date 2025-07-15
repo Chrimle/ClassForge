@@ -40,7 +40,7 @@ class ClassBuilderTest {
   @ParameterizedTest
   @ValueSource(strings = {"ClassName"})
   void testCreatingClass(final String className) throws Exception {
-    new ClassBuilder(ABSOLUTE_PATH_PREFIX, PACKAGE_NAME, className).build();
+    new ClassBuilder(ABSOLUTE_PATH_PREFIX, PACKAGE_NAME, className).commit();
 
     assertNotNull(compileAndLoadClass(PACKAGE_NAME, className));
   }
@@ -72,7 +72,7 @@ class ClassBuilderTest {
     @CsvSource({",'ClassWithNullPackageName'", "'','ClassWithEmptyPackageName'"})
     void testNullValue(final String packageName, final String className) throws Exception {
       assertDoesNotThrow(
-          () -> new ClassBuilder(ABSOLUTE_PATH_PREFIX, packageName, className).build());
+          () -> new ClassBuilder(ABSOLUTE_PATH_PREFIX, packageName, className).commit());
 
       assertNotNull(compileAndLoadClass(className));
     }

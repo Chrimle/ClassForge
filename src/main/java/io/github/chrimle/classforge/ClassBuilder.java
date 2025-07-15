@@ -99,7 +99,7 @@ public final class ClassBuilder {
             .orElse(className);
   }
 
-  public void build() {
+  public void commit() {
     final StringBuilder codeBuilder = new StringBuilder();
 
     Optional.ofNullable(packageName)
