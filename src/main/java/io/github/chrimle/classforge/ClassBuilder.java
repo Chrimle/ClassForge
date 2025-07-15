@@ -44,15 +44,20 @@ public final class ClassBuilder {
   }
 
   public void build() {
-    final String code =
-        """
-        package %s;
+    final StringBuilder codeBuilder = new StringBuilder();
 
+    Optional.ofNullable(packageName)
+        .filter(pN -> !pN.isBlank())
+        .map("package %s;\n\n"::formatted)
+        .ifPresent(codeBuilder::append);
+
+    codeBuilder.append(
+        """
         public class %s {
 
         }
         """
-            .formatted(packageName, className);
-    FileWriter.writeToFile(absolutePathPrefix, fullyQualifiedClassName, code);
+            .formatted(className));
+    FileWriter.writeToFile(absolutePathPrefix, fullyQualifiedClassName, codeBuilder.toString());
   }
 }

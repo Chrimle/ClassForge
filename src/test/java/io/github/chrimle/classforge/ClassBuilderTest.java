@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -15,21 +16,26 @@ class ClassBuilderTest {
 
   public static final String ABSOLUTE_PATH_PREFIX = "target/generated-test-sources";
   public static final String PACKAGE_NAME = "io.github.chrimle.classforge";
-  public static final String PACKAGE_NAME_DIRECTORY = PACKAGE_NAME.replace(".", "/");
 
   static Class<?> compileAndLoadClass(final String className) throws Exception {
     compileClass(className);
     return loadClass(className);
   }
 
-  static void compileClass(final String className) throws IOException {
-    JavaSourceCompiler.compile(
-        Path.of(ABSOLUTE_PATH_PREFIX).resolve(PACKAGE_NAME_DIRECTORY + "/" + className + ".java"));
+  static Class<?> compileAndLoadClass(final String packageName, final String className)
+      throws Exception {
+    final String fullyQualifiedName = String.join(".", packageName, className);
+    compileClass(fullyQualifiedName);
+    return loadClass(fullyQualifiedName);
   }
 
-  static Class<?> loadClass(final String className) throws Exception {
-    return DynamicClassLoader.loadClass(
-        Path.of(ABSOLUTE_PATH_PREFIX), String.join(".", PACKAGE_NAME, className));
+  static void compileClass(final String fullyQualifiedName) throws IOException {
+    JavaSourceCompiler.compile(
+        Path.of(ABSOLUTE_PATH_PREFIX).resolve(fullyQualifiedName.replace(".", "/") + ".java"));
+  }
+
+  static Class<?> loadClass(final String fullyQualifiedName) throws Exception {
+    return DynamicClassLoader.loadClass(Path.of(ABSOLUTE_PATH_PREFIX), fullyQualifiedName);
   }
 
   @ParameterizedTest
@@ -37,7 +43,7 @@ class ClassBuilderTest {
   void testCreatingClass(final String className) throws Exception {
     new ClassBuilder(ABSOLUTE_PATH_PREFIX, PACKAGE_NAME, className).build();
 
-    assertNotNull(compileAndLoadClass(className));
+    assertNotNull(compileAndLoadClass(PACKAGE_NAME, className));
   }
 
   @Nested
@@ -51,7 +57,7 @@ class ClassBuilderTest {
               IllegalArgumentException.class,
               () ->
                   new ClassBuilder(
-                          absolutePathPrefix, PACKAGE_NAME, "TestInvalidAbsolutePathPrefix"));
+                      absolutePathPrefix, PACKAGE_NAME, "TestInvalidAbsolutePathPrefix"));
       assertEquals("`absolutePathPrefix` MUST NOT be `null`!", exception.getMessage());
     }
   }
@@ -64,11 +70,12 @@ class ClassBuilderTest {
      * package.
      */
     @ParameterizedTest
-    @NullSource
-    @ValueSource(strings = "")
-    void testNullValue(final String packageName) {
+    @CsvSource({",'ClassWithNullPackageName'", "'','ClassWithEmptyPackageName'"})
+    void testNullValue(final String packageName, final String className) throws Exception {
       assertDoesNotThrow(
-          () -> new ClassBuilder(ABSOLUTE_PATH_PREFIX, packageName, "TestValidPackageNameTest"));
+          () -> new ClassBuilder(ABSOLUTE_PATH_PREFIX, packageName, className).build());
+
+      assertNotNull(compileAndLoadClass(className));
     }
 
     @ParameterizedTest
