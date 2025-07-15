@@ -41,7 +41,11 @@ class ClassBuilderTest {
   @ParameterizedTest
   @ValueSource(strings = {"ClassName"})
   void testCreatingClass(final String className) throws Exception {
-    new ClassBuilder(ABSOLUTE_PATH_PREFIX, PACKAGE_NAME, className).commit();
+    ClassBuilder.newClass()
+        .updateAbsolutePathPrefix(ABSOLUTE_PATH_PREFIX)
+        .updatePackageName(PACKAGE_NAME)
+        .updateClassName(className)
+        .commit();
 
     assertNotNull(compileAndLoadClass(PACKAGE_NAME, className));
   }
@@ -49,7 +53,10 @@ class ClassBuilderTest {
   @Test
   void testRenamingUncommittedClass() throws Exception {
     final var classBuilder =
-        new ClassBuilder(ABSOLUTE_PATH_PREFIX, PACKAGE_NAME, "OriginalNamedClass");
+        ClassBuilder.newClass()
+            .updateAbsolutePathPrefix(ABSOLUTE_PATH_PREFIX)
+            .updatePackageName(PACKAGE_NAME)
+            .updateClassName("OriginalNamedClass");
     assertDoesNotThrow(() -> classBuilder.updateClassName("RenamedClass"));
     assertDoesNotThrow(classBuilder::commit);
 
@@ -61,7 +68,12 @@ class ClassBuilderTest {
   void testCommittingTwiceWithoutChanges() {
     final var className = "ClassTwiceCommitted";
     final var classBuilder =
-        assertDoesNotThrow(() -> new ClassBuilder(ABSOLUTE_PATH_PREFIX, PACKAGE_NAME, className));
+        assertDoesNotThrow(
+            () ->
+                ClassBuilder.newClass()
+                    .updateAbsolutePathPrefix(ABSOLUTE_PATH_PREFIX)
+                    .updatePackageName(PACKAGE_NAME)
+                    .updateClassName(className));
 
     assertDoesNotThrow(classBuilder::commit);
 
@@ -73,7 +85,10 @@ class ClassBuilderTest {
 
   @Test
   void testRenamingCommittedClass() throws Exception {
-    new ClassBuilder(ABSOLUTE_PATH_PREFIX, PACKAGE_NAME, "OriginalCommittedClass")
+    ClassBuilder.newClass()
+        .updateAbsolutePathPrefix(ABSOLUTE_PATH_PREFIX)
+        .updatePackageName(PACKAGE_NAME)
+        .updateClassName("OriginalCommittedClass")
         .commit()
         .updateClassName("RenamedUncommittedClass")
         .commit();
@@ -91,9 +106,7 @@ class ClassBuilderTest {
       final var exception =
           assertThrows(
               IllegalArgumentException.class,
-              () ->
-                  new ClassBuilder(
-                      absolutePathPrefix, PACKAGE_NAME, "TestInvalidAbsolutePathPrefix"));
+              () -> ClassBuilder.newClass().updateAbsolutePathPrefix(absolutePathPrefix));
       assertEquals("`absolutePathPrefix` MUST NOT be `null`!", exception.getMessage());
     }
   }
@@ -109,7 +122,12 @@ class ClassBuilderTest {
     @CsvSource({",'ClassWithNullPackageName'", "'','ClassWithEmptyPackageName'"})
     void testNullValue(final String packageName, final String className) throws Exception {
       assertDoesNotThrow(
-          () -> new ClassBuilder(ABSOLUTE_PATH_PREFIX, packageName, className).commit());
+          () ->
+              ClassBuilder.newClass()
+                  .updateAbsolutePathPrefix(ABSOLUTE_PATH_PREFIX)
+                  .updatePackageName(packageName)
+                  .updateClassName(className)
+                  .commit());
 
       assertNotNull(compileAndLoadClass(className));
     }
@@ -120,9 +138,7 @@ class ClassBuilderTest {
       final var exception =
           assertThrows(
               IllegalArgumentException.class,
-              () ->
-                  new ClassBuilder(
-                      ABSOLUTE_PATH_PREFIX, packageName, "TestInvalidPackageNameTest"));
+              () -> ClassBuilder.newClass().updatePackageName(packageName));
       assertEquals(
           "`packageName` MUST match the RegEx: " + ClassBuilder.PACKAGE_NAME_REGEX,
           exception.getMessage());
@@ -139,7 +155,7 @@ class ClassBuilderTest {
       final var exception =
           assertThrows(
               IllegalArgumentException.class,
-              () -> new ClassBuilder(ABSOLUTE_PATH_PREFIX, PACKAGE_NAME, className));
+              () -> ClassBuilder.newClass().updateClassName(className));
       assertEquals(
           "`className` MUST match the RegEx: " + ClassBuilder.CLASS_NAME_REGEX,
           exception.getMessage());
@@ -155,7 +171,7 @@ class ClassBuilderTest {
       final var exception =
           assertThrows(
               IllegalArgumentException.class,
-              () -> new ClassBuilder(ABSOLUTE_PATH_PREFIX, PACKAGE_NAME, className));
+              () -> ClassBuilder.newClass().updateClassName(className));
       assertEquals(
           "`className` MUST match the RegEx: " + ClassBuilder.CLASS_NAME_REGEX,
           exception.getMessage());

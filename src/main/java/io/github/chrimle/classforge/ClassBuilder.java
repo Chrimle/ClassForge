@@ -69,15 +69,13 @@ public final class ClassBuilder {
   private String packageName;
   private String className;
 
-  public ClassBuilder(
-      final String absolutePathPrefix, final String packageName, final String className) {
+  private ClassBuilder() {}
 
-    updateAbsolutePathPrefix(absolutePathPrefix);
-    updatePackageName(packageName);
-    updateClassName(className);
+  public static ClassBuilder newClass() {
+    return new ClassBuilder();
   }
 
-  private ClassBuilder updateAbsolutePathPrefix(final String absolutePathPrefix) {
+  public ClassBuilder updateAbsolutePathPrefix(final String absolutePathPrefix) {
     this.absolutePathPrefix =
         Optional.ofNullable(absolutePathPrefix)
             .orElseThrow(
@@ -109,6 +107,17 @@ public final class ClassBuilder {
   }
 
   public ClassBuilder commit() {
+    final String fullyQualifiedClassName = getFullyQualifiedClassName();
+    if (reservedClassNames.contains(fullyQualifiedClassName)) {
+      throw new IllegalStateException(
+          "Class `%s` has already been generated!".formatted(fullyQualifiedClassName));
+    }
+    generateClassFile(fullyQualifiedClassName);
+    reservedClassNames.add(fullyQualifiedClassName);
+    return this;
+  }
+
+  private void generateClassFile(final String fullyQualifiedClassName) {
     final StringBuilder codeBuilder = new StringBuilder();
 
     Optional.ofNullable(packageName)
@@ -124,14 +133,7 @@ public final class ClassBuilder {
         """
             .formatted(className));
 
-    final String fullyQualifiedClassName = getFullyQualifiedClassName();
-    if (reservedClassNames.contains(fullyQualifiedClassName)) {
-      throw new IllegalStateException(
-          "Class `%s` has already been generated!".formatted(fullyQualifiedClassName));
-    }
     FileWriter.writeToFile(absolutePathPrefix, fullyQualifiedClassName, codeBuilder.toString());
-    reservedClassNames.add(fullyQualifiedClassName);
-    return this;
   }
 
   private String getFullyQualifiedClassName() {
