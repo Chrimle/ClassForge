@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 
-public final class ClassBuilder {
+public final class ClassBuilder implements Builder {
 
   private static final Predicate<String> absolutePathPrefixValidator =
       string -> Optional.ofNullable(string).isPresent();
@@ -32,11 +32,12 @@ public final class ClassBuilder {
 
   private ClassBuilder() {}
 
-  static ClassBuilder newClass() {
+  static Builder newClass() {
     return new ClassBuilder();
   }
 
-  public ClassBuilder updateAbsolutePathPrefix(final String absolutePathPrefix) {
+  @Override
+  public Builder updateAbsolutePathPrefix(final String absolutePathPrefix) {
     if (!absolutePathPrefixValidator.test(absolutePathPrefix)) {
       throw new IllegalArgumentException("`absolutePathPrefix` MUST NOT be `null`!");
     }
@@ -44,7 +45,8 @@ public final class ClassBuilder {
     return this;
   }
 
-  public ClassBuilder updatePackageName(final String packageName) {
+  @Override
+  public Builder updatePackageName(final String packageName) {
     if (!packageNameValidator.test(packageName)) {
       throw new IllegalArgumentException(
           "`packageName` MUST match the RegEx: " + ClassForge.VALID_PACKAGE_NAME_REGEX);
@@ -53,7 +55,8 @@ public final class ClassBuilder {
     return this;
   }
 
-  public ClassBuilder updateClassName(final String className) {
+  @Override
+  public Builder updateClassName(final String className) {
     if (!classNameValidator.test(className)) {
       throw new IllegalArgumentException(
           "`className` MUST match the RegEx: " + ClassForge.VALID_CLASS_NAME_REGEX);
@@ -62,7 +65,8 @@ public final class ClassBuilder {
     return this;
   }
 
-  public ClassBuilder commit() {
+  @Override
+  public Builder commit() {
     preCommitCheck();
     final String fullyQualifiedClassName = getFullyQualifiedClassName();
     if (reservedClassNames.contains(fullyQualifiedClassName)) {
@@ -101,6 +105,7 @@ public final class ClassBuilder {
 
   private String getFullyQualifiedClassName() {
     return Optional.ofNullable(packageName)
+        .filter(pN -> !pN.isBlank())
         .map(pN -> String.join(".", pN, className))
         .orElse(className);
   }
