@@ -105,6 +105,7 @@ public final class ClassBuilder implements Builder {
 
   private String getFullyQualifiedClassName() {
     return Optional.ofNullable(packageName)
+        .filter(pN -> !pN.isBlank())
         .map(pN -> String.join(".", pN, className))
         .orElse(className);
   }
