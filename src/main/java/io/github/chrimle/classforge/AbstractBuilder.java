@@ -14,14 +14,14 @@ import java.util.function.Predicate;
  */
 public abstract sealed class AbstractBuilder implements Builder permits ClassBuilder {
 
-  static final Predicate<String> absolutePathPrefixValidator =
+  private static final Predicate<String> absolutePathPrefixValidator =
       string -> Optional.ofNullable(string).isPresent();
-  static final Predicate<String> classNameValidator =
+  private static final Predicate<String> classNameValidator =
       string ->
           Optional.ofNullable(string)
               .filter(className -> className.matches(ClassForge.VALID_CLASS_NAME_REGEX))
               .isPresent();
-  static final Predicate<String> packageNameValidator =
+  private static final Predicate<String> packageNameValidator =
       string ->
           Optional.ofNullable(string)
               .filter(packageName -> !packageName.isBlank())
