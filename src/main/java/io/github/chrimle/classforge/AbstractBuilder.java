@@ -14,7 +14,7 @@ import java.util.function.Predicate;
  */
 public abstract sealed class AbstractBuilder implements Builder permits ClassBuilder {
 
-  private static final Predicate<String> absolutePathPrefixValidator =
+  private static final Predicate<String> directoryValidator =
       string -> Optional.ofNullable(string).isPresent();
   private static final Predicate<String> classNameValidator =
       string ->
@@ -28,15 +28,15 @@ public abstract sealed class AbstractBuilder implements Builder permits ClassBui
               .map(packageName -> packageName.matches(ClassForge.VALID_PACKAGE_NAME_REGEX))
               .orElse(true);
   protected final Set<String> reservedClassNames = new HashSet<>();
-  protected String absolutePathPrefix;
+  protected String directory;
   protected String packageName;
   protected String className;
 
   /** {@inheritDoc} */
   @Override
-  public Builder updateAbsolutePathPrefix(final String absolutePathPrefix) {
-    validateAbsolutePathPrefix(absolutePathPrefix);
-    this.absolutePathPrefix = absolutePathPrefix;
+  public Builder updateDirectory(final String directory) {
+    validateDirectory(directory);
+    this.directory = directory;
     return this;
   }
 
@@ -71,7 +71,7 @@ public abstract sealed class AbstractBuilder implements Builder permits ClassBui
   }
 
   private void validateClass() {
-    validateAbsolutePathPrefix(this.absolutePathPrefix);
+    validateDirectory(this.directory);
     validatePackageName(this.packageName);
     validateClassName(this.className);
     validateAdditionalPredicates();
@@ -82,8 +82,7 @@ public abstract sealed class AbstractBuilder implements Builder permits ClassBui
   protected abstract String generateFileContent();
 
   protected void generateClassFile() {
-    FileWriter.writeToFile(
-        absolutePathPrefix, resolveFullyQualifiedClassName(), generateFileContent());
+    FileWriter.writeToFile(directory, resolveFullyQualifiedClassName(), generateFileContent());
   }
 
   protected String resolveFullyQualifiedClassName() {
@@ -93,9 +92,9 @@ public abstract sealed class AbstractBuilder implements Builder permits ClassBui
         .orElse(className);
   }
 
-  private static void validateAbsolutePathPrefix(String absolutePathPrefix) {
-    if (!absolutePathPrefixValidator.test(absolutePathPrefix)) {
-      throw new IllegalArgumentException("`absolutePathPrefix` MUST NOT be `null`!");
+  private static void validateDirectory(final String directory) {
+    if (!directoryValidator.test(directory)) {
+      throw new IllegalArgumentException("`directory` MUST NOT be `null`!");
     }
   }
 

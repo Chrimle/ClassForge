@@ -14,7 +14,7 @@ import org.junit.jupiter.params.provider.*;
 
 class ClassBuilderTest {
 
-  public static final String ABSOLUTE_PATH_PREFIX = "target/generated-test-sources";
+  public static final String DIRECTORY = "target/generated-test-sources";
   public static final String PACKAGE_NAME = "io.github.chrimle.classforge";
 
   static Class<?> compileAndLoadClass(final String className) throws Exception {
@@ -31,11 +31,11 @@ class ClassBuilderTest {
 
   static void compileClass(final String fullyQualifiedName) throws IOException {
     JavaSourceCompiler.compile(
-        Path.of(ABSOLUTE_PATH_PREFIX).resolve(fullyQualifiedName.replace(".", "/") + ".java"));
+        Path.of(DIRECTORY).resolve(fullyQualifiedName.replace(".", "/") + ".java"));
   }
 
   static Class<?> loadClass(final String fullyQualifiedName) throws Exception {
-    return DynamicClassLoader.loadClass(Path.of(ABSOLUTE_PATH_PREFIX), fullyQualifiedName);
+    return DynamicClassLoader.loadClass(Path.of(DIRECTORY), fullyQualifiedName);
   }
 
   @Test
@@ -43,26 +43,26 @@ class ClassBuilderTest {
     final var exception =
         assertThrows(
             IllegalArgumentException.class,
-            () -> ClassBuilder.newClass().updateAbsolutePathPrefix(ABSOLUTE_PATH_PREFIX).commit());
+            () -> ClassBuilder.newClass().updateDirectory(DIRECTORY).commit());
     assertEquals(
         "`className` MUST match the RegEx: " + ClassForge.VALID_CLASS_NAME_REGEX,
         exception.getMessage());
   }
 
   @Test
-  void testCommittingClassWithoutAbsolutePathPrefix() {
+  void testCommittingClassWithoutDirectory() {
     final var exception =
         assertThrows(
             IllegalArgumentException.class,
-            () -> ClassBuilder.newClass().updateClassName("ClassWithoutPathPrefix").commit());
-    assertEquals("`absolutePathPrefix` MUST NOT be `null`!", exception.getMessage());
+            () -> ClassBuilder.newClass().updateClassName("ClassWithoutDirectory").commit());
+    assertEquals("`directory` MUST NOT be `null`!", exception.getMessage());
   }
 
   @ParameterizedTest
   @ValueSource(strings = {"ClassName"})
   void testCreatingClass(final String className) throws Exception {
     ClassBuilder.newClass()
-        .updateAbsolutePathPrefix(ABSOLUTE_PATH_PREFIX)
+        .updateDirectory(DIRECTORY)
         .updatePackageName(PACKAGE_NAME)
         .updateClassName(className)
         .commit();
@@ -74,7 +74,7 @@ class ClassBuilderTest {
   void testRenamingUncommittedClass() throws Exception {
     final var classBuilder =
         ClassBuilder.newClass()
-            .updateAbsolutePathPrefix(ABSOLUTE_PATH_PREFIX)
+            .updateDirectory(DIRECTORY)
             .updatePackageName(PACKAGE_NAME)
             .updateClassName("OriginalNamedClass");
     assertDoesNotThrow(() -> classBuilder.updateClassName("RenamedClass"));
@@ -91,7 +91,7 @@ class ClassBuilderTest {
         assertDoesNotThrow(
             () ->
                 ClassBuilder.newClass()
-                    .updateAbsolutePathPrefix(ABSOLUTE_PATH_PREFIX)
+                    .updateDirectory(DIRECTORY)
                     .updatePackageName(PACKAGE_NAME)
                     .updateClassName(className));
 
@@ -106,7 +106,7 @@ class ClassBuilderTest {
   @Test
   void testRenamingCommittedClass() throws Exception {
     ClassBuilder.newClass()
-        .updateAbsolutePathPrefix(ABSOLUTE_PATH_PREFIX)
+        .updateDirectory(DIRECTORY)
         .updatePackageName(PACKAGE_NAME)
         .updateClassName("OriginalCommittedClass")
         .commit()
@@ -118,16 +118,16 @@ class ClassBuilderTest {
   }
 
   @Nested
-  class AbsolutePathPrefixTests {
+  class DirectoryTests {
 
     @ParameterizedTest
     @NullSource
-    void testInvalidValues(final String absolutePathPrefix) {
+    void testInvalidValues(final String directory) {
       final var exception =
           assertThrows(
               IllegalArgumentException.class,
-              () -> ClassBuilder.newClass().updateAbsolutePathPrefix(absolutePathPrefix));
-      assertEquals("`absolutePathPrefix` MUST NOT be `null`!", exception.getMessage());
+              () -> ClassBuilder.newClass().updateDirectory(directory));
+      assertEquals("`directory` MUST NOT be `null`!", exception.getMessage());
     }
   }
 
@@ -144,7 +144,7 @@ class ClassBuilderTest {
       assertDoesNotThrow(
           () ->
               ClassBuilder.newClass()
-                  .updateAbsolutePathPrefix(ABSOLUTE_PATH_PREFIX)
+                  .updateDirectory(DIRECTORY)
                   .updatePackageName(packageName)
                   .updateClassName(className)
                   .commit());

@@ -10,14 +10,14 @@ package io.github.chrimle.classforge;
 public sealed interface Builder permits AbstractBuilder {
 
   /**
-   * <em><strong>Updates</strong></em> the {@code absolutePathPrefix} of the <em>currently
-   * uncommitted</em> class.
+   * <em><strong>Updates</strong></em> the {@code directory} of the <em>currently uncommitted</em>
+   * class.
    *
-   * @param absolutePathPrefix of the class.
+   * @param directory of the class.
    * @return <em>this</em> {@code Builder}.
    * @since 0.1.0
    */
-  Builder updateAbsolutePathPrefix(final String absolutePathPrefix);
+  Builder updateDirectory(final String directory);
 
   /**
    * <em><strong>Updates</strong></em> the {@code className} of the <em>currently uncommitted</em>
