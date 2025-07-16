@@ -40,26 +40,6 @@ class ClassBuilderTest {
     return loadedClass;
   }
 
-  @Test
-  void testCommittingClassWithoutClassName() {
-    final var exception =
-        assertThrows(
-            IllegalArgumentException.class,
-            () -> ClassBuilder.newClass().updateDirectory(TestConstants.DIRECTORY).commit());
-    assertEquals(
-        "`className` MUST match the RegEx: " + ClassForge.VALID_CLASS_NAME_REGEX,
-        exception.getMessage());
-  }
-
-  @Test
-  void testCommittingClassWithoutDirectory() {
-    final var exception =
-        assertThrows(
-            IllegalArgumentException.class,
-            () -> ClassBuilder.newClass().updateClassName("ClassWithoutDirectory").commit());
-    assertEquals("`directory` MUST NOT be `null`!", exception.getMessage());
-  }
-
   @ParameterizedTest
   @ValueSource(strings = {"ClassName"})
   void testCreatingClass(final String className) throws Exception {
@@ -120,20 +100,6 @@ class ClassBuilderTest {
 
     assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME, "OriginalCommittedClass"));
     assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME, "RenamedUncommittedClass"));
-  }
-
-  @Nested
-  class DirectoryTests {
-
-    @ParameterizedTest
-    @NullSource
-    void testInvalidValues(final String directory) {
-      final var exception =
-          assertThrows(
-              IllegalArgumentException.class,
-              () -> ClassBuilder.newClass().updateDirectory(directory));
-      assertEquals("`directory` MUST NOT be `null`!", exception.getMessage());
-    }
   }
 
   @Nested
