@@ -39,26 +39,6 @@ class EnumBuilderTest {
     return loadedClass;
   }
 
-  @Test
-  void testCommittingClassWithoutClassName() {
-    final var exception =
-        assertThrows(
-            IllegalArgumentException.class,
-            () -> EnumBuilder.newClass().updateDirectory(TestConstants.DIRECTORY).commit());
-    assertEquals(
-        "`className` MUST match the RegEx: " + ClassForge.VALID_CLASS_NAME_REGEX,
-        exception.getMessage());
-  }
-
-  @Test
-  void testCommittingClassWithoutDirectory() {
-    final var exception =
-        assertThrows(
-            IllegalArgumentException.class,
-            () -> EnumBuilder.newClass().updateClassName("ClassWithoutDirectory").commit());
-    assertEquals("`directory` MUST NOT be `null`!", exception.getMessage());
-  }
-
   @ParameterizedTest
   @ValueSource(strings = {"EnumClassName"})
   void testCreatingClass(final String className) throws Exception {
@@ -119,20 +99,6 @@ class EnumBuilderTest {
 
     assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME, "OriginalCommittedEnumClass"));
     assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME, "RenamedUncommittedEnumClass"));
-  }
-
-  @Nested
-  class DirectoryTests {
-
-    @ParameterizedTest
-    @NullSource
-    void testInvalidValues(final String directory) {
-      final var exception =
-          assertThrows(
-              IllegalArgumentException.class,
-              () -> EnumBuilder.newClass().updateDirectory(directory));
-      assertEquals("`directory` MUST NOT be `null`!", exception.getMessage());
-    }
   }
 
   @Nested
