@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
-class ClassBuilderTest {
+class EnumBuilderTest {
 
   static Class<?> compileAndLoadClass(final String className) throws Exception {
     compileClass(className);
@@ -41,7 +41,7 @@ class ClassBuilderTest {
     final var exception =
         assertThrows(
             IllegalArgumentException.class,
-            () -> ClassBuilder.newClass().updateDirectory(TestConstants.DIRECTORY).commit());
+            () -> EnumBuilder.newClass().updateDirectory(TestConstants.DIRECTORY).commit());
     assertEquals(
         "`className` MUST match the RegEx: " + ClassForge.VALID_CLASS_NAME_REGEX,
         exception.getMessage());
@@ -52,14 +52,14 @@ class ClassBuilderTest {
     final var exception =
         assertThrows(
             IllegalArgumentException.class,
-            () -> ClassBuilder.newClass().updateClassName("ClassWithoutDirectory").commit());
+            () -> EnumBuilder.newClass().updateClassName("ClassWithoutDirectory").commit());
     assertEquals("`directory` MUST NOT be `null`!", exception.getMessage());
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"ClassName"})
+  @ValueSource(strings = {"EnumClassName"})
   void testCreatingClass(final String className) throws Exception {
-    ClassBuilder.newClass()
+    EnumBuilder.newClass()
         .updateDirectory(TestConstants.DIRECTORY)
         .updatePackageName(TestConstants.PACKAGE_NAME)
         .updateClassName(className)
@@ -71,26 +71,26 @@ class ClassBuilderTest {
   @Test
   void testRenamingUncommittedClass() throws Exception {
     final var classBuilder =
-        ClassBuilder.newClass()
+        EnumBuilder.newClass()
             .updateDirectory(TestConstants.DIRECTORY)
             .updatePackageName(TestConstants.PACKAGE_NAME)
-            .updateClassName("OriginalNamedClass");
-    assertDoesNotThrow(() -> classBuilder.updateClassName("RenamedClass"));
+            .updateClassName("OriginalNamedEnumClass");
+    assertDoesNotThrow(() -> classBuilder.updateClassName("RenamedEnumClass"));
     assertDoesNotThrow(classBuilder::commit);
 
-    assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME, "RenamedClass"));
+    assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME, "RenamedEnumClass"));
     assertThrows(
         Exception.class,
-        () -> compileAndLoadClass(TestConstants.PACKAGE_NAME, "OriginalNamedClass"));
+        () -> compileAndLoadClass(TestConstants.PACKAGE_NAME, "OriginalNamedEnumClass"));
   }
 
   @Test
   void testCommittingTwiceWithoutChanges() {
-    final var className = "ClassTwiceCommitted";
+    final var className = "EnumClassTwiceCommitted";
     final var classBuilder =
         assertDoesNotThrow(
             () ->
-                ClassBuilder.newClass()
+                EnumBuilder.newClass()
                     .updateDirectory(TestConstants.DIRECTORY)
                     .updatePackageName(TestConstants.PACKAGE_NAME)
                     .updateClassName(className));
@@ -106,16 +106,16 @@ class ClassBuilderTest {
 
   @Test
   void testRenamingCommittedClass() throws Exception {
-    ClassBuilder.newClass()
+    EnumBuilder.newClass()
         .updateDirectory(TestConstants.DIRECTORY)
         .updatePackageName(TestConstants.PACKAGE_NAME)
-        .updateClassName("OriginalCommittedClass")
+        .updateClassName("OriginalCommittedEnumClass")
         .commit()
-        .updateClassName("RenamedUncommittedClass")
+        .updateClassName("RenamedUncommittedEnumClass")
         .commit();
 
-    assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME, "OriginalCommittedClass"));
-    assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME, "RenamedUncommittedClass"));
+    assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME, "OriginalCommittedEnumClass"));
+    assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME, "RenamedUncommittedEnumClass"));
   }
 
   @Nested
@@ -127,7 +127,7 @@ class ClassBuilderTest {
       final var exception =
           assertThrows(
               IllegalArgumentException.class,
-              () -> ClassBuilder.newClass().updateDirectory(directory));
+              () -> EnumBuilder.newClass().updateDirectory(directory));
       assertEquals("`directory` MUST NOT be `null`!", exception.getMessage());
     }
   }
@@ -140,11 +140,11 @@ class ClassBuilderTest {
      * package.
      */
     @ParameterizedTest
-    @CsvSource({",'ClassWithNullPackageName'", "'','ClassWithEmptyPackageName'"})
+    @CsvSource({",'EnumClassWithNullPackageName'", "'','EnumClassWithEmptyPackageName'"})
     void testNullValue(final String packageName, final String className) throws Exception {
       assertDoesNotThrow(
           () ->
-              ClassBuilder.newClass()
+              EnumBuilder.newClass()
                   .updateDirectory(TestConstants.DIRECTORY)
                   .updatePackageName(packageName)
                   .updateClassName(className)
@@ -159,7 +159,7 @@ class ClassBuilderTest {
       final var exception =
           assertThrows(
               IllegalArgumentException.class,
-              () -> ClassBuilder.newClass().updatePackageName(packageName));
+              () -> EnumBuilder.newClass().updatePackageName(packageName));
       assertEquals(
           "`packageName` MUST match the RegEx: " + ClassForge.VALID_PACKAGE_NAME_REGEX,
           exception.getMessage());
@@ -176,7 +176,7 @@ class ClassBuilderTest {
       final var exception =
           assertThrows(
               IllegalArgumentException.class,
-              () -> ClassBuilder.newClass().updateClassName(className));
+              () -> EnumBuilder.newClass().updateClassName(className));
       assertEquals(
           "`className` MUST match the RegEx: " + ClassForge.VALID_CLASS_NAME_REGEX,
           exception.getMessage());
@@ -192,7 +192,7 @@ class ClassBuilderTest {
       final var exception =
           assertThrows(
               IllegalArgumentException.class,
-              () -> ClassBuilder.newClass().updateClassName(className));
+              () -> EnumBuilder.newClass().updateClassName(className));
       assertEquals(
           "`className` MUST match the RegEx: " + ClassForge.VALID_CLASS_NAME_REGEX,
           exception.getMessage());

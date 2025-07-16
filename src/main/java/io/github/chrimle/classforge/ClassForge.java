@@ -42,7 +42,7 @@ public final class ClassForge {
    * @since 0.1.0
    */
   Builder newEnumBuilder() {
-    return EnumBuilder.newEnum();
+    return EnumBuilder.newClass();
   }
 
   /**
