@@ -2,6 +2,7 @@ package io.github.chrimle.classforge;
 
 /**
  * Builder of Java {@code enum} classes.
+ *
  * @since 0.1.0
  * @author Chrimle
  */
@@ -14,9 +15,7 @@ public final class EnumBuilder extends AbstractBuilder {
   }
 
   @Override
-  protected void validateAdditionalPredicates() {
-
-  }
+  protected void validateAdditionalPredicates() {}
 
   @Override
   protected String generateFileContent() {

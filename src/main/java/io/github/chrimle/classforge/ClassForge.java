@@ -13,6 +13,7 @@ import java.util.Set;
  *   <li>Generate <em>classes</em> via:
  *       <ul>
  *         <li>{@link #newClassBuilder()} - to generate Java {@code class}es.
+ *         <li>{@link #newEnumBuilder()} - to generate Java {@code enum} classes.
  *       </ul>
  * </ul>
  *
@@ -20,6 +21,7 @@ import java.util.Set;
  * @author Chrimle
  * @see #RESERVED_KEYWORDS
  * @see #newClassBuilder() Generating a Java class.
+ * @see #newEnumBuilder() Generating an Enum class.
  */
 public final class ClassForge {
 
@@ -31,6 +33,16 @@ public final class ClassForge {
    */
   Builder newClassBuilder() {
     return ClassBuilder.newClass();
+  }
+
+  /**
+   * Creates a new {@link Builder} instance for generating Java {@code enum} classes.
+   *
+   * @return a new {@link Builder} instance.
+   * @since 0.1.0
+   */
+  Builder newEnumBuilder() {
+    return EnumBuilder.newEnum();
   }
 
   /**
