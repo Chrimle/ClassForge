@@ -42,21 +42,21 @@
     </developers>
 
     <scm>
-        <url>http://github.com/chrimle/ClassForge/tree/main</url>
-        <connection>scm:git:git://github.com/chrimle/ClassForge.git</connection>
-        <developerConnection>scm:git:ssh://github.com:chrimle/ClassForge.git</developerConnection>
+        <url>http://github.com/chrimle/classforge/tree/main</url>
+        <connection>scm:git:git://github.com/chrimle/classforge.git</connection>
+        <developerConnection>scm:git:ssh://github.com:chrimle/classforge.git</developerConnection>
     </scm>
 
     <distributionManagement>
         <repository>
             <id>github</id>
             <name>GitHub Chrimle Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/chrimle/ClassForge</url>
+            <url>https://maven.pkg.github.com/chrimle/classforge</url>
         </repository>
         <snapshotRepository>
             <id>github</id>
             <name>GitHub Chrimle Apache Maven Snapshot Packages</name>
-            <url>https://maven.pkg.github.com/chrimle/ClassForge</url>
+            <url>https://maven.pkg.github.com/chrimle/classforge</url>
         </snapshotRepository>
     </distributionManagement>
 
