@@ -4,20 +4,20 @@
 changelog:
   exclude: # PRs labelled with these will be excluded from the Release Notes.
     labels:
-      - doc
+      - documentation
       - meta
       - refactor
       - test
   categories:
     - title: New Features
       labels:
-        - feat
+        - feature
     - title: Bug Fixes
       labels:
         - bug
     - title: JavaDoc Changes
       labels:
-        - javadoc
+        - javadocs
     - title: Dependency Updates
       labels:
         - dependencies
