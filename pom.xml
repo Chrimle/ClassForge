@@ -142,6 +142,13 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>${maven-javadoc-plugin.version}</version>
+                <configuration>
+                    <source>17</source>
+                    <additionalJOptions>
+                        <!-- Turn warnings into errors -->
+                        <additionalJOption>-Werror</additionalJOption>
+                    </additionalJOptions>
+                </configuration>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
