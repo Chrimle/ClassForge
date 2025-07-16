@@ -1,27 +1,8 @@
 package io.github.chrimle.classforge;
 
 import java.util.Optional;
-import java.util.function.Predicate;
 
 public final class ClassBuilder extends AbstractBuilder {
-
-  private static final Predicate<String> absolutePathPrefixValidator =
-      string -> Optional.ofNullable(string).isPresent();
-  private static final Predicate<String> classNameValidator =
-      string ->
-          Optional.ofNullable(string)
-              .filter(className -> className.matches(ClassForge.VALID_CLASS_NAME_REGEX))
-              .isPresent();
-  private static final Predicate<String> packageNameValidator =
-      string ->
-          Optional.ofNullable(string)
-              .filter(packageName -> !packageName.isBlank())
-              .map(packageName -> packageName.matches(ClassForge.VALID_PACKAGE_NAME_REGEX))
-              .orElse(true);
-  private static final Predicate<ClassBuilder> classBuilderPredicate =
-      classBuilder ->
-          classNameValidator.test(classBuilder.className)
-              && packageNameValidator.test(classBuilder.packageName);
 
   private ClassBuilder() {}
 
