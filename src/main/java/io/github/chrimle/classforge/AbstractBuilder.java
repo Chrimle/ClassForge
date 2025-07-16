@@ -6,6 +6,12 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 
+/**
+ * Abstract class for building and generating Java classes.
+ *
+ * @since 0.1.0
+ * @author Chrimle
+ */
 public abstract sealed class AbstractBuilder implements Builder permits ClassBuilder {
 
   static final Predicate<String> absolutePathPrefixValidator =

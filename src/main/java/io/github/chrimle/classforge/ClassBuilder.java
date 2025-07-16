@@ -2,6 +2,12 @@ package io.github.chrimle.classforge;
 
 import java.util.Optional;
 
+/**
+ * Builder of Java classes ({@code class}).
+ *
+ * @since 0.1.0
+ * @author Chrimle
+ */
 public final class ClassBuilder extends AbstractBuilder {
 
   private ClassBuilder() {}
