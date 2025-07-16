@@ -27,9 +27,17 @@ public abstract sealed class AbstractBuilder implements Builder permits ClassBui
               .filter(packageName -> !packageName.isBlank())
               .map(packageName -> packageName.matches(ClassForge.VALID_PACKAGE_NAME_REGEX))
               .orElse(true);
+
+  /** The collection of <em>previously committed</em> classes. */
   protected final Set<String> reservedClassNames = new HashSet<>();
+
+  /** The {@code directory} of the <em>currently uncommitted</em> class. */
   protected String directory;
+
+  /** The {@code packageName} of the <em>currently uncommitted</em> class. */
   protected String packageName;
+
+  /** The {@code className} of the <em>currently uncommitted</em> class. */
   protected String className;
 
   /** {@inheritDoc} */
@@ -77,14 +85,34 @@ public abstract sealed class AbstractBuilder implements Builder permits ClassBui
     validateAdditionalPredicates();
   }
 
+  /**
+   * Validates additional {@link Predicate}s for determining the validity of the <em>currently
+   * uncommitted</em> class.
+   */
   protected abstract void validateAdditionalPredicates();
 
+  /**
+   * Generates the complete file contents for a {@code .java} file for the <em>currently
+   * uncommitted</em> class.
+   *
+   * @return the file contents as a {@code String}.
+   */
   protected abstract String generateFileContent();
 
+  /** Generates a {@code .java} class file for the <em>currently uncommitted</em> class. */
   protected void generateClassFile() {
     FileWriter.writeToFile(directory, resolveFullyQualifiedClassName(), generateFileContent());
   }
 
+  /**
+   * Resolves the <em>Fully Qualified Class Name (FQCN)</em> for the <em>currently uncommitted</em>
+   * class.
+   *
+   * <p><strong>Example:</strong> {@code module.sub_module.ExampleClass} or {@code
+   * AnotherExampleClass}.
+   *
+   * @return the <em>FQCN</em>.
+   */
   protected String resolveFullyQualifiedClassName() {
     return Optional.ofNullable(packageName)
         .filter(pN -> !pN.isBlank())
