@@ -21,14 +21,53 @@ public abstract sealed class AbstractBuilder implements Builder permits ClassBui
               .filter(packageName -> !packageName.isBlank())
               .map(packageName -> packageName.matches(ClassForge.VALID_PACKAGE_NAME_REGEX))
               .orElse(true);
-  static final Predicate<ClassBuilder> classBuilderPredicate =
-      classBuilder ->
-          classNameValidator.test(classBuilder.className)
-              && packageNameValidator.test(classBuilder.packageName);
   protected final Set<String> reservedClassNames = new HashSet<>();
   protected String absolutePathPrefix;
   protected String packageName;
   protected String className;
+
+  @Override
+  public Builder updateAbsolutePathPrefix(final String absolutePathPrefix) {
+    validateAbsolutePathPrefix(absolutePathPrefix);
+    this.absolutePathPrefix = absolutePathPrefix;
+    return this;
+  }
+
+  @Override
+  public Builder updatePackageName(final String packageName) {
+    validatePackageName(packageName);
+    this.packageName = packageName;
+    return this;
+  }
+
+  @Override
+  public Builder updateClassName(final String className) {
+    validateClassName(className);
+    this.className = className;
+    return this;
+  }
+
+  @Override
+  public Builder commit() {
+    validateClass();
+    final String fullyQualifiedClassName = resolveFullyQualifiedClassName();
+    if (reservedClassNames.contains(fullyQualifiedClassName)) {
+      throw new IllegalStateException(
+          "Class `%s` has already been generated!".formatted(fullyQualifiedClassName));
+    }
+    generateClassFile();
+    reservedClassNames.add(fullyQualifiedClassName);
+    return this;
+  }
+
+  private void validateClass() {
+    validateAbsolutePathPrefix(this.absolutePathPrefix);
+    validatePackageName(this.packageName);
+    validateClassName(this.className);
+    validateAdditionalPredicates();
+  }
+
+  protected abstract void validateAdditionalPredicates();
 
   protected abstract String generateFileContent();
 
@@ -42,5 +81,25 @@ public abstract sealed class AbstractBuilder implements Builder permits ClassBui
         .filter(pN -> !pN.isBlank())
         .map(pN -> String.join(".", pN, className))
         .orElse(className);
+  }
+
+  private static void validateAbsolutePathPrefix(String absolutePathPrefix) {
+    if (!absolutePathPrefixValidator.test(absolutePathPrefix)) {
+      throw new IllegalArgumentException("`absolutePathPrefix` MUST NOT be `null`!");
+    }
+  }
+
+  private static void validatePackageName(final String packageName) {
+    if (!packageNameValidator.test(packageName)) {
+      throw new IllegalArgumentException(
+          "`packageName` MUST match the RegEx: " + ClassForge.VALID_PACKAGE_NAME_REGEX);
+    }
+  }
+
+  private static void validateClassName(final String className) {
+    if (!classNameValidator.test(className)) {
+      throw new IllegalArgumentException(
+          "`className` MUST match the RegEx: " + ClassForge.VALID_CLASS_NAME_REGEX);
+    }
   }
 }

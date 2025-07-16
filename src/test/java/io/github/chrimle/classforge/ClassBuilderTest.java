@@ -40,7 +40,22 @@ class ClassBuilderTest {
 
   @Test
   void testCommittingClassWithoutClassName() {
-    assertThrows(IllegalStateException.class, () -> ClassBuilder.newClass().commit());
+    final var exception =
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> ClassBuilder.newClass().updateAbsolutePathPrefix(ABSOLUTE_PATH_PREFIX).commit());
+    assertEquals(
+        "`className` MUST match the RegEx: " + ClassForge.VALID_CLASS_NAME_REGEX,
+        exception.getMessage());
+  }
+
+  @Test
+  void testCommittingClassWithoutAbsolutePathPrefix() {
+    final var exception =
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> ClassBuilder.newClass().updateClassName("ClassWithoutPathPrefix").commit());
+    assertEquals("`absolutePathPrefix` MUST NOT be `null`!", exception.getMessage());
   }
 
   @ParameterizedTest
