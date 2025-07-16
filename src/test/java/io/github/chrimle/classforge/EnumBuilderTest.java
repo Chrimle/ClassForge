@@ -33,7 +33,10 @@ class EnumBuilderTest {
   }
 
   static Class<?> loadClass(final String fullyQualifiedName) throws Exception {
-    return DynamicClassLoader.loadClass(Path.of(TestConstants.DIRECTORY), fullyQualifiedName);
+    final var loadedClass =
+        DynamicClassLoader.loadClass(Path.of(TestConstants.DIRECTORY), fullyQualifiedName);
+    assertTrue(loadedClass.isEnum());
+    return loadedClass;
   }
 
   @Test
