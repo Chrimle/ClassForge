@@ -26,6 +26,7 @@ public abstract sealed class AbstractBuilder implements Builder permits ClassBui
   protected String packageName;
   protected String className;
 
+  /** {@inheritDoc} */
   @Override
   public Builder updateAbsolutePathPrefix(final String absolutePathPrefix) {
     validateAbsolutePathPrefix(absolutePathPrefix);
@@ -33,6 +34,7 @@ public abstract sealed class AbstractBuilder implements Builder permits ClassBui
     return this;
   }
 
+  /** {@inheritDoc} */
   @Override
   public Builder updatePackageName(final String packageName) {
     validatePackageName(packageName);
@@ -40,6 +42,7 @@ public abstract sealed class AbstractBuilder implements Builder permits ClassBui
     return this;
   }
 
+  /** {@inheritDoc} */
   @Override
   public Builder updateClassName(final String className) {
     validateClassName(className);
@@ -47,6 +50,7 @@ public abstract sealed class AbstractBuilder implements Builder permits ClassBui
     return this;
   }
 
+  /** {@inheritDoc} */
   @Override
   public Builder commit() {
     validateClass();
