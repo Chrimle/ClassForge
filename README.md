@@ -28,3 +28,9 @@
     <version>0.0.0</version>
 </dependency>
 ```
+## Example Usages
+
+All types of classes are generated via the [`ClassForge`-class](src/main/java/io/github/chrimle/classforge/ClassForge.java).
+Refer to the JavaDocs for further explanations and examples.
+
+
