@@ -7,7 +7,7 @@ package io.github.chrimle.classforge;
  * @since 0.1.0
  * @author Chrimle
  */
-public sealed interface Builder permits ClassBuilder {
+public sealed interface Builder permits AbstractBuilder {
 
   /**
    * <em><strong>Updates</strong></em> the {@code absolutePathPrefix} of the <em>currently
