@@ -7,10 +7,9 @@ import java.nio.file.StandardOpenOption;
 public class FileWriter {
 
   public static void writeToFile(
-      final String absolutePathPrefix, final String fullyQualifiedClassName, final String content) {
+      final String directory, final String fullyQualifiedClassName, final String content) {
     writeToFile(
-        Path.of(
-            "%s/%s.java".formatted(absolutePathPrefix, fullyQualifiedClassName.replace(".", "/"))),
+        Path.of("%s/%s.java".formatted(directory, fullyQualifiedClassName.replace(".", "/"))),
         content);
   }
 
