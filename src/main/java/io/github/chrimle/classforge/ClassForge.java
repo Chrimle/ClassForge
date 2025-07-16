@@ -6,8 +6,19 @@ import java.util.Set;
  * The single-entrypoint for generating Java <i>classes</i> via {@code
  * io.github.chrimle:class-forge}.
  *
+ * <p><strong>Instructions</strong>
+ *
+ * <ul>
+ *   <li>Ensure <strong>NO</strong> reserved keywords are used when generating classes.
+ *   <li>Generate <em>classes</em> via:
+ *       <ul>
+ *         <li>{@link #newClassBuilder()} - to generate Java {@code class}es.
+ *       </ul>
+ * </ul>
+ *
  * @since 0.1.0
  * @author Chrimle
+ * @see #RESERVED_KEYWORDS
  * @see #newClassBuilder() Generating a Java class.
  */
 public final class ClassForge {
