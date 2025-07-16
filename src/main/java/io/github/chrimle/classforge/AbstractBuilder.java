@@ -12,7 +12,7 @@ import java.util.function.Predicate;
  * @since 0.1.0
  * @author Chrimle
  */
-public abstract sealed class AbstractBuilder implements Builder permits ClassBuilder {
+public abstract sealed class AbstractBuilder implements Builder permits ClassBuilder, EnumBuilder {
 
   private static final Predicate<String> directoryValidator =
       string -> Optional.ofNullable(string).isPresent();
