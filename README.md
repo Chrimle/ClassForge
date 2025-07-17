@@ -31,6 +31,8 @@
 ## Example Usages
 
 All types of classes are generated via the [`ClassForge`-class](src/main/java/io/github/chrimle/classforge/ClassForge.java).
-Refer to the JavaDocs for further explanations and examples.
+
+## JavaDocs
+Refer to the [JavaDocs](https://javadoc.io/doc/io.github.chrimle/class-forge/latest/index.html) for further explanations and examples.
 
 
