@@ -187,6 +187,17 @@ class EnumBuilderTest {
     }
 
     @Test
+    void testDuplicateEnumConstantNames() {
+      final var enumBuilder = EnumBuilder.newClass();
+      assertDoesNotThrow(
+          () -> enumBuilder.addEnumConstant("FIRST"),
+          "Constant 'FIRST' could not be added the first time!");
+      final var exception =
+          assertThrows(IllegalArgumentException.class, () -> enumBuilder.addEnumConstant("FIRST"));
+      assertEquals("An Enum constant named 'FIRST' already exists!", exception.getMessage());
+    }
+
+    @Test
     void testValidEnumConstantNames() throws Exception {
       final var expectedEnumConstants =
           List.of("_a", "__a", "__9", "TEST", "Test_1_", "Test_1_1", "O__0");
