@@ -11,7 +11,7 @@ import java.util.function.Predicate;
  * @since 0.1.0
  * @author Chrimle
  */
-public final class EnumBuilder extends AbstractBuilder {
+public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
 
   /**
    * The <em>RegularExpression (RegEx)</em> for determining validity of enum constant-names.
@@ -56,6 +56,11 @@ public final class EnumBuilder extends AbstractBuilder {
       throw new IllegalArgumentException(
           "`enumConstantName` MUST match the RegEx: " + VALID_ENUM_CONSTANT_NAME_REGEX);
     }
+  }
+
+  @Override
+  protected EnumBuilder self() {
+    return this;
   }
 
   @Override

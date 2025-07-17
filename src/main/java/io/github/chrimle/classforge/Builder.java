@@ -7,7 +7,7 @@ package io.github.chrimle.classforge;
  * @since 0.1.0
  * @author Chrimle
  */
-public sealed interface Builder permits AbstractBuilder {
+public sealed interface Builder<T extends Builder<T>> permits AbstractBuilder {
 
   /**
    * <em><strong>Updates</strong></em> the {@code directory} of the <em>currently uncommitted</em>
@@ -17,7 +17,7 @@ public sealed interface Builder permits AbstractBuilder {
    * @return <em>this</em> {@code Builder}.
    * @since 0.1.0
    */
-  Builder updateDirectory(final String directory);
+  T updateDirectory(final String directory);
 
   /**
    * <em><strong>Updates</strong></em> the {@code className} of the <em>currently uncommitted</em>
@@ -27,7 +27,7 @@ public sealed interface Builder permits AbstractBuilder {
    * @return <em>this</em> {@code Builder}.
    * @since 0.1.0
    */
-  Builder updateClassName(final String className);
+  T updateClassName(final String className);
 
   /**
    * <em><strong>Updates</strong></em> the {@code packageName} of the <em>currently uncommitted</em>
@@ -37,7 +37,7 @@ public sealed interface Builder permits AbstractBuilder {
    * @return <em>this</em> {@code Builder}.
    * @since 0.1.0
    */
-  Builder updatePackageName(final String packageName);
+  T updatePackageName(final String packageName);
 
   /**
    * <em><strong>Commits</strong></em> the <em>currently uncommitted</em> class.
@@ -45,5 +45,5 @@ public sealed interface Builder permits AbstractBuilder {
    * @return <em>this</em> {@code Builder}.
    * @since 0.1.0
    */
-  Builder commit();
+  T commit();
 }

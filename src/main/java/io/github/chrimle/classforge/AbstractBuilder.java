@@ -12,7 +12,8 @@ import java.util.function.Predicate;
  * @since 0.1.0
  * @author Chrimle
  */
-public abstract sealed class AbstractBuilder implements Builder permits ClassBuilder, EnumBuilder {
+public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Builder<T>
+    permits ClassBuilder, EnumBuilder {
 
   private static final Predicate<String> directoryValidator =
       string -> Optional.ofNullable(string).isPresent();
@@ -42,31 +43,31 @@ public abstract sealed class AbstractBuilder implements Builder permits ClassBui
 
   /** {@inheritDoc} */
   @Override
-  public Builder updateDirectory(final String directory) {
+  public T updateDirectory(final String directory) {
     validateDirectory(directory);
     this.directory = directory;
-    return this;
+    return self();
   }
 
   /** {@inheritDoc} */
   @Override
-  public Builder updatePackageName(final String packageName) {
+  public T updatePackageName(final String packageName) {
     validatePackageName(packageName);
     this.packageName = packageName;
-    return this;
+    return self();
   }
 
   /** {@inheritDoc} */
   @Override
-  public Builder updateClassName(final String className) {
+  public T updateClassName(final String className) {
     validateClassName(className);
     this.className = className;
-    return this;
+    return self();
   }
 
   /** {@inheritDoc} */
   @Override
-  public Builder commit() {
+  public T commit() {
     validateClass();
     final String fullyQualifiedClassName = resolveFullyQualifiedClassName();
     if (reservedClassNames.contains(fullyQualifiedClassName)) {
@@ -75,7 +76,7 @@ public abstract sealed class AbstractBuilder implements Builder permits ClassBui
     }
     generateClassFile();
     reservedClassNames.add(fullyQualifiedClassName);
-    return this;
+    return self();
   }
 
   private void validateClass() {
@@ -84,6 +85,13 @@ public abstract sealed class AbstractBuilder implements Builder permits ClassBui
     validateClassName(this.className);
     validateAdditionalPredicates();
   }
+
+  /**
+   * Returns <em>this</em> as {@link T}.
+   *
+   * @return <em>this</em>.
+   */
+  protected abstract T self();
 
   /**
    * Validates additional {@link Predicate}s for determining the validity of the <em>currently
