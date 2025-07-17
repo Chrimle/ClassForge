@@ -8,12 +8,17 @@ import java.util.Optional;
  * @since 0.1.0
  * @author Chrimle
  */
-public final class ClassBuilder extends AbstractBuilder {
+public final class ClassBuilder extends AbstractBuilder<ClassBuilder> {
 
   private ClassBuilder() {}
 
-  static Builder newClass() {
+  static ClassBuilder newClass() {
     return new ClassBuilder();
+  }
+
+  @Override
+  protected ClassBuilder self() {
+    return this;
   }
 
   @Override
