@@ -7,6 +7,8 @@ import io.github.chrimle.classforge.test.utils.JavaSourceCompiler;
 import io.github.chrimle.classforge.test.utils.TestConstants;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -165,6 +167,51 @@ class EnumBuilderTest {
       assertEquals(
           "`className` MUST match the RegEx: " + ClassForge.VALID_CLASS_NAME_REGEX,
           exception.getMessage());
+    }
+  }
+
+  @Nested
+  class EnumConstantNameTests {
+
+    @ParameterizedTest
+    @ValueSource(strings = {"", " ", ".", "_", "1", "1_"})
+    @NullSource
+    void testInvalidEnumConstantNames(final String enumConstantName) {
+      final var exception =
+          assertThrows(
+              IllegalArgumentException.class,
+              () -> EnumBuilder.newClass().addEnumConstant(enumConstantName));
+      assertEquals(
+          "`enumConstantName` MUST match the RegEx: " + EnumBuilder.VALID_ENUM_CONSTANT_NAME_REGEX,
+          exception.getMessage());
+    }
+
+    @Test
+    void testValidEnumConstantNames() throws Exception {
+      final var expectedEnumConstants =
+          List.of("_a", "__a", "__9", "TEST", "Test_1_", "Test_1_1", "O__0");
+      final var enumBuilder = EnumBuilder.newClass();
+      for (final var enumConstant : expectedEnumConstants) {
+        enumBuilder.addEnumConstant(enumConstant);
+      }
+      enumBuilder
+          .updateClassName("EnumClassWithValidConstants")
+          .updateDirectory(TestConstants.DIRECTORY)
+          .updatePackageName(TestConstants.PACKAGE_NAME)
+          .commit();
+
+      final var enumClass =
+          compileAndLoadClass(TestConstants.PACKAGE_NAME, "EnumClassWithValidConstants");
+      assertTrue(enumClass.isEnum());
+      final var enumConstants =
+          Arrays.stream(enumClass.getEnumConstants())
+              .map(s -> (Enum<?>) s)
+              .map(Enum::name)
+              .toList();
+      assertEquals(expectedEnumConstants.size(), enumConstants.size());
+      for (final var expectedEnumConstant : expectedEnumConstants) {
+        assertTrue(enumConstants.contains(expectedEnumConstant));
+      }
     }
   }
 }
