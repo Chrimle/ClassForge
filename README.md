@@ -28,6 +28,10 @@
     <version>0.1.0</version>
 </dependency>
 ```
+### *Available on...*
+- [Maven Central](https://central.sonatype.com/artifact/io.github.chrimle/class-forge)
+- [GitHub Packages](https://github.com/Chrimle/ClassForge/packages/)
+
 ## Example Usages
 
 All types of classes are generated via the [`ClassForge`-class](src/main/java/io/github/chrimle/classforge/ClassForge.java).
