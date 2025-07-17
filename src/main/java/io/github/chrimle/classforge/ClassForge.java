@@ -31,7 +31,7 @@ public final class ClassForge {
    * @since 0.1.0
    * @return a new {@link Builder} instance.
    */
-  Builder newClassBuilder() {
+  Builder<?> newClassBuilder() {
     return ClassBuilder.newClass();
   }
 
@@ -41,7 +41,7 @@ public final class ClassForge {
    * @return a new {@link Builder} instance.
    * @since 0.1.0
    */
-  Builder newEnumBuilder() {
+  Builder<?> newEnumBuilder() {
     return EnumBuilder.newClass();
   }
 
