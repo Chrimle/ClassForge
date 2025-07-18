@@ -36,6 +36,9 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
   /** The {@code semVer} of the <em>previously committed</em> class. Starts at {@code 0.0.0}. */
   protected SemVer semVer = new SemVer(0, 0, 0);
 
+  /** The {@code versionPlacement} of the <em>currently uncommitted</em> class. */
+  protected VersionPlacement versionPlacement = VersionPlacement.NONE;
+
   /** The {@code directory} of the <em>currently uncommitted</em> class. */
   protected String directory;
 
@@ -44,6 +47,13 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
 
   /** The {@code className} of the <em>currently uncommitted</em> class. */
   protected String className;
+
+  /** {@inheritDoc} */
+  @Override
+  public T setVersionPlacement(final VersionPlacement versionPlacement) {
+    this.versionPlacement = Optional.ofNullable(versionPlacement).orElse(VersionPlacement.NONE);
+    return self();
+  }
 
   /** {@inheritDoc} */
   @Override
@@ -136,10 +146,28 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
    * @return the <em>FQCN</em>.
    */
   protected String resolveFullyQualifiedClassName() {
-    return Optional.ofNullable(packageName)
+    return Optional.ofNullable(resolveEffectivePackageName())
         .filter(pN -> !pN.isBlank())
         .map(pN -> String.join(".", pN, className))
         .orElse(className);
+  }
+
+  /**
+   * Resolves the <em>effective package name</em> for the <em>currently uncommitted</em> class.
+   *
+   * @return the <em>effective package name</em>.
+   */
+  protected String resolveEffectivePackageName() {
+    if (versionPlacement == VersionPlacement.PACKAGE_NAME) {
+      final String versionSubPackage =
+          "v%d_%d_%d".formatted(semVer.major(), semVer.minor(), semVer.patch());
+
+      return Optional.ofNullable(packageName)
+          .filter(pN -> !pN.isBlank())
+          .map(pN -> String.join(".", pN, versionSubPackage))
+          .orElse(versionSubPackage);
+    }
+    return packageName;
   }
 
   private static void validateDirectory(final String directory) {

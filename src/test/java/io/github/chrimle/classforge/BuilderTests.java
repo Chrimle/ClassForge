@@ -2,7 +2,11 @@ package io.github.chrimle.classforge;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import io.github.chrimle.classforge.test.utils.DynamicClassLoader;
+import io.github.chrimle.classforge.test.utils.JavaSourceCompiler;
 import io.github.chrimle.classforge.test.utils.TestConstants;
+import java.io.IOException;
+import java.nio.file.Path;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -17,6 +21,29 @@ public class BuilderTests {
       return builderClass.cast(EnumBuilder.newClass());
     }
     throw new UnsupportedOperationException();
+  }
+
+  static Class<?> compileAndLoadClass(final String className) throws Exception {
+    compileClass(className);
+    return loadClass(className);
+  }
+
+  static Class<?> compileAndLoadClass(final String packageName, final String className)
+      throws Exception {
+    final String fullyQualifiedName = String.join(".", packageName, className);
+    compileClass(fullyQualifiedName);
+    return loadClass(fullyQualifiedName);
+  }
+
+  static void compileClass(final String fullyQualifiedName) throws IOException {
+    JavaSourceCompiler.compile(
+        Path.of(TestConstants.DIRECTORY).resolve(fullyQualifiedName.replace(".", "/") + ".java"));
+  }
+
+  static Class<?> loadClass(final String fullyQualifiedName) throws Exception {
+    final var loadedClass =
+        DynamicClassLoader.loadClass(Path.of(TestConstants.DIRECTORY), fullyQualifiedName);
+    return loadedClass;
   }
 
   @ParameterizedTest

@@ -10,6 +10,37 @@ package io.github.chrimle.classforge;
 public sealed interface Builder<T extends Builder<T>> permits AbstractBuilder {
 
   /**
+   * The placement of version information in generated <em>classes</em>.
+   *
+   * @since 0.3.0
+   * @author Chrimle
+   */
+  enum VersionPlacement {
+    /** <strong>Default.</strong> Version information is excluded. */
+    NONE,
+    /**
+     * Version information is included in the {@code package}-name.
+     *
+     * <p><strong>Example: </strong>{@code 1.2.3}
+     *
+     * <pre>{@code package com.example.v1_2_3;}
+     * </pre>
+     */
+    PACKAGE_NAME
+  }
+
+  /**
+   * <em>Sets</em> the {@code versionPlacement} of the <em>currently uncommitted</em> class.
+   *
+   * <p><strong>Default: </strong> {@link VersionPlacement#NONE}.
+   *
+   * @param versionPlacement for the class.
+   * @return <em>this</em> {@code Builder}.
+   * @since 0.3.0
+   */
+  T setVersionPlacement(final VersionPlacement versionPlacement);
+
+  /**
    * <em><strong>Updates</strong></em> the {@code directory} of the <em>currently uncommitted</em>
    * class.
    *
