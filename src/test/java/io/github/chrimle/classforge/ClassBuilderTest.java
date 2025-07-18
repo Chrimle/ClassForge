@@ -168,4 +168,29 @@ class ClassBuilderTest {
           exception.getMessage());
     }
   }
+
+  @Nested
+  class VersionPlacementTests {
+
+    @Nested
+    class PackageNameTests {
+
+      @Test
+      void testUpdatingPackageVersionTwice() throws Exception {
+        final var className = "ClassTestUpdatingPackageVersionTwice";
+        ClassBuilder.newClass()
+            .setVersionPlacement(Builder.VersionPlacement.PACKAGE_NAME)
+            .updateDirectory(TestConstants.DIRECTORY)
+            .updatePackageName(TestConstants.PACKAGE_NAME)
+            .updateClassName(className)
+            .commit() // Version 1.0.0
+            .commit() // Version 2.0.0
+            .commit(); // Version 3.0.0
+
+        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v1_0_0", className);
+        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v2_0_0", className);
+        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v3_0_0", className);
+      }
+    }
+  }
 }

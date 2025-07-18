@@ -119,7 +119,7 @@ public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
   protected String generateFileContent() {
     final StringBuilder codeBuilder = new StringBuilder();
 
-    Optional.ofNullable(packageName)
+    Optional.ofNullable(resolveEffectivePackageName())
         .filter(pN -> !pN.isBlank())
         .map("package %s;\n\n"::formatted)
         .ifPresent(codeBuilder::append);

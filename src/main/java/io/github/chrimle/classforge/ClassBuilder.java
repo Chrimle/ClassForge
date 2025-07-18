@@ -28,7 +28,7 @@ public final class ClassBuilder extends AbstractBuilder<ClassBuilder> {
   protected String generateFileContent() {
     final StringBuilder codeBuilder = new StringBuilder();
 
-    Optional.ofNullable(packageName)
+    Optional.ofNullable(resolveEffectivePackageName())
         .filter(pN -> !pN.isBlank())
         .map("package %s;\n\n"::formatted)
         .ifPresent(codeBuilder::append);
