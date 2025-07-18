@@ -23,7 +23,7 @@ public record SemVer(int major, int minor, int patch) {
     /** <strong>MINOR</strong> change. */
     MINOR,
     /** <strong>PATCH</strong> change. */
-    PATCH;
+    PATCH
   }
 
   /**
