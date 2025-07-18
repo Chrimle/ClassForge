@@ -248,11 +248,38 @@ class EnumBuilderTest {
     }
 
     @Test
+    void testRemoveEmptyEnumConstantNames() {
+      final var exception =
+          assertThrows(
+              IllegalArgumentException.class, () -> EnumBuilder.newClass().removeEnumConstants());
+      assertEquals("`enumConstantNames` MUST NOT be null or empty!", exception.getMessage());
+    }
+
+    @Test
+    void testRemoveNullEnumConstantName() {
+      final var exception =
+          assertThrows(
+              IllegalArgumentException.class,
+              () -> EnumBuilder.newClass().removeEnumConstants((String) null));
+      assertEquals("`enumConstantNames` MUST NOT be null or empty!", exception.getMessage());
+    }
+
+    @Test
+    void testRemoveNullEnumConstantNames() {
+      final var exception =
+          assertThrows(
+              IllegalArgumentException.class,
+              () -> EnumBuilder.newClass().removeEnumConstants("Valid", null));
+      assertEquals("`enumConstantNames` MUST NOT be null or empty!", exception.getMessage());
+    }
+
+    @Test
     void testRemoveNonExistingEnumConstant() {
       final var enumBuilder = EnumBuilder.newClass();
       final var exception =
           assertThrows(
-              IllegalArgumentException.class, () -> enumBuilder.removeEnumConstant("DoesNotExist"));
+              IllegalArgumentException.class,
+              () -> enumBuilder.removeEnumConstants("DoesNotExist"));
       assertEquals("No Enum constant named 'DoesNotExist' exists!", exception.getMessage());
     }
 
@@ -265,7 +292,7 @@ class EnumBuilderTest {
               .updateClassName("TestRemovingExistingEnumConstant")
               .addEnumConstants("ConstantToKeep")
               .addEnumConstants("ConstantToRemove");
-      assertDoesNotThrow(() -> enumBuilder.removeEnumConstant("ConstantToRemove"));
+      assertDoesNotThrow(() -> enumBuilder.removeEnumConstants("ConstantToRemove"));
       enumBuilder.commit();
 
       final var enumClass =
@@ -274,6 +301,33 @@ class EnumBuilderTest {
       assertEquals(1, enumClass.getEnumConstants().length);
       Enum<?> enumConstant = (Enum<?>) enumClass.getEnumConstants()[0];
       assertEquals("ConstantToKeep", enumConstant.name());
+    }
+
+    @Test
+    void testRemoveMultipleExistingEnumConstant() throws Exception {
+      final var enumBuilder =
+          EnumBuilder.newClass()
+              .updateDirectory(TestConstants.DIRECTORY)
+              .updatePackageName(TestConstants.PACKAGE_NAME)
+              .updateClassName("TestRemovingMultipleExistingEnumConstant")
+              .addEnumConstants("ConstantToKeep")
+              .addEnumConstants("AnotherConstantToKeep")
+              .addEnumConstants("ConstantToRemove")
+              .addEnumConstants("AnotherConstantToRemove");
+      assertDoesNotThrow(
+          () -> enumBuilder.removeEnumConstants("ConstantToRemove", "AnotherConstantToRemove"));
+      enumBuilder.commit();
+
+      final var enumClass =
+          compileAndLoadClass(
+              TestConstants.PACKAGE_NAME, "TestRemovingMultipleExistingEnumConstant");
+      assertTrue(enumClass.isEnum());
+      assertEquals(
+          List.of("ConstantToKeep", "AnotherConstantToKeep"),
+          Arrays.stream(enumClass.getEnumConstants())
+              .map(e -> (Enum<?>) e)
+              .map(Enum::name)
+              .toList());
     }
   }
 }
