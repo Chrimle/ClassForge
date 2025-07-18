@@ -89,6 +89,13 @@ public record SemVer(int major, int minor, int patch) {
     return new SemVer(major, minor, patch + 1);
   }
 
+  /**
+   * Returns <em>this</em> {@link SemVer} as a {@code String} in the format: {@code
+   * v{major}.{minor}.{patch}}.
+   *
+   * @return the formatted {@code String}.
+   * @since 0.3.0
+   */
   @Override
   public String toString() {
     return "v%d.%d.%d".formatted(major, minor, patch);
