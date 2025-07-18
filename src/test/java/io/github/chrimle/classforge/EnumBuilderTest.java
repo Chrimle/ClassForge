@@ -219,10 +219,7 @@ class EnumBuilderTest {
               .map(s -> (Enum<?>) s)
               .map(Enum::name)
               .toList();
-      assertEquals(expectedEnumConstants.size(), enumConstants.size());
-      for (final var expectedEnumConstant : expectedEnumConstants) {
-        assertTrue(enumConstants.contains(expectedEnumConstant));
-      }
+      assertEquals(expectedEnumConstants, enumConstants);
     }
 
     @Test
