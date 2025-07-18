@@ -224,5 +224,34 @@ class EnumBuilderTest {
         assertTrue(enumConstants.contains(expectedEnumConstant));
       }
     }
+
+    @Test
+    void testRemoveNonExistingEnumConstant() {
+      final var enumBuilder = EnumBuilder.newClass();
+      final var exception =
+          assertThrows(
+              IllegalArgumentException.class, () -> enumBuilder.removeEnumConstant("DoesNotExist"));
+      assertEquals("No Enum constant named 'DoesNotExist' exists!", exception.getMessage());
+    }
+
+    @Test
+    void testRemoveExistingEnumConstant() throws Exception {
+      final var enumBuilder =
+          EnumBuilder.newClass()
+              .updateDirectory(TestConstants.DIRECTORY)
+              .updatePackageName(TestConstants.PACKAGE_NAME)
+              .updateClassName("TestRemovingExistingEnumConstant")
+              .addEnumConstant("ConstantToKeep")
+              .addEnumConstant("ConstantToRemove");
+      assertDoesNotThrow(() -> enumBuilder.removeEnumConstant("ConstantToRemove"));
+      enumBuilder.commit();
+
+      final var enumClass =
+          compileAndLoadClass(TestConstants.PACKAGE_NAME, "TestRemovingExistingEnumConstant");
+      assertTrue(enumClass.isEnum());
+      assertEquals(1, enumClass.getEnumConstants().length);
+      Enum<?> enumConstant = (Enum<?>) enumClass.getEnumConstants()[0];
+      assertEquals("ConstantToKeep", enumConstant.name());
+    }
   }
 }
