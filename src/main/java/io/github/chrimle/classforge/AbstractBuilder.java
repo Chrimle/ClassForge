@@ -1,5 +1,6 @@
 package io.github.chrimle.classforge;
 
+import io.github.chrimle.classforge.semver.SemVer;
 import io.github.chrimle.classforge.utils.FileWriter;
 import java.util.HashSet;
 import java.util.Optional;
@@ -31,6 +32,9 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
 
   /** The collection of <em>previously committed</em> classes. */
   protected final Set<String> reservedClassNames = new HashSet<>();
+
+  /** The {@code semVer} of the <em>previously committed</em> class. Starts at {@code 0.0.0}. */
+  protected SemVer semVer = new SemVer(0, 0, 0);
 
   /** The {@code directory} of the <em>currently uncommitted</em> class. */
   protected String directory;
@@ -74,6 +78,7 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
       throw new IllegalStateException(
           "Class `%s` has already been generated!".formatted(fullyQualifiedClassName));
     }
+    this.semVer = semVer.incrementVersion(determineSemVerChange());
     generateClassFile();
     reservedClassNames.add(fullyQualifiedClassName);
     return self();
@@ -84,6 +89,15 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
     validatePackageName(this.packageName);
     validateClassName(this.className);
     validateAdditionalPredicates();
+  }
+
+  /**
+   * Determines the {@link SemVer.Change} for the <em>currently uncommitted</em> changes.
+   *
+   * @return the {@code Change}.
+   */
+  protected SemVer.Change determineSemVerChange() {
+    return SemVer.Change.MAJOR;
   }
 
   /**
