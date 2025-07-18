@@ -88,4 +88,9 @@ public record SemVer(int major, int minor, int patch) {
   public SemVer incrementPatch() {
     return new SemVer(major, minor, patch + 1);
   }
+
+  @Override
+  public String toString() {
+    return "v%d.%d.%d".formatted(major, minor, patch);
+  }
 }

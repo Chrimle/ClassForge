@@ -159,8 +159,7 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
    */
   protected String resolveEffectivePackageName() {
     if (versionPlacement == VersionPlacement.PACKAGE_NAME) {
-      final String versionSubPackage =
-          "v%d_%d_%d".formatted(semVer.major(), semVer.minor(), semVer.patch());
+      final String versionSubPackage = semVer.toString().replace(".", "_");
 
       return Optional.ofNullable(packageName)
           .filter(pN -> !pN.isBlank())
