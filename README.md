@@ -1,5 +1,9 @@
 # ClassForge
 
+[![Java CI with Maven](https://github.com/Chrimle/ClassForge/actions/workflows/maven.yml/badge.svg)](https://github.com/Chrimle/ClassForge/actions/workflows/maven.yml)
+[![Maven Package](https://github.com/Chrimle/ClassForge/actions/workflows/maven-publish.yml/badge.svg)](https://github.com/Chrimle/ClassForge/actions/workflows/maven-publish.yml)
+[![pages-build-deployment](https://github.com/Chrimle/ClassForge/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/Chrimle/ClassForge/actions/workflows/pages/pages-build-deployment)
+
 *Forge Java Classes!*
 
 > Imagine generating [DTO](https://en.wikipedia.org/wiki/Data_transfer_object)s with a *[Builder pattern](https://en.wikipedia.org/wiki/Builder_pattern)*, which functions like a *Database-changeset*.
