@@ -1,8 +1,6 @@
 package io.github.chrimle.classforge;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 
 /**
@@ -26,7 +24,7 @@ public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
           Optional.ofNullable(enumConstantName)
               .filter(name -> name.matches(VALID_ENUM_CONSTANT_NAME_REGEX))
               .isPresent();
-  private final Set<String> enumConstants = new HashSet<>();
+  private final List<String> enumConstants = new ArrayList<>();
 
   private EnumBuilder() {}
 
