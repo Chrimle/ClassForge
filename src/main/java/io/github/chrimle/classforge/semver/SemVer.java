@@ -12,6 +12,21 @@ package io.github.chrimle.classforge.semver;
 public record SemVer(int major, int minor, int patch) {
 
   /**
+   * The <em>type</em> of change.
+   *
+   * @since 0.3.0
+   * @author Chrimle
+   */
+  public enum Change {
+    /** <strong>MAJOR</strong> change. */
+    MAJOR,
+    /** <strong>MINOR</strong> change. */
+    MINOR,
+    /** <strong>PATCH</strong> change. */
+    PATCH;
+  }
+
+  /**
    * Constructs a <em>valid</em> {@link SemVer} instance.
    *
    * @param major version.
@@ -23,6 +38,22 @@ public record SemVer(int major, int minor, int patch) {
     if (major < 0) throw new IllegalArgumentException("SemVer.major MUST NOT be less than 0");
     if (minor < 0) throw new IllegalArgumentException("SemVer.minor MUST NOT be less than 0");
     if (patch < 0) throw new IllegalArgumentException("SemVer.patch MUST NOT be less than 0");
+  }
+
+  /**
+   * Creates a new {@link SemVer} with the corresponding version incremented.
+   *
+   * @param change for determining the new {@code SemVer}.
+   * @return the new {@code SemVer}.
+   * @since 0.3.0
+   */
+  public SemVer incrementVersion(final Change change) {
+    if (change == null) throw new IllegalArgumentException("`change` MUST NOT be null!");
+    return switch (change) {
+      case MAJOR -> incrementMajor();
+      case MINOR -> incrementMinor();
+      case PATCH -> incrementPatch();
+    };
   }
 
   /**
