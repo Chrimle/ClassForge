@@ -33,19 +33,36 @@ public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
   }
 
   /**
-   * Adds the {@code enumConstantName} to the <em>currently uncommitted</em> enum class.
+   * Adds the {@code enumConstantNames} to the <em>currently uncommitted</em> enum class.
    *
-   * @param enumConstantName to add.
+   * @param enumConstantNames to add.
    * @return this Builder.
-   * @since 0.2.0
+   * @since 0.3.0
    */
-  public EnumBuilder addEnumConstant(final String enumConstantName) {
-    validateEnumConstantName(enumConstantName);
-    if (enumConstants.contains(enumConstantName)) {
-      throw new IllegalArgumentException(
-          "An Enum constant named '%s' already exists!".formatted(enumConstantName));
+  public EnumBuilder addEnumConstants(final String... enumConstantNames) {
+
+    if (Optional.ofNullable(enumConstantNames)
+        .filter(enums -> enums.length >= 1)
+        .map(Arrays::stream)
+        .filter(stream -> stream.allMatch(Objects::nonNull))
+        .isEmpty()) {
+      throw new IllegalArgumentException("`enumConstantNames` MUST NOT be null or empty!");
     }
-    enumConstants.add(enumConstantName);
+
+    final var enumNamesList = List.of(enumConstantNames);
+
+    if (new HashSet<>(enumNamesList).size() < enumNamesList.size()) {
+      throw new IllegalArgumentException("Duplicate Enum constant names were provided!");
+    }
+
+    for (final String enumConstantName : enumConstantNames) {
+      validateEnumConstantName(enumConstantName);
+      if (enumConstants.contains(enumConstantName)) {
+        throw new IllegalArgumentException(
+            "An Enum constant named '%s' already exists!".formatted(enumConstantName));
+      }
+    }
+    enumConstants.addAll(enumNamesList);
     return this;
   }
 

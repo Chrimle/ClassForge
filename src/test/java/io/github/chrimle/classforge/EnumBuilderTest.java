@@ -173,14 +173,39 @@ class EnumBuilderTest {
   @Nested
   class EnumConstantNameTests {
 
+    @Test
+    void testEmptyEnumConstantNames() {
+      final var exception =
+          assertThrows(
+              IllegalArgumentException.class, () -> EnumBuilder.newClass().addEnumConstants());
+      assertEquals("`enumConstantNames` MUST NOT be null or empty!", exception.getMessage());
+    }
+
+    @Test
+    void testNullEnumConstantName() {
+      final var exception =
+          assertThrows(
+              IllegalArgumentException.class,
+              () -> EnumBuilder.newClass().addEnumConstants((String) null));
+      assertEquals("`enumConstantNames` MUST NOT be null or empty!", exception.getMessage());
+    }
+
+    @Test
+    void testNullEnumConstantNames() {
+      final var exception =
+          assertThrows(
+              IllegalArgumentException.class,
+              () -> EnumBuilder.newClass().addEnumConstants("Valid", null));
+      assertEquals("`enumConstantNames` MUST NOT be null or empty!", exception.getMessage());
+    }
+
     @ParameterizedTest
     @ValueSource(strings = {"", " ", ".", "_", "1", "1_"})
-    @NullSource
     void testInvalidEnumConstantNames(final String enumConstantName) {
       final var exception =
           assertThrows(
               IllegalArgumentException.class,
-              () -> EnumBuilder.newClass().addEnumConstant(enumConstantName));
+              () -> EnumBuilder.newClass().addEnumConstants(enumConstantName));
       assertEquals(
           "`enumConstantName` MUST match the RegEx: " + EnumBuilder.VALID_ENUM_CONSTANT_NAME_REGEX,
           exception.getMessage());
@@ -190,10 +215,10 @@ class EnumBuilderTest {
     void testDuplicateEnumConstantNames() {
       final var enumBuilder = EnumBuilder.newClass();
       assertDoesNotThrow(
-          () -> enumBuilder.addEnumConstant("FIRST"),
+          () -> enumBuilder.addEnumConstants("FIRST"),
           "Constant 'FIRST' could not be added the first time!");
       final var exception =
-          assertThrows(IllegalArgumentException.class, () -> enumBuilder.addEnumConstant("FIRST"));
+          assertThrows(IllegalArgumentException.class, () -> enumBuilder.addEnumConstants("FIRST"));
       assertEquals("An Enum constant named 'FIRST' already exists!", exception.getMessage());
     }
 
@@ -203,7 +228,7 @@ class EnumBuilderTest {
           List.of("_a", "__a", "__9", "TEST", "Test_1_", "Test_1_1", "O__0");
       final var enumBuilder = EnumBuilder.newClass();
       for (final var enumConstant : expectedEnumConstants) {
-        enumBuilder.addEnumConstant(enumConstant);
+        enumBuilder.addEnumConstants(enumConstant);
       }
       enumBuilder
           .updateClassName("EnumClassWithValidConstants")
@@ -238,8 +263,8 @@ class EnumBuilderTest {
               .updateDirectory(TestConstants.DIRECTORY)
               .updatePackageName(TestConstants.PACKAGE_NAME)
               .updateClassName("TestRemovingExistingEnumConstant")
-              .addEnumConstant("ConstantToKeep")
-              .addEnumConstant("ConstantToRemove");
+              .addEnumConstants("ConstantToKeep")
+              .addEnumConstants("ConstantToRemove");
       assertDoesNotThrow(() -> enumBuilder.removeEnumConstant("ConstantToRemove"));
       enumBuilder.commit();
 
