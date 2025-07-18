@@ -51,6 +51,22 @@ public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
     return this;
   }
 
+  /**
+   * Removes the {@code enumConstantName} from the <em>currently uncommitted</em> enum class.
+   *
+   * @param enumConstantName to remove.
+   * @return this Builder.
+   * @since 0.3.0
+   */
+  public EnumBuilder removeEnumConstant(final String enumConstantName) {
+    if (!enumConstants.contains(enumConstantName)) {
+      throw new IllegalArgumentException(
+          "No Enum constant named '%s' exists!".formatted(enumConstantName));
+    }
+    enumConstants.remove(enumConstantName);
+    return this;
+  }
+
   private static void validateEnumConstantName(final String enumConstantName) {
     if (!enumConstantNamePredicate.test(enumConstantName)) {
       throw new IllegalArgumentException(
