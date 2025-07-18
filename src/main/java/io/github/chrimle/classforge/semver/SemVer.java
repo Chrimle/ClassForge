@@ -33,6 +33,8 @@ public record SemVer(int major, int minor, int patch) {
    * @param minor version.
    * @param patch version.
    * @since 0.3.0
+   * @throws IllegalArgumentException if {@code major}, {@code minor} or {@code patch} is less than
+   *     {@code 0}.
    */
   public SemVer {
     if (major < 0) throw new IllegalArgumentException("SemVer.major MUST NOT be less than 0");
@@ -46,6 +48,7 @@ public record SemVer(int major, int minor, int patch) {
    * @param change for determining the new {@code SemVer}.
    * @return the new {@code SemVer}.
    * @since 0.3.0
+   * @throws IllegalArgumentException if {@code change} is {@code null}.
    */
   public SemVer incrementVersion(final Change change) {
     if (change == null) throw new IllegalArgumentException("`change` MUST NOT be null!");
