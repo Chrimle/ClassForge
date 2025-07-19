@@ -179,7 +179,7 @@ class ClassBuilderTest {
       void testUpdatingPackageVersionTwice() throws Exception {
         final var className = "ClassTestUpdatingPackageVersionTwice";
         ClassBuilder.newClass()
-            .setVersionPlacement(Builder.VersionPlacement.PACKAGE_NAME)
+            .setVersionPlacement(Builder.VersionPlacement.PACKAGE_NAME_WITH_COMPLETE_VERSION)
             .updateDirectory(TestConstants.DIRECTORY)
             .updatePackageName(TestConstants.PACKAGE_NAME)
             .updateClassName(className)

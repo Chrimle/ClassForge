@@ -16,17 +16,27 @@ public sealed interface Builder<T extends Builder<T>> permits AbstractBuilder {
    * @author Chrimle
    */
   enum VersionPlacement {
-    /** <strong>Default.</strong> Version information is excluded. */
+    /**
+     * <strong>Default.</strong> Version information is excluded.
+     *
+     * @since 0.3.0
+     */
     NONE,
     /**
-     * Version information is included in the {@code package}-name.
+     * The <em>complete</em> version is included in the {@code package}-name - always consisting of
+     * {@code v{major}_{minor}_{patch}}.
      *
      * <p><strong>Example: </strong>{@code 1.2.3}
      *
-     * <pre>{@code package com.example.v1_2_3;}
-     * </pre>
+     * <pre>{@code package com.example.v1_2_3;}</pre>
+     *
+     * <p><strong>Example: </strong>{@code 2.0.0}
+     *
+     * <pre>{@code package com.example.v2_0_0;}</pre>
+     *
+     * @since 0.4.0
      */
-    PACKAGE_NAME
+    PACKAGE_NAME_WITH_COMPLETE_VERSION
   }
 
   /**
