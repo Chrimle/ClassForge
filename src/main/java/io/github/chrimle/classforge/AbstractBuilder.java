@@ -169,18 +169,7 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
             .orElse(versionSubPackage);
       }
       case PACKAGE_NAME_WITH_SHORTENED_VERSION -> {
-        final var stringBuilder = new StringBuilder();
-        stringBuilder.append("v").append(semVer.major());
-        if (semVer.minor() > 0) {
-          stringBuilder.append("_").append(semVer.minor());
-          if (semVer.patch() > 0) {
-            stringBuilder.append("_").append(semVer.patch());
-          }
-        } else if (semVer.patch() > 0) {
-          stringBuilder.append("_").append(semVer.minor()).append("_").append(semVer.patch());
-        }
-
-        final String versionSubPackage = stringBuilder.toString();
+        final String versionSubPackage = semVer.toShortVersionString().replace(".", "_");
 
         yield Optional.ofNullable(packageName)
             .filter(pN -> !pN.isBlank())
