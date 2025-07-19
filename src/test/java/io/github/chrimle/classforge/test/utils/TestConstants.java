@@ -15,7 +15,19 @@
  */
 package io.github.chrimle.classforge.test.utils;
 
+import io.github.chrimle.classforge.ClassForge;
+import java.util.stream.Stream;
+import org.junit.jupiter.params.provider.Arguments;
+
 public class TestConstants {
   public static final String DIRECTORY = "target/generated-test-sources";
   public static final String PACKAGE_NAME = "io.github.chrimle.classforge";
+
+  public static final String METHOD_SOURCE_RESERVED_KEYWORDS =
+      "io.github.chrimle.classforge.test.utils.TestConstants#methodSourceReservedKeywords";
+
+  @SuppressWarnings("unused")
+  public static Stream<Arguments> methodSourceReservedKeywords() {
+    return ClassForge.RESERVED_KEYWORDS.stream().map(Arguments::of);
+  }
 }

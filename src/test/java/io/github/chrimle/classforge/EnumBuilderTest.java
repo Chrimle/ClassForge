@@ -15,6 +15,7 @@
  */
 package io.github.chrimle.classforge;
 
+import static io.github.chrimle.classforge.test.utils.TestConstants.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import io.github.chrimle.classforge.test.utils.DynamicClassLoader;
@@ -24,7 +25,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -119,6 +119,21 @@ class EnumBuilderTest {
   }
 
   @Nested
+  class ConstantNameTests {
+
+    @ParameterizedTest
+    @MethodSource(METHOD_SOURCE_RESERVED_KEYWORDS)
+    void testReservedKeywordAsConstantName(final String reservedKeyword) {
+      final var enumBuilder = EnumBuilder.newClass();
+      final var exception =
+          assertThrows(
+              IllegalArgumentException.class, () -> enumBuilder.addEnumConstants(reservedKeyword));
+      assertEquals(
+          "`enumConstantName` MUST NOT be a reserved Java keyword!", exception.getMessage());
+    }
+  }
+
+  @Nested
   class PackageNameTests {
 
     /**
@@ -168,12 +183,8 @@ class EnumBuilderTest {
           exception.getMessage());
     }
 
-    static Stream<Arguments> testReservedKeywords() {
-      return ClassForge.RESERVED_KEYWORDS.stream().map(Arguments::of);
-    }
-
     @ParameterizedTest
-    @MethodSource
+    @MethodSource(METHOD_SOURCE_RESERVED_KEYWORDS)
     void testReservedKeywords(final String className) {
       final var exception =
           assertThrows(
