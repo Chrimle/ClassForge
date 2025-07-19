@@ -30,13 +30,36 @@ public sealed interface Builder<T extends Builder<T>> permits AbstractBuilder {
      *
      * <pre>{@code package com.example.v1_2_3;}</pre>
      *
+     * <p><strong>Example: </strong>{@code 1.3.0}
+     *
+     * <pre>{@code package com.example.v1_3_0;}</pre>
+     *
      * <p><strong>Example: </strong>{@code 2.0.0}
      *
      * <pre>{@code package com.example.v2_0_0;}</pre>
      *
      * @since 0.4.0
      */
-    PACKAGE_NAME_WITH_COMPLETE_VERSION
+    PACKAGE_NAME_WITH_COMPLETE_VERSION,
+    /**
+     * The <em>shortened</em> version is included in the {@code package}-name - omitting trailing
+     * zeros i.e. {@code v2}.
+     *
+     * <p><strong>Example: </strong>{@code 1.2.3}
+     *
+     * <pre>{@code package com.example.v1_2_3;}</pre>
+     *
+     * <p><strong>Example: </strong>{@code 1.3.0}
+     *
+     * <pre>{@code package com.example.v1_3;}</pre>
+     *
+     * <p><strong>Example: </strong>{@code 2.0.0}
+     *
+     * <pre>{@code package com.example.v2;}</pre>
+     *
+     * @since 0.4.0
+     */
+    PACKAGE_NAME_WITH_SHORTENED_VERSION
   }
 
   /**
