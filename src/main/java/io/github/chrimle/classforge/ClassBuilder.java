@@ -37,9 +37,6 @@ public final class ClassBuilder extends AbstractBuilder<ClassBuilder> {
   }
 
   @Override
-  protected void validateAdditionalPredicates() {}
-
-  @Override
   protected String generateFileContent() {
     final StringBuilder codeBuilder = new StringBuilder();
 

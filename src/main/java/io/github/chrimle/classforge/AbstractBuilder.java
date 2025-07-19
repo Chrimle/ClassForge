@@ -136,7 +136,7 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
    * Validates additional {@link Predicate}s for determining the validity of the <em>currently
    * uncommitted</em> class.
    */
-  protected abstract void validateAdditionalPredicates();
+  protected void validateAdditionalPredicates() {}
 
   /**
    * Generates the complete file contents for a {@code .java} file for the <em>currently
