@@ -158,15 +158,36 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
    * @return the <em>effective package name</em>.
    */
   protected String resolveEffectivePackageName() {
-    if (versionPlacement == VersionPlacement.PACKAGE_NAME_WITH_COMPLETE_VERSION) {
-      final String versionSubPackage = semVer.toString().replace(".", "_");
+    return switch (versionPlacement) {
+      case NONE -> packageName;
+      case PACKAGE_NAME_WITH_COMPLETE_VERSION -> {
+        final String versionSubPackage = semVer.toString().replace(".", "_");
 
-      return Optional.ofNullable(packageName)
-          .filter(pN -> !pN.isBlank())
-          .map(pN -> String.join(".", pN, versionSubPackage))
-          .orElse(versionSubPackage);
-    }
-    return packageName;
+        yield Optional.ofNullable(packageName)
+            .filter(pN -> !pN.isBlank())
+            .map(pN -> String.join(".", pN, versionSubPackage))
+            .orElse(versionSubPackage);
+      }
+      case PACKAGE_NAME_WITH_SHORTENED_VERSION -> {
+        final var stringBuilder = new StringBuilder();
+        stringBuilder.append("v").append(semVer.major());
+        if (semVer.minor() > 0) {
+          stringBuilder.append("_").append(semVer.minor());
+          if (semVer.patch() > 0) {
+            stringBuilder.append("_").append(semVer.patch());
+          }
+        } else if (semVer.patch() > 0) {
+          stringBuilder.append("_").append(semVer.minor()).append("_").append(semVer.patch());
+        }
+
+        final String versionSubPackage = stringBuilder.toString();
+
+        yield Optional.ofNullable(packageName)
+            .filter(pN -> !pN.isBlank())
+            .map(pN -> String.join(".", pN, versionSubPackage))
+            .orElse(versionSubPackage);
+      }
+    };
   }
 
   private static void validateDirectory(final String directory) {

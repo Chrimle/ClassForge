@@ -335,11 +335,11 @@ class EnumBuilderTest {
   class VersionPlacementTests {
 
     @Nested
-    class PackageNameTests {
+    class CompletePackageNameTests {
 
       @Test
       void testUpdatingPackageVersionTwice() throws Exception {
-        final var className = "EnumTestUpdatingPackageVersionTwice";
+        final var className = "EnumTestUpdatingPackageVersionTwiceComplete";
         EnumBuilder.newClass()
             .setVersionPlacement(Builder.VersionPlacement.PACKAGE_NAME_WITH_COMPLETE_VERSION)
             .updateDirectory(TestConstants.DIRECTORY)
@@ -352,6 +352,27 @@ class EnumBuilderTest {
         compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v1_0_0", className);
         compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v2_0_0", className);
         compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v3_0_0", className);
+      }
+    }
+
+    @Nested
+    class ShortenedPackageNameTests {
+
+      @Test
+      void testUpdatingPackageVersionTwice() throws Exception {
+        final var className = "EnumTestUpdatingPackageVersionTwiceShortened";
+        EnumBuilder.newClass()
+            .setVersionPlacement(Builder.VersionPlacement.PACKAGE_NAME_WITH_SHORTENED_VERSION)
+            .updateDirectory(TestConstants.DIRECTORY)
+            .updatePackageName(TestConstants.PACKAGE_NAME)
+            .updateClassName(className)
+            .commit() // Version 1
+            .commit() // Version 2
+            .commit(); // Version 3
+
+        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v1", className);
+        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v2", className);
+        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v3", className);
       }
     }
   }
