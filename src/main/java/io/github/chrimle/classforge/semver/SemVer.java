@@ -100,4 +100,29 @@ public record SemVer(int major, int minor, int patch) {
   public String toString() {
     return "v%d.%d.%d".formatted(major, minor, patch);
   }
+
+  /**
+   * Returns <em>this</em> {@link SemVer} as a {@code String} in the format: {@code
+   * v{major}.{minor}.{patch}} - where trailing zero sub-versions are omitted.
+   *
+   * <p><strong>Examples:</strong>
+   *
+   * <ul>
+   *   <li>{@code 1.0.0} returns {@code "v1"}
+   *   <li>{@code 1.2.0} returns {@code "v1.2"}
+   *   <li>{@code 1.2.3} returns {@code "v1.2.3"}
+   * </ul>
+   *
+   * @return the formatted {@code String}.
+   * @since 0.4.0
+   */
+  public String toShortVersionString() {
+    if (patch > 0) {
+      return "v%d.%d.%d".formatted(major, minor, patch);
+    }
+    if (minor > 0) {
+      return "v%d.%d".formatted(major, minor);
+    }
+    return "v%d".formatted(major);
+  }
 }
