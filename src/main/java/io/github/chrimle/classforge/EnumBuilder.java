@@ -131,9 +131,6 @@ public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
   }
 
   @Override
-  protected void validateAdditionalPredicates() {}
-
-  @Override
   protected String generateFileContent() {
     final StringBuilder codeBuilder = new StringBuilder();
 
