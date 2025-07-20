@@ -17,8 +17,13 @@ package io.github.chrimle.classforge;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import io.github.chrimle.classforge.Builder.VersionPlacement;
+import io.github.chrimle.classforge.test.utils.DynamicClassLoader;
+import io.github.chrimle.classforge.test.utils.JavaSourceCompiler;
 import io.github.chrimle.classforge.test.utils.TestConstants;
 import io.github.chrimle.classforge.utils.ExceptionFactory;
+import java.io.IOException;
+import java.nio.file.Path;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -33,6 +38,22 @@ public class BuilderTests {
       return builderClass.cast(EnumBuilder.newClass());
     }
     throw new UnsupportedOperationException();
+  }
+
+  static Class<?> compileAndLoadClass(final String packageName, final String className)
+      throws Exception {
+    final String fullyQualifiedName = String.join(".", packageName, className);
+    compileClass(fullyQualifiedName);
+    return loadClass(fullyQualifiedName);
+  }
+
+  static void compileClass(final String fullyQualifiedName) throws IOException {
+    JavaSourceCompiler.compile(
+        Path.of(TestConstants.DIRECTORY).resolve(fullyQualifiedName.replace(".", "/") + ".java"));
+  }
+
+  static Class<?> loadClass(final String fullyQualifiedName) throws Exception {
+    return DynamicClassLoader.loadClass(Path.of(TestConstants.DIRECTORY), fullyQualifiedName);
   }
 
   @ParameterizedTest
@@ -99,6 +120,33 @@ public class BuilderTests {
           assertThrows(
               IllegalArgumentException.class, () -> instantiateBuilder(builderClass).commit(null));
       assertEquals(ExceptionFactory.nullException("change").getMessage(), exception.getMessage());
+    }
+  }
+
+  @Nested
+  class VersionPlacementTests {
+
+    @Nested
+    class CompletePackageNameTests {
+
+      @ParameterizedTest
+      @ValueSource(classes = {ClassBuilder.class, EnumBuilder.class})
+      void testDefaultCommit(final Class<? extends AbstractBuilder<?>> builderClass)
+          throws Exception {
+        final var className = builderClass.getSimpleName() + "_Test_DefaultCompletePackageName";
+        instantiateBuilder(builderClass)
+            .setVersionPlacement(VersionPlacement.PACKAGE_NAME_WITH_COMPLETE_VERSION)
+            .updateDirectory(TestConstants.DIRECTORY)
+            .updatePackageName(TestConstants.PACKAGE_NAME)
+            .updateClassName(className)
+            .commit() // Version 1.0.0
+            .commit() // Version 2.0.0
+            .commit(); // Version 3.0.0
+
+        assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v1_0_0", className));
+        assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v2_0_0", className));
+        assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v3_0_0", className));
+      }
     }
   }
 }

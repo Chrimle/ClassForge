@@ -219,23 +219,6 @@ class ClassBuilderTest {
     class CompletePackageNameTests {
 
       @Test
-      void testUpdatingPackageVersionTwice() throws Exception {
-        final var className = "ClassTestUpdatingPackageVersionTwiceComplete";
-        ClassBuilder.newClass()
-            .setVersionPlacement(Builder.VersionPlacement.PACKAGE_NAME_WITH_COMPLETE_VERSION)
-            .updateDirectory(TestConstants.DIRECTORY)
-            .updatePackageName(TestConstants.PACKAGE_NAME)
-            .updateClassName(className)
-            .commit() // Version 1.0.0
-            .commit() // Version 2.0.0
-            .commit(); // Version 3.0.0
-
-        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v1_0_0", className);
-        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v2_0_0", className);
-        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v3_0_0", className);
-      }
-
-      @Test
       void testUpdateMajor() throws Exception {
         final var className = "ClassUpdateMajorComplete";
         ClassBuilder.newClass()
