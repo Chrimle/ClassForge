@@ -17,6 +17,8 @@ package io.github.chrimle.classforge;
 
 import java.util.*;
 import java.util.function.Predicate;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Builder of Java {@code enum} classes.
@@ -43,6 +45,8 @@ public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
 
   private EnumBuilder() {}
 
+  @NotNull
+  @Contract(" -> new")
   static EnumBuilder newClass() {
     return new EnumBuilder();
   }
@@ -62,6 +66,7 @@ public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
    *     does not exist in the <em>currently uncommitted</em> class.
    * @since 0.3.0
    */
+  @Contract("null -> fail; _ -> this")
   public EnumBuilder addEnumConstants(final String... enumConstantNames) {
 
     if (Optional.ofNullable(enumConstantNames)
@@ -102,6 +107,7 @@ public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
    *     does not exist in the <em>currently uncommitted</em> class.
    * @since 0.3.0
    */
+  @Contract("null -> fail; _ -> this")
   public EnumBuilder removeEnumConstants(final String... enumConstantNames) {
     if (Optional.ofNullable(enumConstantNames)
         .filter(enums -> enums.length >= 1)
@@ -136,6 +142,7 @@ public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
    * @throws IllegalArgumentException if {@code newEnumConstant} already exists.
    * @since 0.5.0
    */
+  @Contract("null, _ -> fail; _, null -> fail; _, _ -> this")
   public EnumBuilder updateEnumConstant(
       final String oldEnumConstant, final String newEnumConstant) {
     if (oldEnumConstant == null) {
@@ -169,11 +176,13 @@ public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
     }
   }
 
+  @Contract(value = " -> this", pure = true)
   @Override
   protected EnumBuilder self() {
     return this;
   }
 
+  @NotNull
   @Override
   protected String generateFileContent() {
     final StringBuilder codeBuilder = new StringBuilder();
