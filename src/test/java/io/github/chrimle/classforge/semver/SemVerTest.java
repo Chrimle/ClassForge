@@ -32,8 +32,7 @@ class SemVerTest {
       final var exception =
           assertThrows(IllegalArgumentException.class, () -> new SemVer(-1, 0, 0));
       assertEquals(
-          ExceptionFactory.notLessThanZeroViolationException("major").getMessage(),
-          exception.getMessage());
+          ExceptionFactory.lessThanZeroException("major").getMessage(), exception.getMessage());
     }
 
     @Test
@@ -59,8 +58,7 @@ class SemVerTest {
       final var exception =
           assertThrows(IllegalArgumentException.class, () -> new SemVer(0, -1, 0));
       assertEquals(
-          ExceptionFactory.notLessThanZeroViolationException("minor").getMessage(),
-          exception.getMessage());
+          ExceptionFactory.lessThanZeroException("minor").getMessage(), exception.getMessage());
     }
 
     @Test
@@ -86,8 +84,7 @@ class SemVerTest {
       final var exception =
           assertThrows(IllegalArgumentException.class, () -> new SemVer(0, 0, -1));
       assertEquals(
-          ExceptionFactory.notLessThanZeroViolationException("patch").getMessage(),
-          exception.getMessage());
+          ExceptionFactory.lessThanZeroException("patch").getMessage(), exception.getMessage());
     }
 
     @Test

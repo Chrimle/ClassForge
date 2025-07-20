@@ -164,7 +164,7 @@ class EnumBuilderTest {
               IllegalArgumentException.class,
               () -> EnumBuilder.newClass().updatePackageName(packageName));
       assertEquals(
-          ExceptionFactory.notMatchingRegExViolationException(
+          ExceptionFactory.notMatchingRegExException(
                   "packageName", ClassForge.VALID_PACKAGE_NAME_REGEX)
               .getMessage(),
           exception.getMessage());
@@ -183,8 +183,7 @@ class EnumBuilderTest {
               IllegalArgumentException.class,
               () -> EnumBuilder.newClass().updateClassName(className));
       assertEquals(
-          ExceptionFactory.notMatchingRegExViolationException(
-                  "className", ClassForge.VALID_CLASS_NAME_REGEX)
+          ExceptionFactory.notMatchingRegExException("className", ClassForge.VALID_CLASS_NAME_REGEX)
               .getMessage(),
           exception.getMessage());
     }
@@ -197,8 +196,7 @@ class EnumBuilderTest {
               IllegalArgumentException.class,
               () -> EnumBuilder.newClass().updateClassName(className));
       assertEquals(
-          ExceptionFactory.notMatchingRegExViolationException(
-                  "className", ClassForge.VALID_CLASS_NAME_REGEX)
+          ExceptionFactory.notMatchingRegExException("className", ClassForge.VALID_CLASS_NAME_REGEX)
               .getMessage(),
           exception.getMessage());
     }
@@ -241,7 +239,7 @@ class EnumBuilderTest {
               IllegalArgumentException.class,
               () -> EnumBuilder.newClass().addEnumConstants(enumConstantName));
       assertEquals(
-          ExceptionFactory.notMatchingRegExViolationException(
+          ExceptionFactory.notMatchingRegExException(
                   "enumConstantName", EnumBuilder.VALID_ENUM_CONSTANT_NAME_REGEX)
               .getMessage(),
           exception.getMessage());
@@ -256,7 +254,7 @@ class EnumBuilderTest {
       final var exception =
           assertThrows(IllegalArgumentException.class, () -> enumBuilder.addEnumConstants("FIRST"));
       assertEquals(
-          ExceptionFactory.alreadyExistsViolationException("enum constant", "FIRST").getMessage(),
+          ExceptionFactory.alreadyExistsException("enum constant", "FIRST").getMessage(),
           exception.getMessage());
     }
 
@@ -379,8 +377,7 @@ class EnumBuilderTest {
                 IllegalArgumentException.class,
                 () -> enumBuilder.updateEnumConstant(null, "ignored"));
         assertEquals(
-            ExceptionFactory.notNullViolationException("oldEnumConstant").getMessage(),
-            exception.getMessage());
+            ExceptionFactory.nullException("oldEnumConstant").getMessage(), exception.getMessage());
       }
 
       @Test
@@ -401,8 +398,7 @@ class EnumBuilderTest {
                 IllegalArgumentException.class,
                 () -> enumBuilder.updateEnumConstant("existing", null));
         assertEquals(
-            ExceptionFactory.notNullViolationException("newEnumConstant").getMessage(),
-            exception.getMessage());
+            ExceptionFactory.nullException("newEnumConstant").getMessage(), exception.getMessage());
       }
 
       @Test
@@ -413,7 +409,7 @@ class EnumBuilderTest {
                 IllegalArgumentException.class,
                 () -> enumBuilder.updateEnumConstant("existing", "?"));
         assertEquals(
-            ExceptionFactory.notMatchingRegExViolationException(
+            ExceptionFactory.notMatchingRegExException(
                     "enumConstantName", EnumBuilder.VALID_ENUM_CONSTANT_NAME_REGEX)
                 .getMessage(),
             exception.getMessage());
@@ -440,7 +436,7 @@ class EnumBuilderTest {
                 IllegalArgumentException.class,
                 () -> enumBuilder.updateEnumConstant("existing", "another_existing"));
         assertEquals(
-            ExceptionFactory.alreadyExistsViolationException("enum constant", "another_existing")
+            ExceptionFactory.alreadyExistsException("enum constant", "another_existing")
                 .getMessage(),
             exception.getMessage());
       }
@@ -475,9 +471,7 @@ class EnumBuilderTest {
         final var enumBuilder = EnumBuilder.newClass();
         final var exception =
             assertThrows(IllegalArgumentException.class, () -> enumBuilder.setSemVer(null));
-        assertEquals(
-            ExceptionFactory.notNullViolationException("semVer").getMessage(),
-            exception.getMessage());
+        assertEquals(ExceptionFactory.nullException("semVer").getMessage(), exception.getMessage());
       }
 
       @Test

@@ -87,7 +87,7 @@ public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
     for (final String enumConstantName : enumConstantNames) {
       validateEnumConstantName(enumConstantName);
       if (enumConstants.contains(enumConstantName)) {
-        throw ExceptionFactory.alreadyExistsViolationException("enum constant", enumConstantName);
+        throw ExceptionFactory.alreadyExistsException("enum constant", enumConstantName);
       }
     }
     enumConstants.addAll(enumNamesList);
@@ -146,18 +146,18 @@ public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
   public EnumBuilder updateEnumConstant(
       final String oldEnumConstant, final String newEnumConstant) {
     if (oldEnumConstant == null) {
-      throw ExceptionFactory.notNullViolationException("oldEnumConstant");
+      throw ExceptionFactory.nullException("oldEnumConstant");
     }
     if (!enumConstants.contains(oldEnumConstant)) {
       throw new IllegalArgumentException(
           "No Enum constant named '%s' exists!".formatted(oldEnumConstant));
     }
     if (newEnumConstant == null) {
-      throw ExceptionFactory.notNullViolationException("newEnumConstant");
+      throw ExceptionFactory.nullException("newEnumConstant");
     }
     validateEnumConstantName(newEnumConstant);
     if (enumConstants.contains(newEnumConstant)) {
-      throw ExceptionFactory.alreadyExistsViolationException("enum constant", newEnumConstant);
+      throw ExceptionFactory.alreadyExistsException("enum constant", newEnumConstant);
     }
     enumConstants.replaceAll(
         existingEnumConstant ->
@@ -167,7 +167,7 @@ public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
 
   private static void validateEnumConstantName(final String enumConstantName) {
     if (!enumConstantNamePredicate.test(enumConstantName)) {
-      throw ExceptionFactory.notMatchingRegExViolationException(
+      throw ExceptionFactory.notMatchingRegExException(
           "enumConstantName", VALID_ENUM_CONSTANT_NAME_REGEX);
     }
     if (ClassForge.RESERVED_KEYWORDS.contains(enumConstantName)) {

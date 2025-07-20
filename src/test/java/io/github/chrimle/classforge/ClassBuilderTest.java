@@ -129,9 +129,7 @@ class ClassBuilderTest {
       final var classBuilder = ClassBuilder.newClass();
       final var exception =
           assertThrows(IllegalArgumentException.class, () -> classBuilder.setSemVer(null));
-      assertEquals(
-          ExceptionFactory.notNullViolationException("semVer").getMessage(),
-          exception.getMessage());
+      assertEquals(ExceptionFactory.nullException("semVer").getMessage(), exception.getMessage());
     }
 
     @Test
@@ -180,7 +178,7 @@ class ClassBuilderTest {
               IllegalArgumentException.class,
               () -> ClassBuilder.newClass().updatePackageName(packageName));
       assertEquals(
-          ExceptionFactory.notMatchingRegExViolationException(
+          ExceptionFactory.notMatchingRegExException(
                   "packageName", ClassForge.VALID_PACKAGE_NAME_REGEX)
               .getMessage(),
           exception.getMessage());
@@ -199,8 +197,7 @@ class ClassBuilderTest {
               IllegalArgumentException.class,
               () -> ClassBuilder.newClass().updateClassName(className));
       assertEquals(
-          ExceptionFactory.notMatchingRegExViolationException(
-                  "className", ClassForge.VALID_CLASS_NAME_REGEX)
+          ExceptionFactory.notMatchingRegExException("className", ClassForge.VALID_CLASS_NAME_REGEX)
               .getMessage(),
           exception.getMessage());
     }
@@ -217,8 +214,7 @@ class ClassBuilderTest {
               IllegalArgumentException.class,
               () -> ClassBuilder.newClass().updateClassName(className));
       assertEquals(
-          ExceptionFactory.notMatchingRegExViolationException(
-                  "className", ClassForge.VALID_CLASS_NAME_REGEX)
+          ExceptionFactory.notMatchingRegExException("className", ClassForge.VALID_CLASS_NAME_REGEX)
               .getMessage(),
           exception.getMessage());
     }

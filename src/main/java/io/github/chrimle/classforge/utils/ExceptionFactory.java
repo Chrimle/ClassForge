@@ -30,7 +30,7 @@ public final class ExceptionFactory {
 
   /**
    * Creates a new {@link IllegalArgumentException}-instance with a {@code message} representing a
-   * <em>Not Null Violation</em>.
+   * <em>Null</em>-exception.
    *
    * @param key which had a {@code null}-value.
    * @return the exception.
@@ -38,13 +38,13 @@ public final class ExceptionFactory {
    */
   @NotNull
   @Contract("_ -> new")
-  public static IllegalArgumentException notNullViolationException(final String key) {
+  public static IllegalArgumentException nullException(final String key) {
     return new IllegalArgumentException("`%s` MUST NOT be `null`!".formatted(key));
   }
 
   /**
    * Creates a new {@link IllegalArgumentException}-instance with a {@code message} representing a
-   * <em>Not Less Than Zero Violation</em>.
+   * <em>Less Than Zero</em>-exception.
    *
    * @param key which had a <em>less than zero</em> value.
    * @return the exception.
@@ -52,13 +52,13 @@ public final class ExceptionFactory {
    */
   @NotNull
   @Contract("_ -> new")
-  public static IllegalArgumentException notLessThanZeroViolationException(final String key) {
+  public static IllegalArgumentException lessThanZeroException(final String key) {
     return new IllegalArgumentException("`%s` MUST NOT be less than `0`!".formatted(key));
   }
 
   /**
    * Creates a new {@link IllegalArgumentException}-instance with a {@code message} representing a
-   * <em>Not Matching RegEx Violation</em>.
+   * <em>Not Matching RegEx</em>-exception.
    *
    * @param key which had a <em>non-matching</em> value.
    * @param regEx to match.
@@ -67,14 +67,14 @@ public final class ExceptionFactory {
    */
   @NotNull
   @Contract("_, _ -> new")
-  public static IllegalArgumentException notMatchingRegExViolationException(
+  public static IllegalArgumentException notMatchingRegExException(
       final String key, final String regEx) {
     return new IllegalArgumentException("`%s` MUST match the RegEx `%s`".formatted(key, regEx));
   }
 
   /**
    * Creates a new {@link IllegalArgumentException}-instance with a {@code message} representing an
-   * <em>Already Exists Violation</em>.
+   * <em>Already Exists</em>-exception.
    *
    * @param type of the entity.
    * @param name of the entity.
@@ -83,7 +83,7 @@ public final class ExceptionFactory {
    */
   @NotNull
   @Contract(value = "_, _ -> new")
-  public static IllegalArgumentException alreadyExistsViolationException(
+  public static IllegalArgumentException alreadyExistsException(
       final String type, final String name) {
     return new IllegalArgumentException(
         "The `%s` named `%s` already exists!".formatted(type, name));

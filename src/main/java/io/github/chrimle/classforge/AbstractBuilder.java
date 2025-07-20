@@ -70,7 +70,7 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
   @Override
   public T setSemVer(final SemVer semVer) {
     if (semVer == null) {
-      throw ExceptionFactory.notNullViolationException("semVer");
+      throw ExceptionFactory.nullException("semVer");
     }
     this.semVer = semVer;
     return self();
@@ -209,20 +209,20 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
 
   private static void validateDirectory(final String directory) {
     if (!directoryValidator.test(directory)) {
-      throw ExceptionFactory.notNullViolationException("directory");
+      throw ExceptionFactory.nullException("directory");
     }
   }
 
   private static void validatePackageName(final String packageName) {
     if (!packageNameValidator.test(packageName)) {
-      throw ExceptionFactory.notMatchingRegExViolationException(
+      throw ExceptionFactory.notMatchingRegExException(
           "packageName", ClassForge.VALID_PACKAGE_NAME_REGEX);
     }
   }
 
   private static void validateClassName(final String className) {
     if (!classNameValidator.test(className)) {
-      throw ExceptionFactory.notMatchingRegExViolationException(
+      throw ExceptionFactory.notMatchingRegExException(
           "className", ClassForge.VALID_CLASS_NAME_REGEX);
     }
   }

@@ -44,8 +44,7 @@ public class BuilderTests {
             () ->
                 instantiateBuilder(builderClass).updateDirectory(TestConstants.DIRECTORY).commit());
     assertEquals(
-        ExceptionFactory.notMatchingRegExViolationException(
-                "className", ClassForge.VALID_CLASS_NAME_REGEX)
+        ExceptionFactory.notMatchingRegExException("className", ClassForge.VALID_CLASS_NAME_REGEX)
             .getMessage(),
         exception.getMessage());
   }
@@ -58,9 +57,7 @@ public class BuilderTests {
             IllegalArgumentException.class,
             () ->
                 instantiateBuilder(builderClass).updateClassName("ClassWithoutDirectory").commit());
-    assertEquals(
-        ExceptionFactory.notNullViolationException("directory").getMessage(),
-        exception.getMessage());
+    assertEquals(ExceptionFactory.nullException("directory").getMessage(), exception.getMessage());
   }
 
   @Nested
@@ -74,8 +71,7 @@ public class BuilderTests {
               IllegalArgumentException.class,
               () -> instantiateBuilder(builderClass).updateDirectory(null));
       assertEquals(
-          ExceptionFactory.notNullViolationException("directory").getMessage(),
-          exception.getMessage());
+          ExceptionFactory.nullException("directory").getMessage(), exception.getMessage());
     }
   }
 }

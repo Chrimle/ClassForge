@@ -57,9 +57,9 @@ public record SemVer(int major, int minor, int patch) {
    * @since 0.3.0
    */
   public SemVer {
-    if (major < 0) throw ExceptionFactory.notLessThanZeroViolationException("major");
-    if (minor < 0) throw ExceptionFactory.notLessThanZeroViolationException("minor");
-    if (patch < 0) throw ExceptionFactory.notLessThanZeroViolationException("patch");
+    if (major < 0) throw ExceptionFactory.lessThanZeroException("major");
+    if (minor < 0) throw ExceptionFactory.lessThanZeroException("minor");
+    if (patch < 0) throw ExceptionFactory.lessThanZeroException("patch");
   }
 
   /**
@@ -72,7 +72,7 @@ public record SemVer(int major, int minor, int patch) {
    */
   @Contract("null -> fail")
   public SemVer incrementVersion(final Change change) {
-    if (change == null) throw ExceptionFactory.notNullViolationException("change");
+    if (change == null) throw ExceptionFactory.nullException("change");
     return switch (change) {
       case MAJOR -> incrementMajor();
       case MINOR -> incrementMinor();
