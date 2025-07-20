@@ -85,8 +85,23 @@ public final class ExceptionFactory {
   @Contract(value = "_, _ -> new")
   public static IllegalArgumentException alreadyExistsException(
       final String type, final String name) {
-    return new IllegalArgumentException(
-        "The `%s` named `%s` already exists!".formatted(type, name));
+    return new IllegalArgumentException("`%s` named `%s` already exists!".formatted(type, name));
+  }
+
+  /**
+   * Creates a new {@link IllegalArgumentException}-instance with a {@code message} representing a
+   * <em>Does Not Exist</em>-exception.
+   *
+   * @param type of the entity.
+   * @param name of the entity.
+   * @return the exception.
+   * @since 0.5.0
+   */
+  @NotNull
+  @Contract("_, _ -> new")
+  public static IllegalArgumentException doesNotExistException(
+      final String type, final String name) {
+    return new IllegalArgumentException("`%s` named `%s` does not exist!".formatted(type, name));
   }
 
   /**

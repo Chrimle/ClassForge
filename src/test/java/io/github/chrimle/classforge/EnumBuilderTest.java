@@ -317,7 +317,9 @@ class EnumBuilderTest {
           assertThrows(
               IllegalArgumentException.class,
               () -> enumBuilder.removeEnumConstants("DoesNotExist"));
-      assertEquals("No Enum constant named 'DoesNotExist' exists!", exception.getMessage());
+      assertEquals(
+          ExceptionFactory.doesNotExistException("enum constant", "DoesNotExist").getMessage(),
+          exception.getMessage());
     }
 
     @Test
@@ -388,7 +390,9 @@ class EnumBuilderTest {
             assertThrows(
                 IllegalArgumentException.class,
                 () -> enumBuilder.updateEnumConstant("not_existing", "ignored"));
-        assertEquals("No Enum constant named 'not_existing' exists!", exception.getMessage());
+        assertEquals(
+            ExceptionFactory.doesNotExistException("enum constant", "not_existing").getMessage(),
+            exception.getMessage());
       }
 
       @Test
