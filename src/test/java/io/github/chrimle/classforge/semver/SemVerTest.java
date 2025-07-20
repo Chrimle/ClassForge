@@ -99,6 +99,27 @@ class SemVerTest {
   }
 
   @Nested
+  class ToStringTests {
+    @Test
+    void testMajor() {
+      final var semVer = new SemVer(1, 0, 0);
+      assertEquals("v1.0.0", semVer.toString());
+    }
+
+    @Test
+    void testMajorAndMinor() {
+      final var semVer = new SemVer(1, 2, 0);
+      assertEquals("v1.2.0", semVer.toString());
+    }
+
+    @Test
+    void testMajorAndMinorAndPatch() {
+      final var semVer = new SemVer(1, 2, 3);
+      assertEquals("v1.2.3", semVer.toString());
+    }
+  }
+
+  @Nested
   class ToShortVersionStringTests {
 
     @Test
