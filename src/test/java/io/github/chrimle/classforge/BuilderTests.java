@@ -18,6 +18,7 @@ package io.github.chrimle.classforge;
 import static org.junit.jupiter.api.Assertions.*;
 
 import io.github.chrimle.classforge.test.utils.TestConstants;
+import io.github.chrimle.classforge.utils.ExceptionFactory;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -43,7 +44,9 @@ public class BuilderTests {
             () ->
                 instantiateBuilder(builderClass).updateDirectory(TestConstants.DIRECTORY).commit());
     assertEquals(
-        "`className` MUST match the RegEx: " + ClassForge.VALID_CLASS_NAME_REGEX,
+        ExceptionFactory.notMatchingRegExViolationException(
+                "className", ClassForge.VALID_CLASS_NAME_REGEX)
+            .getMessage(),
         exception.getMessage());
   }
 
@@ -55,7 +58,9 @@ public class BuilderTests {
             IllegalArgumentException.class,
             () ->
                 instantiateBuilder(builderClass).updateClassName("ClassWithoutDirectory").commit());
-    assertEquals("`directory` MUST NOT be `null`!", exception.getMessage());
+    assertEquals(
+        ExceptionFactory.notNullViolationException("directory").getMessage(),
+        exception.getMessage());
   }
 
   @Nested
@@ -68,7 +73,9 @@ public class BuilderTests {
           assertThrows(
               IllegalArgumentException.class,
               () -> instantiateBuilder(builderClass).updateDirectory(null));
-      assertEquals("`directory` MUST NOT be `null`!", exception.getMessage());
+      assertEquals(
+          ExceptionFactory.notNullViolationException("directory").getMessage(),
+          exception.getMessage());
     }
   }
 }

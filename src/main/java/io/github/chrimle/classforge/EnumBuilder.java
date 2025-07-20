@@ -15,6 +15,7 @@
  */
 package io.github.chrimle.classforge;
 
+import io.github.chrimle.classforge.utils.ExceptionFactory;
 import java.util.*;
 import java.util.function.Predicate;
 import org.jetbrains.annotations.Contract;
@@ -146,14 +147,14 @@ public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
   public EnumBuilder updateEnumConstant(
       final String oldEnumConstant, final String newEnumConstant) {
     if (oldEnumConstant == null) {
-      throw new IllegalArgumentException("`oldEnumConstant` MUST NOT be null!");
+      throw ExceptionFactory.notNullViolationException("oldEnumConstant");
     }
     if (!enumConstants.contains(oldEnumConstant)) {
       throw new IllegalArgumentException(
           "No Enum constant named '%s' exists!".formatted(oldEnumConstant));
     }
     if (newEnumConstant == null) {
-      throw new IllegalArgumentException("`newEnumConstant` MUST NOT be null!");
+      throw ExceptionFactory.notNullViolationException("newEnumConstant");
     }
     validateEnumConstantName(newEnumConstant);
     if (enumConstants.contains(newEnumConstant)) {
@@ -168,8 +169,8 @@ public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
 
   private static void validateEnumConstantName(final String enumConstantName) {
     if (!enumConstantNamePredicate.test(enumConstantName)) {
-      throw new IllegalArgumentException(
-          "`enumConstantName` MUST match the RegEx: " + VALID_ENUM_CONSTANT_NAME_REGEX);
+      throw ExceptionFactory.notMatchingRegExViolationException(
+          "enumConstantName", VALID_ENUM_CONSTANT_NAME_REGEX);
     }
     if (ClassForge.RESERVED_KEYWORDS.contains(enumConstantName)) {
       throw new IllegalArgumentException("`enumConstantName` MUST NOT be a reserved Java keyword!");

@@ -22,6 +22,7 @@ import io.github.chrimle.classforge.semver.SemVer;
 import io.github.chrimle.classforge.test.utils.DynamicClassLoader;
 import io.github.chrimle.classforge.test.utils.JavaSourceCompiler;
 import io.github.chrimle.classforge.test.utils.TestConstants;
+import io.github.chrimle.classforge.utils.ExceptionFactory;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -163,7 +164,9 @@ class EnumBuilderTest {
               IllegalArgumentException.class,
               () -> EnumBuilder.newClass().updatePackageName(packageName));
       assertEquals(
-          "`packageName` MUST match the RegEx: " + ClassForge.VALID_PACKAGE_NAME_REGEX,
+          ExceptionFactory.notMatchingRegExViolationException(
+                  "packageName", ClassForge.VALID_PACKAGE_NAME_REGEX)
+              .getMessage(),
           exception.getMessage());
     }
   }
@@ -180,7 +183,9 @@ class EnumBuilderTest {
               IllegalArgumentException.class,
               () -> EnumBuilder.newClass().updateClassName(className));
       assertEquals(
-          "`className` MUST match the RegEx: " + ClassForge.VALID_CLASS_NAME_REGEX,
+          ExceptionFactory.notMatchingRegExViolationException(
+                  "className", ClassForge.VALID_CLASS_NAME_REGEX)
+              .getMessage(),
           exception.getMessage());
     }
 
@@ -192,7 +197,9 @@ class EnumBuilderTest {
               IllegalArgumentException.class,
               () -> EnumBuilder.newClass().updateClassName(className));
       assertEquals(
-          "`className` MUST match the RegEx: " + ClassForge.VALID_CLASS_NAME_REGEX,
+          ExceptionFactory.notMatchingRegExViolationException(
+                  "className", ClassForge.VALID_CLASS_NAME_REGEX)
+              .getMessage(),
           exception.getMessage());
     }
   }
@@ -234,7 +241,9 @@ class EnumBuilderTest {
               IllegalArgumentException.class,
               () -> EnumBuilder.newClass().addEnumConstants(enumConstantName));
       assertEquals(
-          "`enumConstantName` MUST match the RegEx: " + EnumBuilder.VALID_ENUM_CONSTANT_NAME_REGEX,
+          ExceptionFactory.notMatchingRegExViolationException(
+                  "enumConstantName", EnumBuilder.VALID_ENUM_CONSTANT_NAME_REGEX)
+              .getMessage(),
           exception.getMessage());
     }
 
@@ -367,7 +376,9 @@ class EnumBuilderTest {
             assertThrows(
                 IllegalArgumentException.class,
                 () -> enumBuilder.updateEnumConstant(null, "ignored"));
-        assertEquals("`oldEnumConstant` MUST NOT be null!", exception.getMessage());
+        assertEquals(
+            ExceptionFactory.notNullViolationException("oldEnumConstant").getMessage(),
+            exception.getMessage());
       }
 
       @Test
@@ -387,7 +398,9 @@ class EnumBuilderTest {
             assertThrows(
                 IllegalArgumentException.class,
                 () -> enumBuilder.updateEnumConstant("existing", null));
-        assertEquals("`newEnumConstant` MUST NOT be null!", exception.getMessage());
+        assertEquals(
+            ExceptionFactory.notNullViolationException("newEnumConstant").getMessage(),
+            exception.getMessage());
       }
 
       @Test
@@ -398,8 +411,9 @@ class EnumBuilderTest {
                 IllegalArgumentException.class,
                 () -> enumBuilder.updateEnumConstant("existing", "?"));
         assertEquals(
-            "`enumConstantName` MUST match the RegEx: "
-                + EnumBuilder.VALID_ENUM_CONSTANT_NAME_REGEX,
+            ExceptionFactory.notMatchingRegExViolationException(
+                    "enumConstantName", EnumBuilder.VALID_ENUM_CONSTANT_NAME_REGEX)
+                .getMessage(),
             exception.getMessage());
       }
 
@@ -458,7 +472,9 @@ class EnumBuilderTest {
         final var enumBuilder = EnumBuilder.newClass();
         final var exception =
             assertThrows(IllegalArgumentException.class, () -> enumBuilder.setSemVer(null));
-        assertEquals("`semVer` MUST NOT be null!", exception.getMessage());
+        assertEquals(
+            ExceptionFactory.notNullViolationException("semVer").getMessage(),
+            exception.getMessage());
       }
 
       @Test

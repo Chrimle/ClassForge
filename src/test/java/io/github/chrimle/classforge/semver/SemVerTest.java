@@ -18,6 +18,7 @@ package io.github.chrimle.classforge.semver;
 import static org.junit.jupiter.api.Assertions.*;
 
 import io.github.chrimle.classforge.semver.SemVer.Change;
+import io.github.chrimle.classforge.utils.ExceptionFactory;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -30,7 +31,9 @@ class SemVerTest {
     void testZeroThrows() {
       final var exception =
           assertThrows(IllegalArgumentException.class, () -> new SemVer(-1, 0, 0));
-      assertEquals("SemVer.major MUST NOT be less than 0", exception.getMessage());
+      assertEquals(
+          ExceptionFactory.notLessThanZeroViolationException("major").getMessage(),
+          exception.getMessage());
     }
 
     @Test
@@ -55,7 +58,9 @@ class SemVerTest {
     void testZeroThrows() {
       final var exception =
           assertThrows(IllegalArgumentException.class, () -> new SemVer(0, -1, 0));
-      assertEquals("SemVer.minor MUST NOT be less than 0", exception.getMessage());
+      assertEquals(
+          ExceptionFactory.notLessThanZeroViolationException("minor").getMessage(),
+          exception.getMessage());
     }
 
     @Test
@@ -80,7 +85,9 @@ class SemVerTest {
     void testZeroThrows() {
       final var exception =
           assertThrows(IllegalArgumentException.class, () -> new SemVer(0, 0, -1));
-      assertEquals("SemVer.patch MUST NOT be less than 0", exception.getMessage());
+      assertEquals(
+          ExceptionFactory.notLessThanZeroViolationException("patch").getMessage(),
+          exception.getMessage());
     }
 
     @Test

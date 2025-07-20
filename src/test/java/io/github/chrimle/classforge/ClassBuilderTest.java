@@ -23,6 +23,7 @@ import io.github.chrimle.classforge.semver.SemVer;
 import io.github.chrimle.classforge.test.utils.DynamicClassLoader;
 import io.github.chrimle.classforge.test.utils.JavaSourceCompiler;
 import io.github.chrimle.classforge.test.utils.TestConstants;
+import io.github.chrimle.classforge.utils.ExceptionFactory;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.stream.Stream;
@@ -128,7 +129,9 @@ class ClassBuilderTest {
       final var classBuilder = ClassBuilder.newClass();
       final var exception =
           assertThrows(IllegalArgumentException.class, () -> classBuilder.setSemVer(null));
-      assertEquals("`semVer` MUST NOT be null!", exception.getMessage());
+      assertEquals(
+          ExceptionFactory.notNullViolationException("semVer").getMessage(),
+          exception.getMessage());
     }
 
     @Test
@@ -177,7 +180,9 @@ class ClassBuilderTest {
               IllegalArgumentException.class,
               () -> ClassBuilder.newClass().updatePackageName(packageName));
       assertEquals(
-          "`packageName` MUST match the RegEx: " + ClassForge.VALID_PACKAGE_NAME_REGEX,
+          ExceptionFactory.notMatchingRegExViolationException(
+                  "packageName", ClassForge.VALID_PACKAGE_NAME_REGEX)
+              .getMessage(),
           exception.getMessage());
     }
   }
@@ -194,7 +199,9 @@ class ClassBuilderTest {
               IllegalArgumentException.class,
               () -> ClassBuilder.newClass().updateClassName(className));
       assertEquals(
-          "`className` MUST match the RegEx: " + ClassForge.VALID_CLASS_NAME_REGEX,
+          ExceptionFactory.notMatchingRegExViolationException(
+                  "className", ClassForge.VALID_CLASS_NAME_REGEX)
+              .getMessage(),
           exception.getMessage());
     }
 
@@ -210,7 +217,9 @@ class ClassBuilderTest {
               IllegalArgumentException.class,
               () -> ClassBuilder.newClass().updateClassName(className));
       assertEquals(
-          "`className` MUST match the RegEx: " + ClassForge.VALID_CLASS_NAME_REGEX,
+          ExceptionFactory.notMatchingRegExViolationException(
+                  "className", ClassForge.VALID_CLASS_NAME_REGEX)
+              .getMessage(),
           exception.getMessage());
     }
   }

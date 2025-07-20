@@ -15,6 +15,7 @@
  */
 package io.github.chrimle.classforge.semver;
 
+import io.github.chrimle.classforge.utils.ExceptionFactory;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -56,9 +57,9 @@ public record SemVer(int major, int minor, int patch) {
    * @since 0.3.0
    */
   public SemVer {
-    if (major < 0) throw new IllegalArgumentException("SemVer.major MUST NOT be less than 0");
-    if (minor < 0) throw new IllegalArgumentException("SemVer.minor MUST NOT be less than 0");
-    if (patch < 0) throw new IllegalArgumentException("SemVer.patch MUST NOT be less than 0");
+    if (major < 0) throw ExceptionFactory.notLessThanZeroViolationException("major");
+    if (minor < 0) throw ExceptionFactory.notLessThanZeroViolationException("minor");
+    if (patch < 0) throw ExceptionFactory.notLessThanZeroViolationException("patch");
   }
 
   /**
@@ -71,7 +72,7 @@ public record SemVer(int major, int minor, int patch) {
    */
   @Contract("null -> fail")
   public SemVer incrementVersion(final Change change) {
-    if (change == null) throw new IllegalArgumentException("`change` MUST NOT be null!");
+    if (change == null) throw ExceptionFactory.notNullViolationException("change");
     return switch (change) {
       case MAJOR -> incrementMajor();
       case MINOR -> incrementMinor();
