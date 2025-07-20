@@ -171,7 +171,7 @@ public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
           "enumConstantName", VALID_ENUM_CONSTANT_NAME_REGEX);
     }
     if (ClassForge.RESERVED_KEYWORDS.contains(enumConstantName)) {
-      throw new IllegalArgumentException("`enumConstantName` MUST NOT be a reserved Java keyword!");
+      throw ExceptionFactory.reservedJavaKeywordException("enumConstantName");
     }
   }
 

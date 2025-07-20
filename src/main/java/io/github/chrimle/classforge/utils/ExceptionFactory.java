@@ -88,4 +88,18 @@ public final class ExceptionFactory {
     return new IllegalArgumentException(
         "The `%s` named `%s` already exists!".formatted(type, name));
   }
+
+  /**
+   * Creates a new {@link IllegalArgumentException}-instance with a {@code message} representing a
+   * <em>Reserved Java Keyword</em>-exception.
+   *
+   * @param key which had <em>Reserved Java Keyword</em>-value.
+   * @return the exception.
+   * @since 0.5.0
+   */
+  @NotNull
+  @Contract("_ -> new")
+  public static IllegalArgumentException reservedJavaKeywordException(final String key) {
+    return new IllegalArgumentException("`%s` MUST NOT be a Reserved Java Keyword!".formatted(key));
+  }
 }

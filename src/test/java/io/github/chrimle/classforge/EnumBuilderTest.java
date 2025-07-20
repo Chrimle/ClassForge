@@ -131,7 +131,8 @@ class EnumBuilderTest {
           assertThrows(
               IllegalArgumentException.class, () -> enumBuilder.addEnumConstants(reservedKeyword));
       assertEquals(
-          "`enumConstantName` MUST NOT be a reserved Java keyword!", exception.getMessage());
+          ExceptionFactory.reservedJavaKeywordException("enumConstantName").getMessage(),
+          exception.getMessage());
     }
   }
 
@@ -424,7 +425,8 @@ class EnumBuilderTest {
                 IllegalArgumentException.class,
                 () -> enumBuilder.updateEnumConstant("existing", reservedKeyword));
         assertEquals(
-            "`enumConstantName` MUST NOT be a reserved Java keyword!", exception.getMessage());
+            ExceptionFactory.reservedJavaKeywordException("enumConstantName").getMessage(),
+            exception.getMessage());
       }
 
       @Test
