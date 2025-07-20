@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
+import org.jetbrains.annotations.Contract;
 
 /**
  * Abstract class for building and generating Java classes.
@@ -64,6 +65,17 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
   protected String className;
 
   /** {@inheritDoc} */
+  @Contract("null -> fail; _ -> this")
+  @Override
+  public T setSemVer(final SemVer semVer) {
+    if (semVer == null) {
+      throw new IllegalArgumentException("`semVer` MUST NOT be null!");
+    }
+    this.semVer = semVer;
+    return self();
+  }
+
+  /** {@inheritDoc} */
   @Override
   public T setVersionPlacement(final VersionPlacement versionPlacement) {
     this.versionPlacement = Optional.ofNullable(versionPlacement).orElse(VersionPlacement.NONE);
@@ -98,12 +110,12 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
   @Override
   public T commit() {
     validateClass();
+    this.semVer = semVer.incrementVersion(determineSemVerChange());
     final String fullyQualifiedClassName = resolveFullyQualifiedClassName();
     if (reservedClassNames.contains(fullyQualifiedClassName)) {
       throw new IllegalStateException(
           "Class `%s` has already been generated!".formatted(fullyQualifiedClassName));
     }
-    this.semVer = semVer.incrementVersion(determineSemVerChange());
     generateClassFile();
     reservedClassNames.add(fullyQualifiedClassName);
     return self();
