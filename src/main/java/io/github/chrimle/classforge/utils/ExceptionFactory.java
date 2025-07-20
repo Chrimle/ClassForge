@@ -44,6 +44,20 @@ public final class ExceptionFactory {
 
   /**
    * Creates a new {@link IllegalArgumentException}-instance with a {@code message} representing a
+   * <em>Null or Empty</em>-exception.
+   *
+   * @param key which had a <em>null or empty</em> value.
+   * @return the exception.
+   * @since 0.5.0
+   */
+  @NotNull
+  @Contract("_ -> new")
+  public static IllegalArgumentException nullOrEmptyException(final String key) {
+    return new IllegalArgumentException("`%s` MUST NOT be `null` or empty!".formatted(key));
+  }
+
+  /**
+   * Creates a new {@link IllegalArgumentException}-instance with a {@code message} representing a
    * <em>Less Than Zero</em>-exception.
    *
    * @param key which had a <em>less than zero</em> value.

@@ -75,7 +75,7 @@ public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
         .map(Arrays::stream)
         .filter(stream -> stream.allMatch(Objects::nonNull))
         .isEmpty()) {
-      throw new IllegalArgumentException("`enumConstantNames` MUST NOT be null or empty!");
+      throw ExceptionFactory.nullOrEmptyException("enumConstantNames");
     }
 
     final var enumNamesList = List.of(enumConstantNames);
@@ -114,7 +114,7 @@ public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
         .map(Arrays::stream)
         .filter(stream -> stream.allMatch(Objects::nonNull))
         .isEmpty()) {
-      throw new IllegalArgumentException("`enumConstantNames` MUST NOT be null or empty!");
+      throw ExceptionFactory.nullOrEmptyException("enumConstantNames");
     }
 
     for (final String enumConstantName : enumConstantNames) {

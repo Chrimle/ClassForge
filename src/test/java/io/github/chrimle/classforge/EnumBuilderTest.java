@@ -211,7 +211,9 @@ class EnumBuilderTest {
       final var exception =
           assertThrows(
               IllegalArgumentException.class, () -> EnumBuilder.newClass().addEnumConstants());
-      assertEquals("`enumConstantNames` MUST NOT be null or empty!", exception.getMessage());
+      assertEquals(
+          ExceptionFactory.nullOrEmptyException("enumConstantNames").getMessage(),
+          exception.getMessage());
     }
 
     @Test
@@ -220,7 +222,9 @@ class EnumBuilderTest {
           assertThrows(
               IllegalArgumentException.class,
               () -> EnumBuilder.newClass().addEnumConstants((String) null));
-      assertEquals("`enumConstantNames` MUST NOT be null or empty!", exception.getMessage());
+      assertEquals(
+          ExceptionFactory.nullOrEmptyException("enumConstantNames").getMessage(),
+          exception.getMessage());
     }
 
     @Test
@@ -229,7 +233,9 @@ class EnumBuilderTest {
           assertThrows(
               IllegalArgumentException.class,
               () -> EnumBuilder.newClass().addEnumConstants("Valid", null));
-      assertEquals("`enumConstantNames` MUST NOT be null or empty!", exception.getMessage());
+      assertEquals(
+          ExceptionFactory.nullOrEmptyException("enumConstantNames").getMessage(),
+          exception.getMessage());
     }
 
     @ParameterizedTest
@@ -289,7 +295,9 @@ class EnumBuilderTest {
       final var exception =
           assertThrows(
               IllegalArgumentException.class, () -> EnumBuilder.newClass().removeEnumConstants());
-      assertEquals("`enumConstantNames` MUST NOT be null or empty!", exception.getMessage());
+      assertEquals(
+          ExceptionFactory.nullOrEmptyException("enumConstantNames").getMessage(),
+          exception.getMessage());
     }
 
     @Test
@@ -298,7 +306,9 @@ class EnumBuilderTest {
           assertThrows(
               IllegalArgumentException.class,
               () -> EnumBuilder.newClass().removeEnumConstants((String) null));
-      assertEquals("`enumConstantNames` MUST NOT be null or empty!", exception.getMessage());
+      assertEquals(
+          ExceptionFactory.nullOrEmptyException("enumConstantNames").getMessage(),
+          exception.getMessage());
     }
 
     @Test
@@ -307,7 +317,9 @@ class EnumBuilderTest {
           assertThrows(
               IllegalArgumentException.class,
               () -> EnumBuilder.newClass().removeEnumConstants("Valid", null));
-      assertEquals("`enumConstantNames` MUST NOT be null or empty!", exception.getMessage());
+      assertEquals(
+          ExceptionFactory.nullOrEmptyException("enumConstantNames").getMessage(),
+          exception.getMessage());
     }
 
     @Test
