@@ -15,6 +15,8 @@
  */
 package io.github.chrimle.classforge;
 
+import io.github.chrimle.classforge.semver.SemVer;
+
 /**
  * Builder of a Java <i>class</i> - which <b>MAY</b> generate a {@code class}, {@code enum} or
  * {@code record}.
@@ -87,6 +89,18 @@ public sealed interface Builder<T extends Builder<T>> permits AbstractBuilder {
    * @since 0.3.0
    */
   T setVersionPlacement(final VersionPlacement versionPlacement);
+
+  /**
+   * <em>Sets</em> the {@code semVer} of the <em>currently uncommitted</em> class.
+   *
+   * <p><strong>NOTE:</strong> the {@code semVer} will be updated when <em>committing</em> the
+   * changes.
+   *
+   * @param semVer for the class.
+   * @return <em>this</em> {@code Builder}.
+   * @since 0.5.0
+   */
+  T setSemVer(final SemVer semVer);
 
   /**
    * <em><strong>Updates</strong></em> the {@code directory} of the <em>currently uncommitted</em>
