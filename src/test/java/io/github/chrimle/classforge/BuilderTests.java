@@ -74,4 +74,18 @@ public class BuilderTests {
           ExceptionFactory.nullException("directory").getMessage(), exception.getMessage());
     }
   }
+
+  @Nested
+  class SemVerTests {
+
+    @ParameterizedTest
+    @ValueSource(classes = {ClassBuilder.class, EnumBuilder.class})
+    void testNullSemVerThrows(final Class<? extends AbstractBuilder<?>> builderClass) {
+      final var exception =
+          assertThrows(
+              IllegalArgumentException.class,
+              () -> instantiateBuilder(builderClass).setSemVer(null));
+      assertEquals(ExceptionFactory.nullException("semVer").getMessage(), exception.getMessage());
+    }
+  }
 }

@@ -125,14 +125,6 @@ class ClassBuilderTest {
   class SetSemVerTests {
 
     @Test
-    void testNullSemVerThrows() {
-      final var classBuilder = ClassBuilder.newClass();
-      final var exception =
-          assertThrows(IllegalArgumentException.class, () -> classBuilder.setSemVer(null));
-      assertEquals(ExceptionFactory.nullException("semVer").getMessage(), exception.getMessage());
-    }
-
-    @Test
     void testValidSemVer() throws Exception {
       final var classBuilder =
           ClassBuilder.newClass()

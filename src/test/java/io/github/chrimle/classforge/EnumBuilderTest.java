@@ -485,14 +485,6 @@ class EnumBuilderTest {
     class SetSemVerTests {
 
       @Test
-      void testNullSemVerThrows() {
-        final var enumBuilder = EnumBuilder.newClass();
-        final var exception =
-            assertThrows(IllegalArgumentException.class, () -> enumBuilder.setSemVer(null));
-        assertEquals(ExceptionFactory.nullException("semVer").getMessage(), exception.getMessage());
-      }
-
-      @Test
       void testValidSemVer() throws Exception {
         final var enumBuilder =
             EnumBuilder.newClass()
