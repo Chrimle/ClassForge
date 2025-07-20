@@ -16,6 +16,8 @@
 package io.github.chrimle.classforge;
 
 import java.util.Optional;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Builder of Java classes ({@code class}).
@@ -27,15 +29,19 @@ public final class ClassBuilder extends AbstractBuilder<ClassBuilder> {
 
   private ClassBuilder() {}
 
+  @NotNull
+  @Contract(" -> new")
   static ClassBuilder newClass() {
     return new ClassBuilder();
   }
 
+  @Contract(value = " -> this", pure = true)
   @Override
   protected ClassBuilder self() {
     return this;
   }
 
+  @NotNull
   @Override
   protected String generateFileContent() {
     final StringBuilder codeBuilder = new StringBuilder();

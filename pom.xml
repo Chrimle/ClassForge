@@ -79,6 +79,7 @@
         <central-publishing-maven-plugin.version>0.8.0</central-publishing-maven-plugin.version>
         <!-- === Dependency Versions === -->
         <junit-jupiter.version>5.12.2</junit-jupiter.version>
+        <jetbrains-annotations.version>13.0</jetbrains-annotations.version>
     </properties>
 
     <!-- === Dependencies === -->
@@ -88,6 +89,11 @@
             <artifactId>junit-jupiter</artifactId>
             <version>${junit-jupiter.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>${jetbrains-annotations.version}</version>
         </dependency>
     </dependencies>
 

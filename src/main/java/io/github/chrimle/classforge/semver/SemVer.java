@@ -15,6 +15,9 @@
  */
 package io.github.chrimle.classforge.semver;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Represents a <em>Semantic Version (SemVer)</em>.
  *
@@ -66,6 +69,7 @@ public record SemVer(int major, int minor, int patch) {
    * @since 0.3.0
    * @throws IllegalArgumentException if {@code change} is {@code null}.
    */
+  @Contract("null -> fail")
   public SemVer incrementVersion(final Change change) {
     if (change == null) throw new IllegalArgumentException("`change` MUST NOT be null!");
     return switch (change) {
@@ -81,6 +85,8 @@ public record SemVer(int major, int minor, int patch) {
    * @since 0.3.0
    * @return the new {@code SemVer}.
    */
+  @NotNull
+  @Contract(" -> new")
   public SemVer incrementMajor() {
     return new SemVer(major + 1, 0, 0);
   }
@@ -91,6 +97,8 @@ public record SemVer(int major, int minor, int patch) {
    * @since 0.3.0
    * @return the new {@code SemVer}.
    */
+  @NotNull
+  @Contract(" -> new")
   public SemVer incrementMinor() {
     return new SemVer(major, minor + 1, 0);
   }
@@ -101,6 +109,8 @@ public record SemVer(int major, int minor, int patch) {
    * @since 0.3.0
    * @return the new {@code SemVer}.
    */
+  @NotNull
+  @Contract(" -> new")
   public SemVer incrementPatch() {
     return new SemVer(major, minor, patch + 1);
   }
@@ -112,6 +122,8 @@ public record SemVer(int major, int minor, int patch) {
    * @return the formatted {@code String}.
    * @since 0.3.0
    */
+  @NotNull
+  @Contract(pure = true)
   @Override
   public String toString() {
     return "v%d.%d.%d".formatted(major, minor, patch);
@@ -132,6 +144,7 @@ public record SemVer(int major, int minor, int patch) {
    * @return the formatted {@code String}.
    * @since 0.4.0
    */
+  @NotNull
   public String toShortVersionString() {
     if (patch > 0) {
       return "v%d.%d.%d".formatted(major, minor, patch);
