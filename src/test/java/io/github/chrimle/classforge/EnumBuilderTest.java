@@ -355,6 +355,95 @@ class EnumBuilderTest {
               .map(Enum::name)
               .toList());
     }
+
+    @Nested
+    class UpdateEnumConstantTests {
+
+      @Test
+      void testNullOldEnumConstant() {
+        final var enumBuilder = EnumBuilder.newClass();
+        final var exception =
+            assertThrows(
+                IllegalArgumentException.class,
+                () -> enumBuilder.updateEnumConstant(null, "ignored"));
+        assertEquals("`oldEnumConstant` MUST NOT be null!", exception.getMessage());
+      }
+
+      @Test
+      void testNonExistingOldEnumConstant() {
+        final var enumBuilder = EnumBuilder.newClass();
+        final var exception =
+            assertThrows(
+                IllegalArgumentException.class,
+                () -> enumBuilder.updateEnumConstant("not_existing", "ignored"));
+        assertEquals("No Enum constant named 'not_existing' exists!", exception.getMessage());
+      }
+
+      @Test
+      void testNullNewEnumConstant() {
+        final var enumBuilder = EnumBuilder.newClass().addEnumConstants("existing");
+        final var exception =
+            assertThrows(
+                IllegalArgumentException.class,
+                () -> enumBuilder.updateEnumConstant("existing", null));
+        assertEquals("`newEnumConstant` MUST NOT be null!", exception.getMessage());
+      }
+
+      @Test
+      void testInvalidNewEnumConstant() {
+        final var enumBuilder = EnumBuilder.newClass().addEnumConstants("existing");
+        final var exception =
+            assertThrows(
+                IllegalArgumentException.class,
+                () -> enumBuilder.updateEnumConstant("existing", "?"));
+        assertEquals(
+            "`enumConstantName` MUST match the RegEx: "
+                + EnumBuilder.VALID_ENUM_CONSTANT_NAME_REGEX,
+            exception.getMessage());
+      }
+
+      @ParameterizedTest
+      @MethodSource(METHOD_SOURCE_RESERVED_KEYWORDS)
+      void testReservedKeywordNewEnumConstant(final String reservedKeyword) {
+        final var enumBuilder = EnumBuilder.newClass().addEnumConstants("existing");
+        final var exception =
+            assertThrows(
+                IllegalArgumentException.class,
+                () -> enumBuilder.updateEnumConstant("existing", reservedKeyword));
+        assertEquals(
+            "`enumConstantName` MUST NOT be a reserved Java keyword!", exception.getMessage());
+      }
+
+      @Test
+      void testExistingNewEnumConstant() {
+        final var enumBuilder =
+            EnumBuilder.newClass().addEnumConstants("existing", "another_existing");
+        final var exception =
+            assertThrows(
+                IllegalArgumentException.class,
+                () -> enumBuilder.updateEnumConstant("existing", "another_existing"));
+        assertEquals(
+            "An Enum constant named '%s' already exists!".formatted("another_existing"),
+            exception.getMessage());
+      }
+
+      @Test
+      void testValidUpdate() throws Exception {
+        final var enumBuilder =
+            EnumBuilder.newClass()
+                .updateDirectory(DIRECTORY)
+                .updatePackageName(PACKAGE_NAME)
+                .updateClassName("EnumWithUpdatedConstant")
+                .addEnumConstants("OLD");
+        assertDoesNotThrow(() -> enumBuilder.updateEnumConstant("OLD", "NEW"));
+        enumBuilder.commit();
+        final Class<?> enumWithUpdatedConstant =
+            compileAndLoadClass(PACKAGE_NAME, "EnumWithUpdatedConstant");
+        assertTrue(enumWithUpdatedConstant.isEnum());
+        assertEquals(1, enumWithUpdatedConstant.getEnumConstants().length);
+        assertEquals("NEW", ((Enum<?>) enumWithUpdatedConstant.getEnumConstants()[0]).name());
+      }
+    }
   }
 
   @Nested
