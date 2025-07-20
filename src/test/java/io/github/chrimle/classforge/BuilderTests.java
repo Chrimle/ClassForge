@@ -24,7 +24,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 public class BuilderTests {
 
-  static <T extends AbstractBuilder> T instantiateBuilder(final Class<T> builderClass) {
+  static <T extends AbstractBuilder<?>> T instantiateBuilder(final Class<T> builderClass) {
     if (builderClass == ClassBuilder.class) {
       return builderClass.cast(ClassBuilder.newClass());
     }
@@ -36,7 +36,7 @@ public class BuilderTests {
 
   @ParameterizedTest
   @ValueSource(classes = {ClassBuilder.class, EnumBuilder.class})
-  void testCommittingClassWithoutClassName(final Class<? extends AbstractBuilder> builderClass) {
+  void testCommittingClassWithoutClassName(final Class<? extends AbstractBuilder<?>> builderClass) {
     final var exception =
         assertThrows(
             IllegalArgumentException.class,
@@ -49,7 +49,7 @@ public class BuilderTests {
 
   @ParameterizedTest
   @ValueSource(classes = {ClassBuilder.class, EnumBuilder.class})
-  void testCommittingClassWithoutDirectory(final Class<? extends AbstractBuilder> builderClass) {
+  void testCommittingClassWithoutDirectory(final Class<? extends AbstractBuilder<?>> builderClass) {
     final var exception =
         assertThrows(
             IllegalArgumentException.class,
@@ -63,7 +63,7 @@ public class BuilderTests {
 
     @ParameterizedTest
     @ValueSource(classes = {ClassBuilder.class, EnumBuilder.class})
-    void testInvalidValues(final Class<? extends AbstractBuilder> builderClass) {
+    void testInvalidValues(final Class<? extends AbstractBuilder<?>> builderClass) {
       final var exception =
           assertThrows(
               IllegalArgumentException.class,
