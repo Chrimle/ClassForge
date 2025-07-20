@@ -47,9 +47,10 @@ public record SemVer(int major, int minor, int patch) {
    * @param major version.
    * @param minor version.
    * @param patch version.
+   * @throws IllegalArgumentException if {@link #major} is less than {@code 0}.
+   * @throws IllegalArgumentException if {@link #minor} is less than {@code 0}.
+   * @throws IllegalArgumentException if {@link #patch} is less than {@code 0}.
    * @since 0.3.0
-   * @throws IllegalArgumentException if {@code major}, {@code minor} or {@code patch} is less than
-   *     {@code 0}.
    */
   public SemVer {
     if (major < 0) throw new IllegalArgumentException("SemVer.major MUST NOT be less than 0");
