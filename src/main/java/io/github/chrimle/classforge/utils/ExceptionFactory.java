@@ -71,4 +71,21 @@ public final class ExceptionFactory {
       final String key, final String regEx) {
     return new IllegalArgumentException("`%s` MUST match the RegEx `%s`".formatted(key, regEx));
   }
+
+  /**
+   * Creates a new {@link IllegalArgumentException}-instance with a {@code message} representing an
+   * <em>Already Exists Violation</em>.
+   *
+   * @param type of the entity.
+   * @param name of the entity.
+   * @return the exception.
+   * @since 0.5.0
+   */
+  @NotNull
+  @Contract(value = "_, _ -> new")
+  public static IllegalArgumentException alreadyExistsViolationException(
+      final String type, final String name) {
+    return new IllegalArgumentException(
+        "The `%s` named `%s` already exists!".formatted(type, name));
+  }
 }

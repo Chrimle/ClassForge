@@ -87,8 +87,7 @@ public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
     for (final String enumConstantName : enumConstantNames) {
       validateEnumConstantName(enumConstantName);
       if (enumConstants.contains(enumConstantName)) {
-        throw new IllegalArgumentException(
-            "An Enum constant named '%s' already exists!".formatted(enumConstantName));
+        throw ExceptionFactory.alreadyExistsViolationException("enum constant", enumConstantName);
       }
     }
     enumConstants.addAll(enumNamesList);
@@ -158,8 +157,7 @@ public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
     }
     validateEnumConstantName(newEnumConstant);
     if (enumConstants.contains(newEnumConstant)) {
-      throw new IllegalArgumentException(
-          "An Enum constant named '%s' already exists!".formatted(newEnumConstant));
+      throw ExceptionFactory.alreadyExistsViolationException("enum constant", newEnumConstant);
     }
     enumConstants.replaceAll(
         existingEnumConstant ->

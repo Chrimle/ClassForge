@@ -255,7 +255,9 @@ class EnumBuilderTest {
           "Constant 'FIRST' could not be added the first time!");
       final var exception =
           assertThrows(IllegalArgumentException.class, () -> enumBuilder.addEnumConstants("FIRST"));
-      assertEquals("An Enum constant named 'FIRST' already exists!", exception.getMessage());
+      assertEquals(
+          ExceptionFactory.alreadyExistsViolationException("enum constant", "FIRST").getMessage(),
+          exception.getMessage());
     }
 
     @Test
@@ -438,7 +440,8 @@ class EnumBuilderTest {
                 IllegalArgumentException.class,
                 () -> enumBuilder.updateEnumConstant("existing", "another_existing"));
         assertEquals(
-            "An Enum constant named '%s' already exists!".formatted("another_existing"),
+            ExceptionFactory.alreadyExistsViolationException("enum constant", "another_existing")
+                .getMessage(),
             exception.getMessage());
       }
 
