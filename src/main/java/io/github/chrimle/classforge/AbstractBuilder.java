@@ -16,6 +16,7 @@
 package io.github.chrimle.classforge;
 
 import io.github.chrimle.classforge.semver.SemVer;
+import io.github.chrimle.classforge.utils.ExceptionFactory;
 import io.github.chrimle.classforge.utils.FileWriter;
 import java.util.HashSet;
 import java.util.Optional;
@@ -69,7 +70,7 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
   @Override
   public T setSemVer(final SemVer semVer) {
     if (semVer == null) {
-      throw new IllegalArgumentException("`semVer` MUST NOT be null!");
+      throw ExceptionFactory.nullException("semVer");
     }
     this.semVer = semVer;
     return self();
@@ -208,21 +209,21 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
 
   private static void validateDirectory(final String directory) {
     if (!directoryValidator.test(directory)) {
-      throw new IllegalArgumentException("`directory` MUST NOT be `null`!");
+      throw ExceptionFactory.nullException("directory");
     }
   }
 
   private static void validatePackageName(final String packageName) {
     if (!packageNameValidator.test(packageName)) {
-      throw new IllegalArgumentException(
-          "`packageName` MUST match the RegEx: " + ClassForge.VALID_PACKAGE_NAME_REGEX);
+      throw ExceptionFactory.notMatchingRegExException(
+          "packageName", ClassForge.VALID_PACKAGE_NAME_REGEX);
     }
   }
 
   private static void validateClassName(final String className) {
     if (!classNameValidator.test(className)) {
-      throw new IllegalArgumentException(
-          "`className` MUST match the RegEx: " + ClassForge.VALID_CLASS_NAME_REGEX);
+      throw ExceptionFactory.notMatchingRegExException(
+          "className", ClassForge.VALID_CLASS_NAME_REGEX);
     }
   }
 }

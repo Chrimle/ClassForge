@@ -22,6 +22,7 @@ import io.github.chrimle.classforge.semver.SemVer;
 import io.github.chrimle.classforge.test.utils.DynamicClassLoader;
 import io.github.chrimle.classforge.test.utils.JavaSourceCompiler;
 import io.github.chrimle.classforge.test.utils.TestConstants;
+import io.github.chrimle.classforge.utils.ExceptionFactory;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -130,7 +131,8 @@ class EnumBuilderTest {
           assertThrows(
               IllegalArgumentException.class, () -> enumBuilder.addEnumConstants(reservedKeyword));
       assertEquals(
-          "`enumConstantName` MUST NOT be a reserved Java keyword!", exception.getMessage());
+          ExceptionFactory.reservedJavaKeywordException("enumConstantName").getMessage(),
+          exception.getMessage());
     }
   }
 
@@ -163,7 +165,9 @@ class EnumBuilderTest {
               IllegalArgumentException.class,
               () -> EnumBuilder.newClass().updatePackageName(packageName));
       assertEquals(
-          "`packageName` MUST match the RegEx: " + ClassForge.VALID_PACKAGE_NAME_REGEX,
+          ExceptionFactory.notMatchingRegExException(
+                  "packageName", ClassForge.VALID_PACKAGE_NAME_REGEX)
+              .getMessage(),
           exception.getMessage());
     }
   }
@@ -180,7 +184,8 @@ class EnumBuilderTest {
               IllegalArgumentException.class,
               () -> EnumBuilder.newClass().updateClassName(className));
       assertEquals(
-          "`className` MUST match the RegEx: " + ClassForge.VALID_CLASS_NAME_REGEX,
+          ExceptionFactory.notMatchingRegExException("className", ClassForge.VALID_CLASS_NAME_REGEX)
+              .getMessage(),
           exception.getMessage());
     }
 
@@ -192,7 +197,8 @@ class EnumBuilderTest {
               IllegalArgumentException.class,
               () -> EnumBuilder.newClass().updateClassName(className));
       assertEquals(
-          "`className` MUST match the RegEx: " + ClassForge.VALID_CLASS_NAME_REGEX,
+          ExceptionFactory.notMatchingRegExException("className", ClassForge.VALID_CLASS_NAME_REGEX)
+              .getMessage(),
           exception.getMessage());
     }
   }
@@ -205,7 +211,9 @@ class EnumBuilderTest {
       final var exception =
           assertThrows(
               IllegalArgumentException.class, () -> EnumBuilder.newClass().addEnumConstants());
-      assertEquals("`enumConstantNames` MUST NOT be null or empty!", exception.getMessage());
+      assertEquals(
+          ExceptionFactory.nullOrEmptyException("enumConstantNames").getMessage(),
+          exception.getMessage());
     }
 
     @Test
@@ -214,7 +222,9 @@ class EnumBuilderTest {
           assertThrows(
               IllegalArgumentException.class,
               () -> EnumBuilder.newClass().addEnumConstants((String) null));
-      assertEquals("`enumConstantNames` MUST NOT be null or empty!", exception.getMessage());
+      assertEquals(
+          ExceptionFactory.nullOrEmptyException("enumConstantNames").getMessage(),
+          exception.getMessage());
     }
 
     @Test
@@ -223,7 +233,9 @@ class EnumBuilderTest {
           assertThrows(
               IllegalArgumentException.class,
               () -> EnumBuilder.newClass().addEnumConstants("Valid", null));
-      assertEquals("`enumConstantNames` MUST NOT be null or empty!", exception.getMessage());
+      assertEquals(
+          ExceptionFactory.nullOrEmptyException("enumConstantNames").getMessage(),
+          exception.getMessage());
     }
 
     @ParameterizedTest
@@ -234,7 +246,9 @@ class EnumBuilderTest {
               IllegalArgumentException.class,
               () -> EnumBuilder.newClass().addEnumConstants(enumConstantName));
       assertEquals(
-          "`enumConstantName` MUST match the RegEx: " + EnumBuilder.VALID_ENUM_CONSTANT_NAME_REGEX,
+          ExceptionFactory.notMatchingRegExException(
+                  "enumConstantName", EnumBuilder.VALID_ENUM_CONSTANT_NAME_REGEX)
+              .getMessage(),
           exception.getMessage());
     }
 
@@ -246,7 +260,9 @@ class EnumBuilderTest {
           "Constant 'FIRST' could not be added the first time!");
       final var exception =
           assertThrows(IllegalArgumentException.class, () -> enumBuilder.addEnumConstants("FIRST"));
-      assertEquals("An Enum constant named 'FIRST' already exists!", exception.getMessage());
+      assertEquals(
+          ExceptionFactory.alreadyExistsException("enum constant", "FIRST").getMessage(),
+          exception.getMessage());
     }
 
     @Test
@@ -279,7 +295,9 @@ class EnumBuilderTest {
       final var exception =
           assertThrows(
               IllegalArgumentException.class, () -> EnumBuilder.newClass().removeEnumConstants());
-      assertEquals("`enumConstantNames` MUST NOT be null or empty!", exception.getMessage());
+      assertEquals(
+          ExceptionFactory.nullOrEmptyException("enumConstantNames").getMessage(),
+          exception.getMessage());
     }
 
     @Test
@@ -288,7 +306,9 @@ class EnumBuilderTest {
           assertThrows(
               IllegalArgumentException.class,
               () -> EnumBuilder.newClass().removeEnumConstants((String) null));
-      assertEquals("`enumConstantNames` MUST NOT be null or empty!", exception.getMessage());
+      assertEquals(
+          ExceptionFactory.nullOrEmptyException("enumConstantNames").getMessage(),
+          exception.getMessage());
     }
 
     @Test
@@ -297,7 +317,9 @@ class EnumBuilderTest {
           assertThrows(
               IllegalArgumentException.class,
               () -> EnumBuilder.newClass().removeEnumConstants("Valid", null));
-      assertEquals("`enumConstantNames` MUST NOT be null or empty!", exception.getMessage());
+      assertEquals(
+          ExceptionFactory.nullOrEmptyException("enumConstantNames").getMessage(),
+          exception.getMessage());
     }
 
     @Test
@@ -307,7 +329,9 @@ class EnumBuilderTest {
           assertThrows(
               IllegalArgumentException.class,
               () -> enumBuilder.removeEnumConstants("DoesNotExist"));
-      assertEquals("No Enum constant named 'DoesNotExist' exists!", exception.getMessage());
+      assertEquals(
+          ExceptionFactory.doesNotExistException("enum constant", "DoesNotExist").getMessage(),
+          exception.getMessage());
     }
 
     @Test
@@ -367,7 +391,8 @@ class EnumBuilderTest {
             assertThrows(
                 IllegalArgumentException.class,
                 () -> enumBuilder.updateEnumConstant(null, "ignored"));
-        assertEquals("`oldEnumConstant` MUST NOT be null!", exception.getMessage());
+        assertEquals(
+            ExceptionFactory.nullException("oldEnumConstant").getMessage(), exception.getMessage());
       }
 
       @Test
@@ -377,7 +402,9 @@ class EnumBuilderTest {
             assertThrows(
                 IllegalArgumentException.class,
                 () -> enumBuilder.updateEnumConstant("not_existing", "ignored"));
-        assertEquals("No Enum constant named 'not_existing' exists!", exception.getMessage());
+        assertEquals(
+            ExceptionFactory.doesNotExistException("enum constant", "not_existing").getMessage(),
+            exception.getMessage());
       }
 
       @Test
@@ -387,7 +414,8 @@ class EnumBuilderTest {
             assertThrows(
                 IllegalArgumentException.class,
                 () -> enumBuilder.updateEnumConstant("existing", null));
-        assertEquals("`newEnumConstant` MUST NOT be null!", exception.getMessage());
+        assertEquals(
+            ExceptionFactory.nullException("newEnumConstant").getMessage(), exception.getMessage());
       }
 
       @Test
@@ -398,8 +426,9 @@ class EnumBuilderTest {
                 IllegalArgumentException.class,
                 () -> enumBuilder.updateEnumConstant("existing", "?"));
         assertEquals(
-            "`enumConstantName` MUST match the RegEx: "
-                + EnumBuilder.VALID_ENUM_CONSTANT_NAME_REGEX,
+            ExceptionFactory.notMatchingRegExException(
+                    "enumConstantName", EnumBuilder.VALID_ENUM_CONSTANT_NAME_REGEX)
+                .getMessage(),
             exception.getMessage());
       }
 
@@ -412,7 +441,8 @@ class EnumBuilderTest {
                 IllegalArgumentException.class,
                 () -> enumBuilder.updateEnumConstant("existing", reservedKeyword));
         assertEquals(
-            "`enumConstantName` MUST NOT be a reserved Java keyword!", exception.getMessage());
+            ExceptionFactory.reservedJavaKeywordException("enumConstantName").getMessage(),
+            exception.getMessage());
       }
 
       @Test
@@ -424,7 +454,8 @@ class EnumBuilderTest {
                 IllegalArgumentException.class,
                 () -> enumBuilder.updateEnumConstant("existing", "another_existing"));
         assertEquals(
-            "An Enum constant named '%s' already exists!".formatted("another_existing"),
+            ExceptionFactory.alreadyExistsException("enum constant", "another_existing")
+                .getMessage(),
             exception.getMessage());
       }
 
@@ -458,7 +489,7 @@ class EnumBuilderTest {
         final var enumBuilder = EnumBuilder.newClass();
         final var exception =
             assertThrows(IllegalArgumentException.class, () -> enumBuilder.setSemVer(null));
-        assertEquals("`semVer` MUST NOT be null!", exception.getMessage());
+        assertEquals(ExceptionFactory.nullException("semVer").getMessage(), exception.getMessage());
       }
 
       @Test

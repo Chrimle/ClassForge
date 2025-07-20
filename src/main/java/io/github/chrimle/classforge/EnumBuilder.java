@@ -15,6 +15,7 @@
  */
 package io.github.chrimle.classforge;
 
+import io.github.chrimle.classforge.utils.ExceptionFactory;
 import java.util.*;
 import java.util.function.Predicate;
 import org.jetbrains.annotations.Contract;
@@ -74,7 +75,7 @@ public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
         .map(Arrays::stream)
         .filter(stream -> stream.allMatch(Objects::nonNull))
         .isEmpty()) {
-      throw new IllegalArgumentException("`enumConstantNames` MUST NOT be null or empty!");
+      throw ExceptionFactory.nullOrEmptyException("enumConstantNames");
     }
 
     final var enumNamesList = List.of(enumConstantNames);
@@ -86,8 +87,7 @@ public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
     for (final String enumConstantName : enumConstantNames) {
       validateEnumConstantName(enumConstantName);
       if (enumConstants.contains(enumConstantName)) {
-        throw new IllegalArgumentException(
-            "An Enum constant named '%s' already exists!".formatted(enumConstantName));
+        throw ExceptionFactory.alreadyExistsException("enum constant", enumConstantName);
       }
     }
     enumConstants.addAll(enumNamesList);
@@ -114,13 +114,12 @@ public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
         .map(Arrays::stream)
         .filter(stream -> stream.allMatch(Objects::nonNull))
         .isEmpty()) {
-      throw new IllegalArgumentException("`enumConstantNames` MUST NOT be null or empty!");
+      throw ExceptionFactory.nullOrEmptyException("enumConstantNames");
     }
 
     for (final String enumConstantName : enumConstantNames) {
       if (!enumConstants.contains(enumConstantName)) {
-        throw new IllegalArgumentException(
-            "No Enum constant named '%s' exists!".formatted(enumConstantName));
+        throw ExceptionFactory.doesNotExistException("enum constant", enumConstantName);
       }
     }
     enumConstants.removeAll(List.of(enumConstantNames));
@@ -146,19 +145,17 @@ public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
   public EnumBuilder updateEnumConstant(
       final String oldEnumConstant, final String newEnumConstant) {
     if (oldEnumConstant == null) {
-      throw new IllegalArgumentException("`oldEnumConstant` MUST NOT be null!");
+      throw ExceptionFactory.nullException("oldEnumConstant");
     }
     if (!enumConstants.contains(oldEnumConstant)) {
-      throw new IllegalArgumentException(
-          "No Enum constant named '%s' exists!".formatted(oldEnumConstant));
+      throw ExceptionFactory.doesNotExistException("enum constant", oldEnumConstant);
     }
     if (newEnumConstant == null) {
-      throw new IllegalArgumentException("`newEnumConstant` MUST NOT be null!");
+      throw ExceptionFactory.nullException("newEnumConstant");
     }
     validateEnumConstantName(newEnumConstant);
     if (enumConstants.contains(newEnumConstant)) {
-      throw new IllegalArgumentException(
-          "An Enum constant named '%s' already exists!".formatted(newEnumConstant));
+      throw ExceptionFactory.alreadyExistsException("enum constant", newEnumConstant);
     }
     enumConstants.replaceAll(
         existingEnumConstant ->
@@ -168,11 +165,11 @@ public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
 
   private static void validateEnumConstantName(final String enumConstantName) {
     if (!enumConstantNamePredicate.test(enumConstantName)) {
-      throw new IllegalArgumentException(
-          "`enumConstantName` MUST match the RegEx: " + VALID_ENUM_CONSTANT_NAME_REGEX);
+      throw ExceptionFactory.notMatchingRegExException(
+          "enumConstantName", VALID_ENUM_CONSTANT_NAME_REGEX);
     }
     if (ClassForge.RESERVED_KEYWORDS.contains(enumConstantName)) {
-      throw new IllegalArgumentException("`enumConstantName` MUST NOT be a reserved Java keyword!");
+      throw ExceptionFactory.reservedJavaKeywordException("enumConstantName");
     }
   }
 
