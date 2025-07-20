@@ -79,7 +79,7 @@ class ClassBuilderTest {
             .updatePackageName(TestConstants.PACKAGE_NAME)
             .updateClassName("OriginalNamedClass");
     assertDoesNotThrow(() -> classBuilder.updateClassName("RenamedClass"));
-    assertDoesNotThrow(classBuilder::commit);
+    assertDoesNotThrow(() -> classBuilder.commit());
 
     assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME, "RenamedClass"));
     assertThrows(
@@ -98,7 +98,7 @@ class ClassBuilderTest {
                     .updatePackageName(TestConstants.PACKAGE_NAME)
                     .updateClassName(className));
 
-    assertDoesNotThrow(classBuilder::commit);
+    assertDoesNotThrow(() -> classBuilder.commit());
 
     final var exception = assertThrows(IllegalStateException.class, classBuilder::commit);
     assertEquals(
@@ -141,7 +141,7 @@ class ClassBuilderTest {
               .updateClassName("ClassWithCustomSemVer")
               .setVersionPlacement(Builder.VersionPlacement.PACKAGE_NAME_WITH_COMPLETE_VERSION);
       assertDoesNotThrow(() -> classBuilder.setSemVer(new SemVer(42, 7, 11)));
-      assertDoesNotThrow(classBuilder::commit);
+      assertDoesNotThrow(() -> classBuilder.commit());
 
       final Class<?> enumWithCustomSemVer =
           compileAndLoadClass(PACKAGE_NAME + ".v43_0_0", "ClassWithCustomSemVer");
@@ -242,6 +242,57 @@ class ClassBuilderTest {
         compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v2_0_0", className);
         compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v3_0_0", className);
       }
+
+      @Test
+      void testUpdateMajor() throws Exception {
+        final var className = "ClassUpdateMajorComplete";
+        ClassBuilder.newClass()
+            .setVersionPlacement(Builder.VersionPlacement.PACKAGE_NAME_WITH_COMPLETE_VERSION)
+            .updateDirectory(TestConstants.DIRECTORY)
+            .updatePackageName(TestConstants.PACKAGE_NAME)
+            .updateClassName(className)
+            .commit(SemVer.Change.MAJOR) // Version 1.0.0
+            .commit(SemVer.Change.MAJOR) // Version 2.0.0
+            .commit(SemVer.Change.MAJOR); // Version 3.0.0
+
+        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v1_0_0", className);
+        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v2_0_0", className);
+        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v3_0_0", className);
+      }
+
+      @Test
+      void testUpdateMinor() throws Exception {
+        final var className = "ClassUpdateMinorComplete";
+        ClassBuilder.newClass()
+            .setVersionPlacement(Builder.VersionPlacement.PACKAGE_NAME_WITH_COMPLETE_VERSION)
+            .updateDirectory(TestConstants.DIRECTORY)
+            .updatePackageName(TestConstants.PACKAGE_NAME)
+            .updateClassName(className)
+            .commit(SemVer.Change.MINOR) // Version 0.1.0
+            .commit(SemVer.Change.MINOR) // Version 0.2.0
+            .commit(SemVer.Change.MINOR); // Version 0.3.0
+
+        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_1_0", className);
+        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_2_0", className);
+        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_3_0", className);
+      }
+
+      @Test
+      void testUpdatePatch() throws Exception {
+        final var className = "ClassUpdatePatchComplete";
+        ClassBuilder.newClass()
+            .setVersionPlacement(Builder.VersionPlacement.PACKAGE_NAME_WITH_COMPLETE_VERSION)
+            .updateDirectory(TestConstants.DIRECTORY)
+            .updatePackageName(TestConstants.PACKAGE_NAME)
+            .updateClassName(className)
+            .commit(SemVer.Change.PATCH) // Version 0.0.1
+            .commit(SemVer.Change.PATCH) // Version 0.0.2
+            .commit(SemVer.Change.PATCH); // Version 0.0.3
+
+        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_0_1", className);
+        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_0_2", className);
+        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_0_3", className);
+      }
     }
 
     @Nested
@@ -262,6 +313,57 @@ class ClassBuilderTest {
         compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v1", className);
         compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v2", className);
         compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v3", className);
+      }
+
+      @Test
+      void testUpdateMajor() throws Exception {
+        final var className = "ClassUpdateMajorShort";
+        ClassBuilder.newClass()
+            .setVersionPlacement(Builder.VersionPlacement.PACKAGE_NAME_WITH_SHORTENED_VERSION)
+            .updateDirectory(TestConstants.DIRECTORY)
+            .updatePackageName(TestConstants.PACKAGE_NAME)
+            .updateClassName(className)
+            .commit(SemVer.Change.MAJOR) // Version 1.0.0
+            .commit(SemVer.Change.MAJOR) // Version 2.0.0
+            .commit(SemVer.Change.MAJOR); // Version 3.0.0
+
+        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v1", className);
+        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v2", className);
+        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v3", className);
+      }
+
+      @Test
+      void testUpdateMinor() throws Exception {
+        final var className = "ClassUpdateMinorShort";
+        ClassBuilder.newClass()
+            .setVersionPlacement(Builder.VersionPlacement.PACKAGE_NAME_WITH_SHORTENED_VERSION)
+            .updateDirectory(TestConstants.DIRECTORY)
+            .updatePackageName(TestConstants.PACKAGE_NAME)
+            .updateClassName(className)
+            .commit(SemVer.Change.MINOR) // Version 0.1.0
+            .commit(SemVer.Change.MINOR) // Version 0.2.0
+            .commit(SemVer.Change.MINOR); // Version 0.3.0
+
+        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_1", className);
+        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_2", className);
+        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_3", className);
+      }
+
+      @Test
+      void testUpdatePatch() throws Exception {
+        final var className = "ClassUpdatePatchShort";
+        ClassBuilder.newClass()
+            .setVersionPlacement(Builder.VersionPlacement.PACKAGE_NAME_WITH_SHORTENED_VERSION)
+            .updateDirectory(TestConstants.DIRECTORY)
+            .updatePackageName(TestConstants.PACKAGE_NAME)
+            .updateClassName(className)
+            .commit(SemVer.Change.PATCH) // Version 0.0.1
+            .commit(SemVer.Change.PATCH) // Version 0.0.2
+            .commit(SemVer.Change.PATCH); // Version 0.0.3
+
+        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_0_1", className);
+        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_0_2", className);
+        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_0_3", className);
       }
     }
   }

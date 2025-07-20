@@ -15,6 +15,7 @@
  */
 package io.github.chrimle.classforge;
 
+import io.github.chrimle.classforge.semver.SemVer;
 import io.github.chrimle.classforge.utils.ExceptionFactory;
 import java.util.*;
 import java.util.function.Predicate;
@@ -181,10 +182,10 @@ public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
 
   @NotNull
   @Override
-  protected String generateFileContent() {
+  protected String generateFileContent(final SemVer semVer) {
     final StringBuilder codeBuilder = new StringBuilder();
 
-    Optional.ofNullable(resolveEffectivePackageName())
+    Optional.ofNullable(resolveEffectivePackageName(semVer))
         .filter(pN -> !pN.isBlank())
         .map("package %s;\n\n"::formatted)
         .ifPresent(codeBuilder::append);

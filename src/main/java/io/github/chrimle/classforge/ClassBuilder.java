@@ -15,6 +15,7 @@
  */
 package io.github.chrimle.classforge;
 
+import io.github.chrimle.classforge.semver.SemVer;
 import java.util.Optional;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -43,10 +44,10 @@ public final class ClassBuilder extends AbstractBuilder<ClassBuilder> {
 
   @NotNull
   @Override
-  protected String generateFileContent() {
+  protected String generateFileContent(final SemVer semVer) {
     final StringBuilder codeBuilder = new StringBuilder();
 
-    Optional.ofNullable(resolveEffectivePackageName())
+    Optional.ofNullable(resolveEffectivePackageName(semVer))
         .filter(pN -> !pN.isBlank())
         .map("package %s;\n\n"::formatted)
         .ifPresent(codeBuilder::append);
