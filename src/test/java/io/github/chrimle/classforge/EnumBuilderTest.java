@@ -505,23 +505,6 @@ class EnumBuilderTest {
     class CompletePackageNameTests {
 
       @Test
-      void testUpdateMajor() throws Exception {
-        final var className = "EnumUpdateMajorComplete";
-        EnumBuilder.newClass()
-            .setVersionPlacement(Builder.VersionPlacement.PACKAGE_NAME_WITH_COMPLETE_VERSION)
-            .updateDirectory(TestConstants.DIRECTORY)
-            .updatePackageName(TestConstants.PACKAGE_NAME)
-            .updateClassName(className)
-            .commit(SemVer.Change.MAJOR) // Version 1.0.0
-            .commit(SemVer.Change.MAJOR) // Version 2.0.0
-            .commit(SemVer.Change.MAJOR); // Version 3.0.0
-
-        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v1_0_0", className);
-        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v2_0_0", className);
-        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v3_0_0", className);
-      }
-
-      @Test
       void testUpdateMinor() throws Exception {
         final var className = "EnumUpdateMinorComplete";
         EnumBuilder.newClass()

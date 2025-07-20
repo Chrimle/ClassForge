@@ -18,6 +18,7 @@ package io.github.chrimle.classforge;
 import static org.junit.jupiter.api.Assertions.*;
 
 import io.github.chrimle.classforge.Builder.VersionPlacement;
+import io.github.chrimle.classforge.semver.SemVer;
 import io.github.chrimle.classforge.test.utils.DynamicClassLoader;
 import io.github.chrimle.classforge.test.utils.JavaSourceCompiler;
 import io.github.chrimle.classforge.test.utils.TestConstants;
@@ -131,7 +132,7 @@ public class BuilderTests {
 
       @ParameterizedTest
       @ValueSource(classes = {ClassBuilder.class, EnumBuilder.class})
-      void testDefaultCommit(final Class<? extends AbstractBuilder<?>> builderClass)
+      void testDefaultCommits(final Class<? extends AbstractBuilder<?>> builderClass)
           throws Exception {
         final var className = builderClass.getSimpleName() + "_Test_DefaultCompletePackageName";
         instantiateBuilder(builderClass)
@@ -142,6 +143,25 @@ public class BuilderTests {
             .commit() // Version 1.0.0
             .commit() // Version 2.0.0
             .commit(); // Version 3.0.0
+
+        assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v1_0_0", className));
+        assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v2_0_0", className));
+        assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v3_0_0", className));
+      }
+
+      @ParameterizedTest
+      @ValueSource(classes = {ClassBuilder.class, EnumBuilder.class})
+      void testMajorCommits(final Class<? extends AbstractBuilder<?>> builderClass)
+          throws Exception {
+        final var className = builderClass.getSimpleName() + "_Test_MajorCompletePackageName";
+        instantiateBuilder(builderClass)
+            .setVersionPlacement(VersionPlacement.PACKAGE_NAME_WITH_COMPLETE_VERSION)
+            .updateDirectory(TestConstants.DIRECTORY)
+            .updatePackageName(TestConstants.PACKAGE_NAME)
+            .updateClassName(className)
+            .commit(SemVer.Change.MAJOR) // Version 1.0.0
+            .commit(SemVer.Change.MAJOR) // Version 2.0.0
+            .commit(SemVer.Change.MAJOR); // Version 3.0.0
 
         assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v1_0_0", className));
         assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v2_0_0", className));
