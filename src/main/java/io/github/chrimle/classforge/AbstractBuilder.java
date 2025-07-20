@@ -78,6 +78,7 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
 
   /** {@inheritDoc} */
   @Override
+  @Contract("_ -> this")
   public T setVersionPlacement(final VersionPlacement versionPlacement) {
     this.versionPlacement = Optional.ofNullable(versionPlacement).orElse(VersionPlacement.NONE);
     return self();
@@ -85,6 +86,7 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
 
   /** {@inheritDoc} */
   @Override
+  @Contract("null -> fail; _ -> this")
   public T updateDirectory(final String directory) {
     validateDirectory(directory);
     this.directory = directory;
@@ -93,6 +95,7 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
 
   /** {@inheritDoc} */
   @Override
+  @Contract("null -> fail; _ -> this")
   public T updatePackageName(final String packageName) {
     validatePackageName(packageName);
     this.packageName = packageName;
@@ -101,6 +104,7 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
 
   /** {@inheritDoc} */
   @Override
+  @Contract("null -> fail; _ -> this")
   public T updateClassName(final String className) {
     validateClassName(className);
     this.className = className;
@@ -109,12 +113,14 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
 
   /** {@inheritDoc} */
   @Override
+  @Contract(" -> this")
   public T commit() {
     return commit(determineSemVerChange());
   }
 
   /** {@inheritDoc} */
   @Override
+  @Contract("null -> fail; _ -> this")
   public T commit(final SemVer.Change change) {
     if (change == null) {
       throw ExceptionFactory.nullException("change");
