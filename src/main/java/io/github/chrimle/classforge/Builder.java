@@ -133,10 +133,23 @@ public sealed interface Builder<T extends Builder<T>> permits AbstractBuilder {
   T updatePackageName(final String packageName);
 
   /**
-   * <em><strong>Commits</strong></em> the <em>currently uncommitted</em> class.
+   * <em><strong>Commits</strong></em> the <em>currently uncommitted</em> changes as a new
+   * <em>class</em>. The {@code semVer} of the new <em>class</em> will be set
+   * <em><strong>automatically</strong></em>.
    *
    * @return <em>this</em> {@code Builder}.
    * @since 0.1.0
    */
   T commit();
+
+  /**
+   * <em><strong>Commits</strong></em> the <em>currently uncommitted</em> changes as a new
+   * <em>class</em>. The {@code semVer} of the new <em>class</em> will be set according to the given
+   * {@code change}.
+   *
+   * @param change for the new {@code semVer}.
+   * @return <em>this</em> {@code Builder}
+   * @since 0.5.0
+   */
+  T commit(final SemVer.Change change);
 }

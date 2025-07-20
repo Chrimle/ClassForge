@@ -110,15 +110,25 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
   /** {@inheritDoc} */
   @Override
   public T commit() {
+    return commit(determineSemVerChange());
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public T commit(final SemVer.Change change) {
+    if (change == null) {
+      throw ExceptionFactory.nullException("change");
+    }
+    final SemVer newSemVer = semVer.incrementVersion(change);
     validateClass();
-    this.semVer = semVer.incrementVersion(determineSemVerChange());
-    final String fullyQualifiedClassName = resolveFullyQualifiedClassName();
+    final String fullyQualifiedClassName = resolveFullyQualifiedClassName(newSemVer);
     if (reservedClassNames.contains(fullyQualifiedClassName)) {
       throw new IllegalStateException(
           "Class `%s` has already been generated!".formatted(fullyQualifiedClassName));
     }
-    generateClassFile();
+    generateClassFile(newSemVer);
     reservedClassNames.add(fullyQualifiedClassName);
+    this.semVer = newSemVer;
     return self();
   }
 
@@ -155,13 +165,19 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
    * Generates the complete file contents for a {@code .java} file for the <em>currently
    * uncommitted</em> class.
    *
+   * @param semVer for the new class.
    * @return the file contents as a {@code String}.
    */
-  protected abstract String generateFileContent();
+  protected abstract String generateFileContent(final SemVer semVer);
 
-  /** Generates a {@code .java} class file for the <em>currently uncommitted</em> class. */
-  protected void generateClassFile() {
-    FileWriter.writeToFile(directory, resolveFullyQualifiedClassName(), generateFileContent());
+  /**
+   * Generates a {@code .java} class file for the <em>currently uncommitted</em> class.
+   *
+   * @param semVer for the new class.
+   */
+  protected void generateClassFile(final SemVer semVer) {
+    FileWriter.writeToFile(
+        directory, resolveFullyQualifiedClassName(semVer), generateFileContent(semVer));
   }
 
   /**
@@ -171,10 +187,11 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
    * <p><strong>Example:</strong> {@code module.sub_module.ExampleClass} or {@code
    * AnotherExampleClass}.
    *
+   * @param semVer for the new class.
    * @return the <em>FQCN</em>.
    */
-  protected String resolveFullyQualifiedClassName() {
-    return Optional.ofNullable(resolveEffectivePackageName())
+  protected String resolveFullyQualifiedClassName(final SemVer semVer) {
+    return Optional.ofNullable(resolveEffectivePackageName(semVer))
         .filter(pN -> !pN.isBlank())
         .map(pN -> String.join(".", pN, className))
         .orElse(className);
@@ -183,9 +200,10 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
   /**
    * Resolves the <em>effective package name</em> for the <em>currently uncommitted</em> class.
    *
+   * @param semVer for the class.
    * @return the <em>effective package name</em>.
    */
-  protected String resolveEffectivePackageName() {
+  protected String resolveEffectivePackageName(final SemVer semVer) {
     return switch (versionPlacement) {
       case NONE -> packageName;
       case PACKAGE_NAME_WITH_COMPLETE_VERSION -> {
