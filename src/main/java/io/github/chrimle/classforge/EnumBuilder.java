@@ -52,11 +52,15 @@ public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
    *
    * @param enumConstantNames to add.
    * @return this Builder.
+   * @throws IllegalArgumentException if {@code enumConstantNames} is {@code null}.
+   * @throws IllegalArgumentException if {@code enumConstantNames} is empty.
+   * @throws IllegalArgumentException if {@code enumConstantNames} contain a {@code String} which is
+   *     {@code null}.
+   * @throws IllegalArgumentException if {@code enumConstantNames} contain a {@code String} which
+   *     does not match the RegEx {@value VALID_ENUM_CONSTANT_NAME_REGEX}.
+   * @throws IllegalArgumentException if {@code enumConstantNames} contain a {@code String} which
+   *     does not exist in the <em>currently uncommitted</em> class.
    * @since 0.3.0
-   * @throws IllegalArgumentException if {@code enumConstantNames} is {@code null}, empty, or
-   *     contains {@link String}s which are {@code null}, does not match the RegEx {@value
-   *     VALID_ENUM_CONSTANT_NAME_REGEX} or the <em>currently uncommitted</em> class already has an
-   *     enum constant with the same name.
    */
   public EnumBuilder addEnumConstants(final String... enumConstantNames) {
 
@@ -90,11 +94,13 @@ public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
    *
    * @param enumConstantNames to remove.
    * @return this Builder.
+   * @throws IllegalArgumentException if {@code enumConstantNames} is {@code null}.
+   * @throws IllegalArgumentException if {@code enumConstantNames} is empty.
+   * @throws IllegalArgumentException if {@code enumConstantNames} contain a {@code String} which is
+   *     {@code null}.
+   * @throws IllegalArgumentException if {@code enumConstantNames} contain a {@code String} which
+   *     does not exist in the <em>currently uncommitted</em> class.
    * @since 0.3.0
-   * @throws IllegalArgumentException if {@code enumConstantNames} is {@code null}, empty, or
-   *     contains {@link String}s which are {@code null}, does not match the RegEx {@value
-   *     VALID_ENUM_CONSTANT_NAME_REGEX} or the <em>currently uncommitted</em> class does not have
-   *     the enum constant to be removed.
    */
   public EnumBuilder removeEnumConstants(final String... enumConstantNames) {
     if (Optional.ofNullable(enumConstantNames)
