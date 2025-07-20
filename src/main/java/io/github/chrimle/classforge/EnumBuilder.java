@@ -115,6 +115,44 @@ public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
     return this;
   }
 
+  /**
+   * <em>Updates</em> the {@code oldEnumConstant} into {@code newEnumConstant} in the <em>currently
+   * uncommitted</em> class.
+   *
+   * @param oldEnumConstant to be removed.
+   * @param newEnumConstant to be added.
+   * @return this Builder.
+   * @throws IllegalArgumentException if {@code oldEnumConstant} is {@code null}.
+   * @throws IllegalArgumentException if {@code oldEnumConstant} does not exist.
+   * @throws IllegalArgumentException if {@code newEnumConstant} is {@code null}.
+   * @throws IllegalArgumentException if {@code newEnumConstant} does not match the RegEx {@value
+   *     VALID_ENUM_CONSTANT_NAME_REGEX}.
+   * @throws IllegalArgumentException if {@code newEnumConstant} already exists.
+   * @since 0.5.0
+   */
+  public EnumBuilder updateEnumConstant(
+      final String oldEnumConstant, final String newEnumConstant) {
+    if (oldEnumConstant == null) {
+      throw new IllegalArgumentException("`oldEnumConstant` MUST NOT be null!");
+    }
+    if (!enumConstants.contains(oldEnumConstant)) {
+      throw new IllegalArgumentException(
+          "No Enum constant named '%s' exists!".formatted(oldEnumConstant));
+    }
+    if (newEnumConstant == null) {
+      throw new IllegalArgumentException("`newEnumConstant` MUST NOT be null!");
+    }
+    validateEnumConstantName(newEnumConstant);
+    if (enumConstants.contains(newEnumConstant)) {
+      throw new IllegalArgumentException(
+          "An Enum constant named '%s' already exists!".formatted(newEnumConstant));
+    }
+    enumConstants.replaceAll(
+        existingEnumConstant ->
+            existingEnumConstant.equals(oldEnumConstant) ? newEnumConstant : existingEnumConstant);
+    return this;
+  }
+
   private static void validateEnumConstantName(final String enumConstantName) {
     if (!enumConstantNamePredicate.test(enumConstantName)) {
       throw new IllegalArgumentException(
