@@ -88,4 +88,17 @@ public class BuilderTests {
       assertEquals(ExceptionFactory.nullException("semVer").getMessage(), exception.getMessage());
     }
   }
+
+  @Nested
+  class CommitTests {
+
+    @ParameterizedTest
+    @ValueSource(classes = {ClassBuilder.class, EnumBuilder.class})
+    void testNullChange(final Class<? extends AbstractBuilder<?>> builderClass) {
+      final var exception =
+          assertThrows(
+              IllegalArgumentException.class, () -> instantiateBuilder(builderClass).commit(null));
+      assertEquals(ExceptionFactory.nullException("change").getMessage(), exception.getMessage());
+    }
+  }
 }
