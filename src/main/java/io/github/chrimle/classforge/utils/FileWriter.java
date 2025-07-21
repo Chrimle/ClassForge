@@ -26,7 +26,7 @@ import org.apiguardian.api.API;
  * @since 0.1.0
  * @author Chrimle
  */
-@API(since = "0.6.0", status = API.Status.INTERNAL, consumers = "io.github.chrimle.classforge")
+@API(status = API.Status.INTERNAL, since = "0.6.0", consumers = "io.github.chrimle.classforge")
 public class FileWriter {
 
   /**

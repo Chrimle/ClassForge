@@ -32,7 +32,7 @@ import org.jetbrains.annotations.NotNull;
  * @since 0.1.0
  * @author Chrimle
  */
-@API(since = "0.6.0", status = API.Status.STABLE)
+@API(status = API.Status.STABLE, since = "0.6.0")
 public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Builder<T>
     permits ClassBuilder, EnumBuilder {
 
