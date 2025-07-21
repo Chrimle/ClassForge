@@ -35,10 +35,10 @@ public class BuilderTests {
 
   static <T extends AbstractBuilder<?>> T instantiateBuilder(final Class<T> builderClass) {
     if (builderClass == ClassBuilder.class) {
-      return builderClass.cast(ClassBuilder.newClass());
+      return builderClass.cast(ClassForge.newClassBuilder());
     }
     if (builderClass == EnumBuilder.class) {
-      return builderClass.cast(EnumBuilder.newClass());
+      return builderClass.cast(ClassForge.newEnumBuilder());
     }
     throw new UnsupportedOperationException();
   }

@@ -42,6 +42,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class ClassForge {
 
+  private ClassForge() {}
+
   /**
    * Creates a new {@link Builder} instance for generating Java <i>classes</i>.
    *
@@ -50,7 +52,7 @@ public final class ClassForge {
    */
   @NotNull
   @Contract(" -> new")
-  Builder<?> newClassBuilder() {
+  public static Builder<?> newClassBuilder() {
     return ClassBuilder.newClass();
   }
 
@@ -62,7 +64,7 @@ public final class ClassForge {
    */
   @NotNull
   @Contract(" -> new")
-  Builder<?> newEnumBuilder() {
+  public static Builder<?> newEnumBuilder() {
     return EnumBuilder.newClass();
   }
 
