@@ -206,5 +206,85 @@ public class BuilderTests {
         assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_0_3", className));
       }
     }
+
+    @Nested
+    class ShortPackageNameTests {
+
+      @ParameterizedTest
+      @ValueSource(classes = {ClassBuilder.class, EnumBuilder.class})
+      void testDefaultCommits(final Class<? extends AbstractBuilder<?>> builderClass)
+          throws Exception {
+        final var className = builderClass.getSimpleName() + "_Test_DefaultShortPackageName";
+        instantiateBuilder(builderClass)
+            .setVersionPlacement(VersionPlacement.PACKAGE_NAME_WITH_SHORTENED_VERSION)
+            .updateDirectory(TestConstants.DIRECTORY)
+            .updatePackageName(TestConstants.PACKAGE_NAME)
+            .updateClassName(className)
+            .commit() // Version 1.0.0
+            .commit() // Version 2.0.0
+            .commit(); // Version 3.0.0
+
+        assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v1", className));
+        assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v2", className));
+        assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v3", className));
+      }
+
+      @ParameterizedTest
+      @ValueSource(classes = {ClassBuilder.class, EnumBuilder.class})
+      void testMajorCommits(final Class<? extends AbstractBuilder<?>> builderClass)
+          throws Exception {
+        final var className = builderClass.getSimpleName() + "_Test_MajorShortPackageName";
+        instantiateBuilder(builderClass)
+            .setVersionPlacement(VersionPlacement.PACKAGE_NAME_WITH_SHORTENED_VERSION)
+            .updateDirectory(TestConstants.DIRECTORY)
+            .updatePackageName(TestConstants.PACKAGE_NAME)
+            .updateClassName(className)
+            .commit(SemVer.Change.MAJOR) // Version 1.0.0
+            .commit(SemVer.Change.MAJOR) // Version 2.0.0
+            .commit(SemVer.Change.MAJOR); // Version 3.0.0
+
+        assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v1", className));
+        assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v2", className));
+        assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v3", className));
+      }
+
+      @ParameterizedTest
+      @ValueSource(classes = {ClassBuilder.class, EnumBuilder.class})
+      void testMinorCommits(final Class<? extends AbstractBuilder<?>> builderClass)
+          throws Exception {
+        final var className = builderClass.getSimpleName() + "_Test_MinorShortPackageName";
+        instantiateBuilder(builderClass)
+            .setVersionPlacement(VersionPlacement.PACKAGE_NAME_WITH_SHORTENED_VERSION)
+            .updateDirectory(TestConstants.DIRECTORY)
+            .updatePackageName(TestConstants.PACKAGE_NAME)
+            .updateClassName(className)
+            .commit(SemVer.Change.MINOR) // Version 0.1.0
+            .commit(SemVer.Change.MINOR) // Version 0.2.0
+            .commit(SemVer.Change.MINOR); // Version 0.3.0
+
+        assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_1", className));
+        assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_2", className));
+        assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_3", className));
+      }
+
+      @ParameterizedTest
+      @ValueSource(classes = {ClassBuilder.class, EnumBuilder.class})
+      void testPatchCommits(final Class<? extends AbstractBuilder<?>> builderClass)
+          throws Exception {
+        final var className = builderClass.getSimpleName() + "_Test_PatchShortPackageName";
+        instantiateBuilder(builderClass)
+            .setVersionPlacement(VersionPlacement.PACKAGE_NAME_WITH_SHORTENED_VERSION)
+            .updateDirectory(TestConstants.DIRECTORY)
+            .updatePackageName(TestConstants.PACKAGE_NAME)
+            .updateClassName(className)
+            .commit(SemVer.Change.PATCH) // Version 0.0.1
+            .commit(SemVer.Change.PATCH) // Version 0.0.2
+            .commit(SemVer.Change.PATCH); // Version 0.0.3
+
+        assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_0_1", className));
+        assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_0_2", className));
+        assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_0_3", className));
+      }
+    }
   }
 }
