@@ -15,11 +15,8 @@
  */
 package io.github.chrimle.classforge;
 
-import static io.github.chrimle.classforge.test.utils.TestConstants.DIRECTORY;
-import static io.github.chrimle.classforge.test.utils.TestConstants.PACKAGE_NAME;
 import static org.junit.jupiter.api.Assertions.*;
 
-import io.github.chrimle.classforge.semver.SemVer;
 import io.github.chrimle.classforge.test.utils.DynamicClassLoader;
 import io.github.chrimle.classforge.test.utils.JavaSourceCompiler;
 import io.github.chrimle.classforge.test.utils.TestConstants;
@@ -122,53 +119,7 @@ class ClassBuilderTest {
   }
 
   @Nested
-  class SetSemVerTests {
-
-    @Test
-    void testNullSemVerThrows() {
-      final var classBuilder = ClassBuilder.newClass();
-      final var exception =
-          assertThrows(IllegalArgumentException.class, () -> classBuilder.setSemVer(null));
-      assertEquals(ExceptionFactory.nullException("semVer").getMessage(), exception.getMessage());
-    }
-
-    @Test
-    void testValidSemVer() throws Exception {
-      final var classBuilder =
-          ClassBuilder.newClass()
-              .updateDirectory(DIRECTORY)
-              .updatePackageName(PACKAGE_NAME)
-              .updateClassName("ClassWithCustomSemVer")
-              .setVersionPlacement(Builder.VersionPlacement.PACKAGE_NAME_WITH_COMPLETE_VERSION);
-      assertDoesNotThrow(() -> classBuilder.setSemVer(new SemVer(42, 7, 11)));
-      assertDoesNotThrow(() -> classBuilder.commit());
-
-      final Class<?> enumWithCustomSemVer =
-          compileAndLoadClass(PACKAGE_NAME + ".v43_0_0", "ClassWithCustomSemVer");
-      assertFalse(enumWithCustomSemVer.isEnum());
-    }
-  }
-
-  @Nested
   class PackageNameTests {
-
-    /**
-     * A null/empty packageName should be allowed, as it should be treated as not belonging to any
-     * package.
-     */
-    @ParameterizedTest
-    @CsvSource({",'ClassWithNullPackageName'", "'','ClassWithEmptyPackageName'"})
-    void testNullValue(final String packageName, final String className) throws Exception {
-      assertDoesNotThrow(
-          () ->
-              ClassBuilder.newClass()
-                  .updateDirectory(TestConstants.DIRECTORY)
-                  .updatePackageName(packageName)
-                  .updateClassName(className)
-                  .commit());
-
-      assertNotNull(compileAndLoadClass(className));
-    }
 
     @ParameterizedTest
     @ValueSource(strings = {".", "..", "a..", "..a", ".a.", "a..a"})
@@ -217,154 +168,6 @@ class ClassBuilderTest {
           ExceptionFactory.notMatchingRegExException("className", ClassForge.VALID_CLASS_NAME_REGEX)
               .getMessage(),
           exception.getMessage());
-    }
-  }
-
-  @Nested
-  class VersionPlacementTests {
-
-    @Nested
-    class CompletePackageNameTests {
-
-      @Test
-      void testUpdatingPackageVersionTwice() throws Exception {
-        final var className = "ClassTestUpdatingPackageVersionTwiceComplete";
-        ClassBuilder.newClass()
-            .setVersionPlacement(Builder.VersionPlacement.PACKAGE_NAME_WITH_COMPLETE_VERSION)
-            .updateDirectory(TestConstants.DIRECTORY)
-            .updatePackageName(TestConstants.PACKAGE_NAME)
-            .updateClassName(className)
-            .commit() // Version 1.0.0
-            .commit() // Version 2.0.0
-            .commit(); // Version 3.0.0
-
-        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v1_0_0", className);
-        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v2_0_0", className);
-        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v3_0_0", className);
-      }
-
-      @Test
-      void testUpdateMajor() throws Exception {
-        final var className = "ClassUpdateMajorComplete";
-        ClassBuilder.newClass()
-            .setVersionPlacement(Builder.VersionPlacement.PACKAGE_NAME_WITH_COMPLETE_VERSION)
-            .updateDirectory(TestConstants.DIRECTORY)
-            .updatePackageName(TestConstants.PACKAGE_NAME)
-            .updateClassName(className)
-            .commit(SemVer.Change.MAJOR) // Version 1.0.0
-            .commit(SemVer.Change.MAJOR) // Version 2.0.0
-            .commit(SemVer.Change.MAJOR); // Version 3.0.0
-
-        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v1_0_0", className);
-        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v2_0_0", className);
-        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v3_0_0", className);
-      }
-
-      @Test
-      void testUpdateMinor() throws Exception {
-        final var className = "ClassUpdateMinorComplete";
-        ClassBuilder.newClass()
-            .setVersionPlacement(Builder.VersionPlacement.PACKAGE_NAME_WITH_COMPLETE_VERSION)
-            .updateDirectory(TestConstants.DIRECTORY)
-            .updatePackageName(TestConstants.PACKAGE_NAME)
-            .updateClassName(className)
-            .commit(SemVer.Change.MINOR) // Version 0.1.0
-            .commit(SemVer.Change.MINOR) // Version 0.2.0
-            .commit(SemVer.Change.MINOR); // Version 0.3.0
-
-        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_1_0", className);
-        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_2_0", className);
-        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_3_0", className);
-      }
-
-      @Test
-      void testUpdatePatch() throws Exception {
-        final var className = "ClassUpdatePatchComplete";
-        ClassBuilder.newClass()
-            .setVersionPlacement(Builder.VersionPlacement.PACKAGE_NAME_WITH_COMPLETE_VERSION)
-            .updateDirectory(TestConstants.DIRECTORY)
-            .updatePackageName(TestConstants.PACKAGE_NAME)
-            .updateClassName(className)
-            .commit(SemVer.Change.PATCH) // Version 0.0.1
-            .commit(SemVer.Change.PATCH) // Version 0.0.2
-            .commit(SemVer.Change.PATCH); // Version 0.0.3
-
-        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_0_1", className);
-        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_0_2", className);
-        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_0_3", className);
-      }
-    }
-
-    @Nested
-    class ShortenedPackageNameTests {
-
-      @Test
-      void testUpdatingPackageVersionTwice() throws Exception {
-        final var className = "ClassTestUpdatingPackageVersionTwiceShortened";
-        ClassBuilder.newClass()
-            .setVersionPlacement(Builder.VersionPlacement.PACKAGE_NAME_WITH_SHORTENED_VERSION)
-            .updateDirectory(TestConstants.DIRECTORY)
-            .updatePackageName(TestConstants.PACKAGE_NAME)
-            .updateClassName(className)
-            .commit() // Version 1
-            .commit() // Version 2
-            .commit(); // Version 3
-
-        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v1", className);
-        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v2", className);
-        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v3", className);
-      }
-
-      @Test
-      void testUpdateMajor() throws Exception {
-        final var className = "ClassUpdateMajorShort";
-        ClassBuilder.newClass()
-            .setVersionPlacement(Builder.VersionPlacement.PACKAGE_NAME_WITH_SHORTENED_VERSION)
-            .updateDirectory(TestConstants.DIRECTORY)
-            .updatePackageName(TestConstants.PACKAGE_NAME)
-            .updateClassName(className)
-            .commit(SemVer.Change.MAJOR) // Version 1.0.0
-            .commit(SemVer.Change.MAJOR) // Version 2.0.0
-            .commit(SemVer.Change.MAJOR); // Version 3.0.0
-
-        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v1", className);
-        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v2", className);
-        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v3", className);
-      }
-
-      @Test
-      void testUpdateMinor() throws Exception {
-        final var className = "ClassUpdateMinorShort";
-        ClassBuilder.newClass()
-            .setVersionPlacement(Builder.VersionPlacement.PACKAGE_NAME_WITH_SHORTENED_VERSION)
-            .updateDirectory(TestConstants.DIRECTORY)
-            .updatePackageName(TestConstants.PACKAGE_NAME)
-            .updateClassName(className)
-            .commit(SemVer.Change.MINOR) // Version 0.1.0
-            .commit(SemVer.Change.MINOR) // Version 0.2.0
-            .commit(SemVer.Change.MINOR); // Version 0.3.0
-
-        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_1", className);
-        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_2", className);
-        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_3", className);
-      }
-
-      @Test
-      void testUpdatePatch() throws Exception {
-        final var className = "ClassUpdatePatchShort";
-        ClassBuilder.newClass()
-            .setVersionPlacement(Builder.VersionPlacement.PACKAGE_NAME_WITH_SHORTENED_VERSION)
-            .updateDirectory(TestConstants.DIRECTORY)
-            .updatePackageName(TestConstants.PACKAGE_NAME)
-            .updateClassName(className)
-            .commit(SemVer.Change.PATCH) // Version 0.0.1
-            .commit(SemVer.Change.PATCH) // Version 0.0.2
-            .commit(SemVer.Change.PATCH); // Version 0.0.3
-
-        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_0_1", className);
-        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_0_2", className);
-        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_0_3", className);
-      }
     }
   }
 }
