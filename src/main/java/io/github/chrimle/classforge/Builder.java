@@ -91,6 +91,16 @@ public sealed interface Builder<T extends Builder<T>> permits AbstractBuilder {
   T setVersionPlacement(final VersionPlacement versionPlacement);
 
   /**
+   * <em>Gets</em> the {@code semVer} of the <em>currently uncommitted</em> class.
+   * <em><strong>NOTE:</strong></em> the {@code semVer} will be updated when <em>committing</em> the
+   * changes.
+   *
+   * @return the {@code semVer} of the class.
+   * @since 0.6.0
+   */
+  SemVer getSemVer();
+
+  /**
    * <em>Sets</em> the {@code semVer} of the <em>currently uncommitted</em> class.
    *
    * <p><strong>NOTE:</strong> the {@code semVer} will be updated when <em>committing</em> the
