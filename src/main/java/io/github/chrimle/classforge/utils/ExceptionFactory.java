@@ -22,6 +22,8 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Factory-class for instantiating {@link Exception}-classes with <em>message presets</em>.
  *
+ * <p><em><strong>FOR INTERNAL USE ONLY.</strong></em>
+ *
  * @since 0.5.0
  * @author Chrimle
  */
