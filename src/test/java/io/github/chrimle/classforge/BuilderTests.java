@@ -77,6 +77,19 @@ public class BuilderTests {
               .getMessage(),
           exception.getMessage());
     }
+
+    @ParameterizedTest
+    @ValueSource(classes = {ClassBuilder.class, EnumBuilder.class})
+    void testNull(final Class<? extends AbstractBuilder<?>> builderClass) {
+      final var exception =
+          assertThrows(
+              IllegalArgumentException.class,
+              () -> instantiateBuilder(builderClass).updateClassName(null));
+      assertEquals(
+          ExceptionFactory.notMatchingRegExException("className", ClassForge.VALID_CLASS_NAME_REGEX)
+              .getMessage(),
+          exception.getMessage());
+    }
   }
 
   @ParameterizedTest
