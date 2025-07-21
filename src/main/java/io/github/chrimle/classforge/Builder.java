@@ -16,6 +16,7 @@
 package io.github.chrimle.classforge;
 
 import io.github.chrimle.classforge.semver.SemVer;
+import org.jetbrains.annotations.Contract;
 
 /**
  * Builder of a Java <i>class</i> - which <b>MAY</b> generate a {@code class}, {@code enum} or
@@ -159,9 +160,13 @@ public sealed interface Builder<T extends Builder<T>> permits AbstractBuilder {
    *
    * @param change for the new {@code semVer}.
    * @return <em>this</em> {@code Builder}
-   * @since 0.5.0
+   * @throws IllegalArgumentException if {@code change} is {@code null}.
+   * @since 0.6.0
    */
-  T commit(final SemVer.Change change);
+  @Contract("null -> fail; _ -> this")
+  default T commit(final SemVer.Change change) {
+    return commit(getSemVer().incrementVersion(change));
+  }
 
   /**
    * <em><strong>Commits</strong></em> the <em>currently uncommitted</em> changes as a new

@@ -129,16 +129,6 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
   /** {@inheritDoc} */
   @Override
   @Contract("null -> fail; _ -> this")
-  public T commit(final SemVer.Change change) {
-    if (change == null) {
-      throw ExceptionFactory.nullException("change");
-    }
-    return commit(semVer.incrementVersion(change));
-  }
-
-  /** {@inheritDoc} */
-  @Override
-  @Contract("null -> fail; _ -> this")
   public T commit(final SemVer semVer) {
     if (semVer == null) {
       throw ExceptionFactory.nullException("semVer");
