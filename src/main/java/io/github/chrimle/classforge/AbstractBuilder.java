@@ -23,6 +23,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Abstract class for building and generating Java classes.
@@ -64,6 +65,13 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
 
   /** The {@code className} of the <em>currently uncommitted</em> class. */
   protected String className;
+
+  /** {@inheritDoc} */
+  @Override
+  @NotNull
+  public SemVer getSemVer() {
+    return semVer;
+  }
 
   /** {@inheritDoc} */
   @Contract("null -> fail; _ -> this")
@@ -116,16 +124,6 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
   @Contract(" -> this")
   public T commit() {
     return commit(determineSemVerChange());
-  }
-
-  /** {@inheritDoc} */
-  @Override
-  @Contract("null -> fail; _ -> this")
-  public T commit(final SemVer.Change change) {
-    if (change == null) {
-      throw ExceptionFactory.nullException("change");
-    }
-    return commit(semVer.incrementVersion(change));
   }
 
   /** {@inheritDoc} */
