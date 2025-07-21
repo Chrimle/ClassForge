@@ -207,7 +207,8 @@ public class BuilderTests {
     void testNullChange(final Class<? extends AbstractBuilder<?>> builderClass) {
       final var exception =
           assertThrows(
-              IllegalArgumentException.class, () -> instantiateBuilder(builderClass).commit(null));
+              IllegalArgumentException.class,
+              () -> instantiateBuilder(builderClass).commit((SemVer.Change) null));
       assertEquals(ExceptionFactory.nullException("change").getMessage(), exception.getMessage());
     }
   }

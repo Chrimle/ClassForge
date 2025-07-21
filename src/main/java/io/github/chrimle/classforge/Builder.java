@@ -152,4 +152,15 @@ public sealed interface Builder<T extends Builder<T>> permits AbstractBuilder {
    * @since 0.5.0
    */
   T commit(final SemVer.Change change);
+
+  /**
+   * <em><strong>Commits</strong></em> the <em>currently uncommitted</em> changes as a new
+   * <em>class</em>. The {@code semVer} of the new <em>class</em> will be set to the given {@code
+   * semVer}.
+   *
+   * @param semVer for the new <em>class</em>.
+   * @return <em>this</em> {@code Builder}.
+   * @since 0.6.0
+   */
+  T commit(final SemVer semVer);
 }
