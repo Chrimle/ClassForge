@@ -184,8 +184,8 @@ public class BuilderTests {
 
     @ParameterizedTest
     @ValueSource(classes = {ClassBuilder.class, EnumBuilder.class})
-    void testValid(final Class<? extends AbstractBuilder<?>> builderClass) throws Exception {
-      final var className = builderClass.getSimpleName() + "_Test_CustomSemVer";
+    void testValidChange(final Class<? extends AbstractBuilder<?>> builderClass) throws Exception {
+      final var className = builderClass.getSimpleName() + "_Test_CustomCommitChange";
       final var classBuilder =
           instantiateBuilder(builderClass)
               .updateDirectory(DIRECTORY)
@@ -197,6 +197,21 @@ public class BuilderTests {
 
       assertNotNull(compileAndLoadClass(PACKAGE_NAME + ".v42_7_11", className));
     }
+
+    @ParameterizedTest
+    @ValueSource(classes = {ClassBuilder.class, EnumBuilder.class})
+    void testValidSemVer(final Class<? extends AbstractBuilder<?>> builderClass) throws Exception {
+      final var className = builderClass.getSimpleName() + "_Test_CustomCommitSemVer";
+      final var classBuilder =
+          instantiateBuilder(builderClass)
+              .updateDirectory(DIRECTORY)
+              .updatePackageName(PACKAGE_NAME)
+              .updateClassName(className)
+              .setVersionPlacement(Builder.VersionPlacement.PACKAGE_NAME_WITH_COMPLETE_VERSION);
+      assertDoesNotThrow(() -> classBuilder.commit(new SemVer(3, 2, 1)));
+
+      assertNotNull(compileAndLoadClass(PACKAGE_NAME + ".v3_2_1", className));
+    }
   }
 
   @Nested
@@ -207,8 +222,19 @@ public class BuilderTests {
     void testNullChange(final Class<? extends AbstractBuilder<?>> builderClass) {
       final var exception =
           assertThrows(
-              IllegalArgumentException.class, () -> instantiateBuilder(builderClass).commit(null));
+              IllegalArgumentException.class,
+              () -> instantiateBuilder(builderClass).commit((SemVer.Change) null));
       assertEquals(ExceptionFactory.nullException("change").getMessage(), exception.getMessage());
+    }
+
+    @ParameterizedTest
+    @ValueSource(classes = {ClassBuilder.class, EnumBuilder.class})
+    void testNullSemVer(final Class<? extends AbstractBuilder<?>> builderClass) {
+      final var exception =
+          assertThrows(
+              IllegalArgumentException.class,
+              () -> instantiateBuilder(builderClass).commit((SemVer) null));
+      assertEquals(ExceptionFactory.nullException("semVer").getMessage(), exception.getMessage());
     }
   }
 

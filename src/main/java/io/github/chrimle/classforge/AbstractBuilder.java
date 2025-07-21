@@ -125,16 +125,25 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
     if (change == null) {
       throw ExceptionFactory.nullException("change");
     }
-    final SemVer newSemVer = semVer.incrementVersion(change);
+    return commit(semVer.incrementVersion(change));
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  @Contract("null -> fail; _ -> this")
+  public T commit(final SemVer semVer) {
+    if (semVer == null) {
+      throw ExceptionFactory.nullException("semVer");
+    }
     validateClass();
-    final String fullyQualifiedClassName = resolveFullyQualifiedClassName(newSemVer);
+    final String fullyQualifiedClassName = resolveFullyQualifiedClassName(semVer);
     if (reservedClassNames.contains(fullyQualifiedClassName)) {
       throw new IllegalStateException(
           "Class `%s` has already been generated!".formatted(fullyQualifiedClassName));
     }
-    generateClassFile(newSemVer);
+    generateClassFile(semVer);
     reservedClassNames.add(fullyQualifiedClassName);
-    this.semVer = newSemVer;
+    this.semVer = semVer;
     return self();
   }
 
