@@ -29,7 +29,7 @@
 <dependency>
     <groupId>io.github.chrimle</groupId>
     <artifactId>class-forge</artifactId>
-    <version>0.5.0</version>
+    <version>0.6.0</version>
 </dependency>
 ```
 ### *Available on...*
