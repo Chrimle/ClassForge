@@ -43,6 +43,11 @@ public class BuilderTests {
     throw new UnsupportedOperationException();
   }
 
+  static Class<?> compileAndLoadClass(final String className) throws Exception {
+    compileClass(className);
+    return loadClass(className);
+  }
+
   static Class<?> compileAndLoadClass(final String packageName, final String className)
       throws Exception {
     final String fullyQualifiedName = String.join(".", packageName, className);
@@ -89,6 +94,48 @@ public class BuilderTests {
           ExceptionFactory.notMatchingRegExException("className", ClassForge.VALID_CLASS_NAME_REGEX)
               .getMessage(),
           exception.getMessage());
+    }
+  }
+
+  @Nested
+  class PackageNameTests {
+
+    /**
+     * A {@code packageName} set to {@code null} should be allowed, as it should be treated as not
+     * belonging to any package.
+     */
+    @ParameterizedTest
+    @ValueSource(classes = {ClassBuilder.class, EnumBuilder.class})
+    void testNullValue(final Class<? extends AbstractBuilder<?>> builderClass) throws Exception {
+      final var className = builderClass.getSimpleName() + "_Test_NullPackageName";
+      assertDoesNotThrow(
+          () ->
+              instantiateBuilder(builderClass)
+                  .updateDirectory(TestConstants.DIRECTORY)
+                  .updatePackageName(null)
+                  .updateClassName(className)
+                  .commit());
+
+      assertNotNull(compileAndLoadClass(className));
+    }
+
+    /**
+     * An empty {@code packageName} should be allowed, as it should be treated as not belonging to
+     * any package.
+     */
+    @ParameterizedTest
+    @ValueSource(classes = {ClassBuilder.class, EnumBuilder.class})
+    void testEmptyValue(final Class<? extends AbstractBuilder<?>> builderClass) throws Exception {
+      final var className = builderClass.getSimpleName() + "_Test_EmptyPackageName";
+      assertDoesNotThrow(
+          () ->
+              instantiateBuilder(builderClass)
+                  .updateDirectory(TestConstants.DIRECTORY)
+                  .updatePackageName("")
+                  .updateClassName(className)
+                  .commit());
+
+      assertNotNull(compileAndLoadClass(className));
     }
   }
 

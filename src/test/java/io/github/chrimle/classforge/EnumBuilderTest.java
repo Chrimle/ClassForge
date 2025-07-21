@@ -138,24 +138,6 @@ class EnumBuilderTest {
   @Nested
   class PackageNameTests {
 
-    /**
-     * A null/empty packageName should be allowed, as it should be treated as not belonging to any
-     * package.
-     */
-    @ParameterizedTest
-    @CsvSource({",'EnumClassWithNullPackageName'", "'','EnumClassWithEmptyPackageName'"})
-    void testNullValue(final String packageName, final String className) throws Exception {
-      assertDoesNotThrow(
-          () ->
-              EnumBuilder.newClass()
-                  .updateDirectory(TestConstants.DIRECTORY)
-                  .updatePackageName(packageName)
-                  .updateClassName(className)
-                  .commit());
-
-      assertNotNull(compileAndLoadClass(className));
-    }
-
     @ParameterizedTest
     @ValueSource(strings = {".", "..", "a..", "..a", ".a.", "a..a"})
     void testInvalidValues(final String packageName) {
