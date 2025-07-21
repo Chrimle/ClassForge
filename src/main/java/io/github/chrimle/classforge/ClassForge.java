@@ -47,7 +47,7 @@ public final class ClassForge {
   /**
    * Creates a new {@link Builder} instance for generating Java <i>classes</i>.
    *
-   * @since 0.1.0
+   * @since 0.6.0
    * @return a new {@link Builder} instance.
    */
   @NotNull
@@ -60,7 +60,7 @@ public final class ClassForge {
    * Creates a new {@link Builder} instance for generating Java {@code enum} classes.
    *
    * @return a new {@link Builder} instance.
-   * @since 0.1.0
+   * @since 0.6.0
    */
   @NotNull
   @Contract(" -> new")
