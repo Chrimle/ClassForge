@@ -42,15 +42,17 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class ClassForge {
 
+  private ClassForge() {}
+
   /**
    * Creates a new {@link Builder} instance for generating Java <i>classes</i>.
    *
-   * @since 0.1.0
+   * @since 0.6.0
    * @return a new {@link Builder} instance.
    */
   @NotNull
   @Contract(" -> new")
-  Builder<?> newClassBuilder() {
+  public static Builder<?> newClassBuilder() {
     return ClassBuilder.newClass();
   }
 
@@ -58,11 +60,11 @@ public final class ClassForge {
    * Creates a new {@link Builder} instance for generating Java {@code enum} classes.
    *
    * @return a new {@link Builder} instance.
-   * @since 0.1.0
+   * @since 0.6.0
    */
   @NotNull
   @Contract(" -> new")
-  Builder<?> newEnumBuilder() {
+  public static Builder<?> newEnumBuilder() {
     return EnumBuilder.newClass();
   }
 
