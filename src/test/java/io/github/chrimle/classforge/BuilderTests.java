@@ -167,6 +167,25 @@ public class BuilderTests {
         assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v2_0_0", className));
         assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v3_0_0", className));
       }
+
+      @ParameterizedTest
+      @ValueSource(classes = {ClassBuilder.class, EnumBuilder.class})
+      void testMinorCommits(final Class<? extends AbstractBuilder<?>> builderClass)
+          throws Exception {
+        final var className = builderClass.getSimpleName() + "_Test_MinorCompletePackageName";
+        instantiateBuilder(builderClass)
+            .setVersionPlacement(Builder.VersionPlacement.PACKAGE_NAME_WITH_COMPLETE_VERSION)
+            .updateDirectory(TestConstants.DIRECTORY)
+            .updatePackageName(TestConstants.PACKAGE_NAME)
+            .updateClassName(className)
+            .commit(SemVer.Change.MINOR) // Version 0.1.0
+            .commit(SemVer.Change.MINOR) // Version 0.2.0
+            .commit(SemVer.Change.MINOR); // Version 0.3.0
+
+        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_1_0", className);
+        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_2_0", className);
+        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_3_0", className);
+      }
     }
   }
 }
