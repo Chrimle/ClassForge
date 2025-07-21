@@ -23,8 +23,6 @@ import org.apiguardian.api.API;
 /**
  * Writes content to files - creating directories and files if needed.
  *
- * <p><em><strong>FOR INTERNAL USE ONLY.</strong></em>
- *
  * @since 0.1.0
  * @author Chrimle
  */
