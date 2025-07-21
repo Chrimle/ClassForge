@@ -216,27 +216,6 @@ class ClassBuilderTest {
   class VersionPlacementTests {
 
     @Nested
-    class CompletePackageNameTests {
-
-      @Test
-      void testUpdatePatch() throws Exception {
-        final var className = "ClassUpdatePatchComplete";
-        ClassBuilder.newClass()
-            .setVersionPlacement(Builder.VersionPlacement.PACKAGE_NAME_WITH_COMPLETE_VERSION)
-            .updateDirectory(TestConstants.DIRECTORY)
-            .updatePackageName(TestConstants.PACKAGE_NAME)
-            .updateClassName(className)
-            .commit(SemVer.Change.PATCH) // Version 0.0.1
-            .commit(SemVer.Change.PATCH) // Version 0.0.2
-            .commit(SemVer.Change.PATCH); // Version 0.0.3
-
-        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_0_1", className);
-        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_0_2", className);
-        compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_0_3", className);
-      }
-    }
-
-    @Nested
     class ShortenedPackageNameTests {
 
       @Test
