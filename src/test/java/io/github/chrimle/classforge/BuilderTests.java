@@ -59,18 +59,24 @@ public class BuilderTests {
     return DynamicClassLoader.loadClass(Path.of(TestConstants.DIRECTORY), fullyQualifiedName);
   }
 
-  @ParameterizedTest
-  @ValueSource(classes = {ClassBuilder.class, EnumBuilder.class})
-  void testCommittingClassWithoutClassName(final Class<? extends AbstractBuilder<?>> builderClass) {
-    final var exception =
-        assertThrows(
-            IllegalArgumentException.class,
-            () ->
-                instantiateBuilder(builderClass).updateDirectory(TestConstants.DIRECTORY).commit());
-    assertEquals(
-        ExceptionFactory.notMatchingRegExException("className", ClassForge.VALID_CLASS_NAME_REGEX)
-            .getMessage(),
-        exception.getMessage());
+  @Nested
+  class ClassNameTests {
+
+    @ParameterizedTest
+    @ValueSource(classes = {ClassBuilder.class, EnumBuilder.class})
+    void testWithoutClassName(final Class<? extends AbstractBuilder<?>> builderClass) {
+      final var exception =
+          assertThrows(
+              IllegalArgumentException.class,
+              () ->
+                  instantiateBuilder(builderClass)
+                      .updateDirectory(TestConstants.DIRECTORY)
+                      .commit());
+      assertEquals(
+          ExceptionFactory.notMatchingRegExException("className", ClassForge.VALID_CLASS_NAME_REGEX)
+              .getMessage(),
+          exception.getMessage());
+    }
   }
 
   @ParameterizedTest
