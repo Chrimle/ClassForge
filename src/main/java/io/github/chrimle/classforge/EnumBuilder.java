@@ -19,6 +19,7 @@ import io.github.chrimle.classforge.semver.SemVer;
 import io.github.chrimle.classforge.utils.ExceptionFactory;
 import java.util.*;
 import java.util.function.Predicate;
+import org.apiguardian.api.API;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,6 +29,7 @@ import org.jetbrains.annotations.NotNull;
  * @since 0.1.0
  * @author Chrimle
  */
+@API(since = "0.6.0", status = API.Status.STABLE)
 public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
 
   /**

@@ -16,6 +16,7 @@
 package io.github.chrimle.classforge;
 
 import java.util.Set;
+import org.apiguardian.api.API;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,6 +41,7 @@ import org.jetbrains.annotations.NotNull;
  * @see #newClassBuilder() Generating a Java class.
  * @see #newEnumBuilder() Generating an Enum class.
  */
+@API(since = "0.6.0", status = API.Status.STABLE)
 public final class ClassForge {
 
   private ClassForge() {}

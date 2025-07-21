@@ -15,6 +15,7 @@
  */
 package io.github.chrimle.classforge.utils;
 
+import org.apiguardian.api.API;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,6 +25,7 @@ import org.jetbrains.annotations.NotNull;
  * @since 0.5.0
  * @author Chrimle
  */
+@API(since = "0.6.0", status = API.Status.INTERNAL, consumers = "io.github.chrimle.classforge")
 public final class ExceptionFactory {
 
   private ExceptionFactory() {}

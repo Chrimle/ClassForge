@@ -17,6 +17,7 @@ package io.github.chrimle.classforge;
 
 import io.github.chrimle.classforge.semver.SemVer;
 import java.util.Optional;
+import org.apiguardian.api.API;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
  * @since 0.1.0
  * @author Chrimle
  */
+@API(since = "0.6.0", status = API.Status.STABLE)
 public final class ClassBuilder extends AbstractBuilder<ClassBuilder> {
 
   private ClassBuilder() {}

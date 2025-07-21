@@ -16,6 +16,7 @@
 package io.github.chrimle.classforge;
 
 import io.github.chrimle.classforge.semver.SemVer;
+import org.apiguardian.api.API;
 import org.jetbrains.annotations.Contract;
 
 /**
@@ -25,6 +26,7 @@ import org.jetbrains.annotations.Contract;
  * @since 0.1.0
  * @author Chrimle
  */
+@API(since = "0.6.0", status = API.Status.STABLE)
 public sealed interface Builder<T extends Builder<T>> permits AbstractBuilder {
 
   /**

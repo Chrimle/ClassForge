@@ -16,6 +16,7 @@
 package io.github.chrimle.classforge.semver;
 
 import io.github.chrimle.classforge.utils.ExceptionFactory;
+import org.apiguardian.api.API;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,6 +29,7 @@ import org.jetbrains.annotations.NotNull;
  * @since 0.3.0
  * @author Chrimle
  */
+@API(since = "0.6.0", status = API.Status.STABLE)
 public record SemVer(int major, int minor, int patch) {
 
   /**
