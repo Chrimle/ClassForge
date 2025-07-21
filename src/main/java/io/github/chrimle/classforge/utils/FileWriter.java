@@ -18,6 +18,7 @@ package io.github.chrimle.classforge.utils;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import org.apiguardian.api.API;
 
 /**
  * Writes content to files - creating directories and files if needed.
@@ -25,6 +26,7 @@ import java.nio.file.StandardOpenOption;
  * @since 0.1.0
  * @author Chrimle
  */
+@API(status = API.Status.INTERNAL, since = "0.6.0", consumers = "io.github.chrimle.classforge")
 public class FileWriter {
 
   /**
