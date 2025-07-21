@@ -58,8 +58,7 @@ public class FileWriter {
   public static void writeToFile(final Path filePath, final String content) {
     try {
       Files.createDirectories(filePath.getParent());
-      Files.writeString(
-          filePath, content, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+      Files.writeString(filePath, content, StandardOpenOption.CREATE_NEW);
     } catch (final Exception e) {
       throw new RuntimeException(e);
     }
