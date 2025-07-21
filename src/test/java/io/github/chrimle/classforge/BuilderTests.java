@@ -211,6 +211,16 @@ public class BuilderTests {
               () -> instantiateBuilder(builderClass).commit((SemVer.Change) null));
       assertEquals(ExceptionFactory.nullException("change").getMessage(), exception.getMessage());
     }
+
+    @ParameterizedTest
+    @ValueSource(classes = {ClassBuilder.class, EnumBuilder.class})
+    void testNullSemVer(final Class<? extends AbstractBuilder<?>> builderClass) {
+      final var exception =
+          assertThrows(
+              IllegalArgumentException.class,
+              () -> instantiateBuilder(builderClass).commit((SemVer) null));
+      assertEquals(ExceptionFactory.nullException("semVer").getMessage(), exception.getMessage());
+    }
   }
 
   @Nested

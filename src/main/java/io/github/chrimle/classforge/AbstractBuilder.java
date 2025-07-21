@@ -132,6 +132,9 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
   @Override
   @Contract("null -> fail; _ -> this")
   public T commit(final SemVer semVer) {
+    if (semVer == null) {
+      throw ExceptionFactory.nullException("semVer");
+    }
     validateClass();
     final String fullyQualifiedClassName = resolveFullyQualifiedClassName(semVer);
     if (reservedClassNames.contains(fullyQualifiedClassName)) {
