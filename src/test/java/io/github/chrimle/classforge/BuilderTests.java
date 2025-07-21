@@ -92,17 +92,6 @@ public class BuilderTests {
     }
   }
 
-  @ParameterizedTest
-  @ValueSource(classes = {ClassBuilder.class, EnumBuilder.class})
-  void testCommittingClassWithoutDirectory(final Class<? extends AbstractBuilder<?>> builderClass) {
-    final var exception =
-        assertThrows(
-            IllegalArgumentException.class,
-            () ->
-                instantiateBuilder(builderClass).updateClassName("ClassWithoutDirectory").commit());
-    assertEquals(ExceptionFactory.nullException("directory").getMessage(), exception.getMessage());
-  }
-
   @Nested
   class DirectoryTests {
 
@@ -113,6 +102,21 @@ public class BuilderTests {
           assertThrows(
               IllegalArgumentException.class,
               () -> instantiateBuilder(builderClass).updateDirectory(null));
+      assertEquals(
+          ExceptionFactory.nullException("directory").getMessage(), exception.getMessage());
+    }
+
+    @ParameterizedTest
+    @ValueSource(classes = {ClassBuilder.class, EnumBuilder.class})
+    void testCommittingClassWithoutDirectory(
+        final Class<? extends AbstractBuilder<?>> builderClass) {
+      final var exception =
+          assertThrows(
+              IllegalArgumentException.class,
+              () ->
+                  instantiateBuilder(builderClass)
+                      .updateClassName("ClassWithoutDirectory")
+                      .commit());
       assertEquals(
           ExceptionFactory.nullException("directory").getMessage(), exception.getMessage());
     }
