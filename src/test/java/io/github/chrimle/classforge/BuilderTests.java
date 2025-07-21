@@ -15,6 +15,8 @@
  */
 package io.github.chrimle.classforge;
 
+import static io.github.chrimle.classforge.test.utils.TestConstants.DIRECTORY;
+import static io.github.chrimle.classforge.test.utils.TestConstants.PACKAGE_NAME;
 import static org.junit.jupiter.api.Assertions.*;
 
 import io.github.chrimle.classforge.Builder.VersionPlacement;
@@ -108,6 +110,22 @@ public class BuilderTests {
               IllegalArgumentException.class,
               () -> instantiateBuilder(builderClass).setSemVer(null));
       assertEquals(ExceptionFactory.nullException("semVer").getMessage(), exception.getMessage());
+    }
+
+    @ParameterizedTest
+    @ValueSource(classes = {ClassBuilder.class, EnumBuilder.class})
+    void testValid(final Class<? extends AbstractBuilder<?>> builderClass) throws Exception {
+      final var className = builderClass.getSimpleName() + "_Test_CustomSemVer";
+      final var classBuilder =
+          instantiateBuilder(builderClass)
+              .updateDirectory(DIRECTORY)
+              .updatePackageName(PACKAGE_NAME)
+              .updateClassName(className)
+              .setVersionPlacement(Builder.VersionPlacement.PACKAGE_NAME_WITH_COMPLETE_VERSION);
+      assertDoesNotThrow(() -> classBuilder.setSemVer(new SemVer(42, 7, 10)));
+      assertDoesNotThrow(() -> classBuilder.commit(SemVer.Change.PATCH));
+
+      assertNotNull(compileAndLoadClass(PACKAGE_NAME + ".v42_7_11", className));
     }
   }
 

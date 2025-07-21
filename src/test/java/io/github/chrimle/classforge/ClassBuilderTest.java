@@ -15,11 +15,8 @@
  */
 package io.github.chrimle.classforge;
 
-import static io.github.chrimle.classforge.test.utils.TestConstants.DIRECTORY;
-import static io.github.chrimle.classforge.test.utils.TestConstants.PACKAGE_NAME;
 import static org.junit.jupiter.api.Assertions.*;
 
-import io.github.chrimle.classforge.semver.SemVer;
 import io.github.chrimle.classforge.test.utils.DynamicClassLoader;
 import io.github.chrimle.classforge.test.utils.JavaSourceCompiler;
 import io.github.chrimle.classforge.test.utils.TestConstants;
@@ -119,26 +116,6 @@ class ClassBuilderTest {
 
     assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME, "OriginalCommittedClass"));
     assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME, "RenamedUncommittedClass"));
-  }
-
-  @Nested
-  class SetSemVerTests {
-
-    @Test
-    void testValidSemVer() throws Exception {
-      final var classBuilder =
-          ClassBuilder.newClass()
-              .updateDirectory(DIRECTORY)
-              .updatePackageName(PACKAGE_NAME)
-              .updateClassName("ClassWithCustomSemVer")
-              .setVersionPlacement(Builder.VersionPlacement.PACKAGE_NAME_WITH_COMPLETE_VERSION);
-      assertDoesNotThrow(() -> classBuilder.setSemVer(new SemVer(42, 7, 11)));
-      assertDoesNotThrow(() -> classBuilder.commit());
-
-      final Class<?> enumWithCustomSemVer =
-          compileAndLoadClass(PACKAGE_NAME + ".v43_0_0", "ClassWithCustomSemVer");
-      assertFalse(enumWithCustomSemVer.isEnum());
-    }
   }
 
   @Nested
