@@ -20,11 +20,12 @@ import static io.github.chrimle.classforge.test.utils.TestConstants.PACKAGE_NAME
 import static org.junit.jupiter.api.Assertions.*;
 
 import io.github.chrimle.classforge.Builder.VersionPlacement;
-import io.github.chrimle.classforge.semver.SemVer;
 import io.github.chrimle.classforge.test.utils.DynamicClassLoader;
 import io.github.chrimle.classforge.test.utils.JavaSourceCompiler;
 import io.github.chrimle.classforge.test.utils.TestConstants;
 import io.github.chrimle.classforge.utils.ExceptionFactory;
+import io.github.chrimle.semver.Change;
+import io.github.chrimle.semver.SemVer;
 import java.io.IOException;
 import java.nio.file.Path;
 import org.junit.jupiter.api.Nested;
@@ -193,7 +194,7 @@ public class BuilderTests {
               .updateClassName(className)
               .setVersionPlacement(Builder.VersionPlacement.PACKAGE_NAME_WITH_COMPLETE_VERSION);
       assertDoesNotThrow(() -> classBuilder.setSemVer(new SemVer(42, 7, 10)));
-      assertDoesNotThrow(() -> classBuilder.commit(SemVer.Change.PATCH));
+      assertDoesNotThrow(() -> classBuilder.commit(Change.PATCH));
 
       assertNotNull(compileAndLoadClass(PACKAGE_NAME + ".v42_7_11", className));
     }
@@ -223,7 +224,7 @@ public class BuilderTests {
       final var exception =
           assertThrows(
               IllegalArgumentException.class,
-              () -> instantiateBuilder(builderClass).commit((SemVer.Change) null));
+              () -> instantiateBuilder(builderClass).commit((Change) null));
       assertEquals(ExceptionFactory.nullException("change").getMessage(), exception.getMessage());
     }
 
@@ -273,9 +274,9 @@ public class BuilderTests {
             .updateDirectory(TestConstants.DIRECTORY)
             .updatePackageName(TestConstants.PACKAGE_NAME)
             .updateClassName(className)
-            .commit(SemVer.Change.MAJOR) // Version 1.0.0
-            .commit(SemVer.Change.MAJOR) // Version 2.0.0
-            .commit(SemVer.Change.MAJOR); // Version 3.0.0
+            .commit(Change.MAJOR) // Version 1.0.0
+            .commit(Change.MAJOR) // Version 2.0.0
+            .commit(Change.MAJOR); // Version 3.0.0
 
         assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v1_0_0", className));
         assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v2_0_0", className));
@@ -292,9 +293,9 @@ public class BuilderTests {
             .updateDirectory(TestConstants.DIRECTORY)
             .updatePackageName(TestConstants.PACKAGE_NAME)
             .updateClassName(className)
-            .commit(SemVer.Change.MINOR) // Version 0.1.0
-            .commit(SemVer.Change.MINOR) // Version 0.2.0
-            .commit(SemVer.Change.MINOR); // Version 0.3.0
+            .commit(Change.MINOR) // Version 0.1.0
+            .commit(Change.MINOR) // Version 0.2.0
+            .commit(Change.MINOR); // Version 0.3.0
 
         assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_1_0", className));
         assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_2_0", className));
@@ -311,9 +312,9 @@ public class BuilderTests {
             .updateDirectory(TestConstants.DIRECTORY)
             .updatePackageName(TestConstants.PACKAGE_NAME)
             .updateClassName(className)
-            .commit(SemVer.Change.PATCH) // Version 0.0.1
-            .commit(SemVer.Change.PATCH) // Version 0.0.2
-            .commit(SemVer.Change.PATCH); // Version 0.0.3
+            .commit(Change.PATCH) // Version 0.0.1
+            .commit(Change.PATCH) // Version 0.0.2
+            .commit(Change.PATCH); // Version 0.0.3
 
         assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_0_1", className));
         assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_0_2", className));
@@ -353,9 +354,9 @@ public class BuilderTests {
             .updateDirectory(TestConstants.DIRECTORY)
             .updatePackageName(TestConstants.PACKAGE_NAME)
             .updateClassName(className)
-            .commit(SemVer.Change.MAJOR) // Version 1.0.0
-            .commit(SemVer.Change.MAJOR) // Version 2.0.0
-            .commit(SemVer.Change.MAJOR); // Version 3.0.0
+            .commit(Change.MAJOR) // Version 1.0.0
+            .commit(Change.MAJOR) // Version 2.0.0
+            .commit(Change.MAJOR); // Version 3.0.0
 
         assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v1", className));
         assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v2", className));
@@ -372,9 +373,9 @@ public class BuilderTests {
             .updateDirectory(TestConstants.DIRECTORY)
             .updatePackageName(TestConstants.PACKAGE_NAME)
             .updateClassName(className)
-            .commit(SemVer.Change.MINOR) // Version 0.1.0
-            .commit(SemVer.Change.MINOR) // Version 0.2.0
-            .commit(SemVer.Change.MINOR); // Version 0.3.0
+            .commit(Change.MINOR) // Version 0.1.0
+            .commit(Change.MINOR) // Version 0.2.0
+            .commit(Change.MINOR); // Version 0.3.0
 
         assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_1", className));
         assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_2", className));
@@ -391,9 +392,9 @@ public class BuilderTests {
             .updateDirectory(TestConstants.DIRECTORY)
             .updatePackageName(TestConstants.PACKAGE_NAME)
             .updateClassName(className)
-            .commit(SemVer.Change.PATCH) // Version 0.0.1
-            .commit(SemVer.Change.PATCH) // Version 0.0.2
-            .commit(SemVer.Change.PATCH); // Version 0.0.3
+            .commit(Change.PATCH) // Version 0.0.1
+            .commit(Change.PATCH) // Version 0.0.2
+            .commit(Change.PATCH); // Version 0.0.3
 
         assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_0_1", className));
         assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_0_2", className));
