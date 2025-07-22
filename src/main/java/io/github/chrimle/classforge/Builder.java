@@ -15,7 +15,8 @@
  */
 package io.github.chrimle.classforge;
 
-import io.github.chrimle.classforge.semver.SemVer;
+import io.github.chrimle.semver.Change;
+import io.github.chrimle.semver.SemVer;
 import org.apiguardian.api.API;
 import org.jetbrains.annotations.Contract;
 
@@ -166,7 +167,7 @@ public sealed interface Builder<T extends Builder<T>> permits AbstractBuilder {
    * @since 0.6.0
    */
   @Contract("null -> fail; _ -> this")
-  default T commit(final SemVer.Change change) {
+  default T commit(final Change change) {
     return commit(getSemVer().incrementVersion(change));
   }
 
