@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.chrimle.classforge.utils;
+package io.github.chrimle.classforge.internal;
 
 import java.nio.file.Files;
 import java.nio.file.Path;

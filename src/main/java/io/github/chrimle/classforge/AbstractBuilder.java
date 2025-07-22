@@ -15,8 +15,8 @@
  */
 package io.github.chrimle.classforge;
 
-import io.github.chrimle.classforge.utils.ExceptionFactory;
-import io.github.chrimle.classforge.utils.FileWriter;
+import io.github.chrimle.classforge.internal.ExceptionFactory;
+import io.github.chrimle.classforge.internal.FileWriter;
 import io.github.chrimle.semver.Change;
 import io.github.chrimle.semver.SemVer;
 import java.util.HashSet;

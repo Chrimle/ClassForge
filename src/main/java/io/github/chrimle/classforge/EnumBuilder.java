@@ -15,7 +15,7 @@
  */
 package io.github.chrimle.classforge;
 
-import io.github.chrimle.classforge.utils.ExceptionFactory;
+import io.github.chrimle.classforge.internal.ExceptionFactory;
 import io.github.chrimle.semver.SemVer;
 import java.util.*;
 import java.util.function.Predicate;
