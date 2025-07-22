@@ -23,7 +23,7 @@ import io.github.chrimle.classforge.Builder.VersionPlacement;
 import io.github.chrimle.classforge.test.utils.DynamicClassLoader;
 import io.github.chrimle.classforge.test.utils.JavaSourceCompiler;
 import io.github.chrimle.classforge.test.utils.TestConstants;
-import io.github.chrimle.classforge.utils.ExceptionFactory;
+import io.github.chrimle.classforge.internal.ExceptionFactory;
 import io.github.chrimle.semver.Change;
 import io.github.chrimle.semver.SemVer;
 import java.io.IOException;

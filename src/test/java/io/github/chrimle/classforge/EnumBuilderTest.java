@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import io.github.chrimle.classforge.test.utils.DynamicClassLoader;
 import io.github.chrimle.classforge.test.utils.JavaSourceCompiler;
 import io.github.chrimle.classforge.test.utils.TestConstants;
-import io.github.chrimle.classforge.utils.ExceptionFactory;
+import io.github.chrimle.classforge.internal.ExceptionFactory;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
