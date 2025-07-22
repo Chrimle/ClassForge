@@ -43,7 +43,7 @@ public final class ExceptionFactory {
   @NotNull
   @Contract("_ -> new")
   public static IllegalArgumentException nullException(final String key) {
-    return new IllegalArgumentException("`%s` MUST NOT be `null`!".formatted(key));
+    return new IllegalArgumentException("`%s` MUST NOT be `null`".formatted(key));
   }
 
   /**
@@ -57,7 +57,7 @@ public final class ExceptionFactory {
   @NotNull
   @Contract("_ -> new")
   public static IllegalArgumentException nullOrEmptyException(final String key) {
-    return new IllegalArgumentException("`%s` MUST NOT be `null` or empty!".formatted(key));
+    return new IllegalArgumentException("`%s` MUST NOT be `null` or empty".formatted(key));
   }
 
   /**
@@ -71,7 +71,7 @@ public final class ExceptionFactory {
   @NotNull
   @Contract("_ -> new")
   public static IllegalArgumentException lessThanZeroException(final String key) {
-    return new IllegalArgumentException("`%s` MUST NOT be less than `0`!".formatted(key));
+    return new IllegalArgumentException("`%s` MUST NOT be less than `0`".formatted(key));
   }
 
   /**
@@ -103,7 +103,7 @@ public final class ExceptionFactory {
   @Contract(value = "_, _ -> new")
   public static IllegalArgumentException alreadyExistsException(
       final String type, final String name) {
-    return new IllegalArgumentException("`%s` named `%s` already exists!".formatted(type, name));
+    return new IllegalArgumentException("`%s` named `%s` already exists".formatted(type, name));
   }
 
   /**
@@ -119,7 +119,7 @@ public final class ExceptionFactory {
   @Contract("_, _ -> new")
   public static IllegalArgumentException doesNotExistException(
       final String type, final String name) {
-    return new IllegalArgumentException("`%s` named `%s` does not exist!".formatted(type, name));
+    return new IllegalArgumentException("`%s` named `%s` does not exist".formatted(type, name));
   }
 
   /**
@@ -133,6 +133,6 @@ public final class ExceptionFactory {
   @NotNull
   @Contract("_ -> new")
   public static IllegalArgumentException reservedJavaKeywordException(final String key) {
-    return new IllegalArgumentException("`%s` MUST NOT be a Reserved Java Keyword!".formatted(key));
+    return new IllegalArgumentException("`%s` MUST NOT be a Reserved Java Keyword".formatted(key));
   }
 }

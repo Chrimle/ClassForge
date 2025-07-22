@@ -15,7 +15,7 @@
  */
 package io.github.chrimle.classforge;
 
-import io.github.chrimle.classforge.semver.SemVer;
+import io.github.chrimle.semver.SemVer;
 import java.util.Optional;
 import org.apiguardian.api.API;
 import org.jetbrains.annotations.Contract;

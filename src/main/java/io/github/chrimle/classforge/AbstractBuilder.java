@@ -15,9 +15,10 @@
  */
 package io.github.chrimle.classforge;
 
-import io.github.chrimle.classforge.semver.SemVer;
 import io.github.chrimle.classforge.utils.ExceptionFactory;
 import io.github.chrimle.classforge.utils.FileWriter;
+import io.github.chrimle.semver.Change;
+import io.github.chrimle.semver.SemVer;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -155,12 +156,12 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
   }
 
   /**
-   * Determines the {@link SemVer.Change} for the <em>currently uncommitted</em> changes.
+   * Determines the {@link Change} for the <em>currently uncommitted</em> changes.
    *
    * @return the {@code Change}.
    */
-  protected SemVer.Change determineSemVerChange() {
-    return SemVer.Change.MAJOR;
+  protected Change determineSemVerChange() {
+    return Change.MAJOR;
   }
 
   /**
@@ -222,7 +223,7 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
     return switch (versionPlacement) {
       case NONE -> packageName;
       case PACKAGE_NAME_WITH_COMPLETE_VERSION -> {
-        final String versionSubPackage = semVer.toString().replace(".", "_");
+        final String versionSubPackage = semVer.toCompleteVersionString().replace(".", "_");
 
         yield Optional.ofNullable(packageName)
             .filter(pN -> !pN.isBlank())
