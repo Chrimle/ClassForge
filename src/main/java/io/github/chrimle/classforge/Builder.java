@@ -57,6 +57,25 @@ public sealed interface Builder<T extends Builder<T>> permits AbstractBuilder {
      */
     CLASS_NAME_WITH_COMPLETE_VERSION,
     /**
+     * The <em>shortened</em> version is included as a <em>suffix</em> in the <em>class</em>-name -
+     * omitting trailing zeros i.e. {@code V2}.
+     *
+     * <p><strong>Example: </strong>{@code 1.2.3}
+     *
+     * <pre>{@code class ExampleV1_2_3 { ... }}</pre>
+     *
+     * <p><strong>Example: </strong>{@code 1.3.0}
+     *
+     * <pre>{@code class ExampleV1_3 { ... }}</pre>
+     *
+     * <p><strong>Example: </strong>{@code 2.0.0}
+     *
+     * <pre>{@code class ExampleV2 { ... }}</pre>
+     *
+     * @since 0.8.0
+     */
+    CLASS_NAME_WITH_SHORTENED_VERSION,
+    /**
      * <strong>Default.</strong> Version information is excluded.
      *
      * @since 0.3.0
