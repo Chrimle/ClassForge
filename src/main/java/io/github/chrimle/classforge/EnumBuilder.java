@@ -198,7 +198,8 @@ public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
           %s
         }
         """
-            .formatted(className, String.join(",\n\t", enumConstants) + ";"));
+            .formatted(
+                resolveEffectiveClassName(semVer), String.join(",\n\t", enumConstants) + ";"));
 
     return codeBuilder.toString();
   }

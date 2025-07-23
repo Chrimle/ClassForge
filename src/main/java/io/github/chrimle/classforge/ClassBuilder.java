@@ -60,7 +60,7 @@ public final class ClassBuilder extends AbstractBuilder<ClassBuilder> {
 
         }
         """
-            .formatted(className));
+            .formatted(resolveEffectiveClassName(semVer)));
 
     return codeBuilder.toString();
   }

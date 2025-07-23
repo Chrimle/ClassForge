@@ -207,10 +207,11 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
    * @return the <em>FQCN</em>.
    */
   protected String resolveFullyQualifiedClassName(final SemVer semVer) {
+    final String effectiveClassName = resolveEffectiveClassName(semVer);
     return Optional.ofNullable(resolveEffectivePackageName(semVer))
         .filter(pN -> !pN.isBlank())
-        .map(pN -> String.join(".", pN, className))
-        .orElse(className);
+        .map(pN -> String.join(".", pN, effectiveClassName))
+        .orElse(effectiveClassName);
   }
 
   /**
@@ -221,7 +222,7 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
    */
   protected String resolveEffectivePackageName(final SemVer semVer) {
     return switch (versionPlacement) {
-      case NONE -> packageName;
+      case NONE, CLASS_NAME_WITH_COMPLETE_VERSION -> packageName;
       case PACKAGE_NAME_WITH_COMPLETE_VERSION -> {
         final String versionSubPackage = semVer.toCompleteVersionString().replace(".", "_");
 
@@ -238,6 +239,25 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
             .map(pN -> String.join(".", pN, versionSubPackage))
             .orElse(versionSubPackage);
       }
+    };
+  }
+
+  /**
+   * Resolves the <em>effective class name</em> for the <em>currently uncommitted</em> class.
+   *
+   * @param semVer for the class.
+   * @return the <em>effective class name</em>.
+   */
+  protected String resolveEffectiveClassName(final SemVer semVer) {
+    return switch (versionPlacement) {
+      case CLASS_NAME_WITH_COMPLETE_VERSION -> {
+        final String versionClassSuffix =
+            semVer.toCompleteVersionString().replace(".", "_").toUpperCase();
+
+        yield className + versionClassSuffix;
+      }
+      case NONE, PACKAGE_NAME_WITH_COMPLETE_VERSION, PACKAGE_NAME_WITH_SHORTENED_VERSION ->
+          className;
     };
   }
 

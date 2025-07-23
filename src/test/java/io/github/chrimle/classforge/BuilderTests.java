@@ -401,5 +401,85 @@ public class BuilderTests {
         assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME + ".v0_0_3", className));
       }
     }
+
+    @Nested
+    class CompleteClassNameTests {
+
+      @ParameterizedTest
+      @ValueSource(classes = {ClassBuilder.class, EnumBuilder.class})
+      void testDefaultCommits(final Class<? extends AbstractBuilder<?>> builderClass)
+          throws Exception {
+        final var className = builderClass.getSimpleName() + "_Test_DefaultCompleteClassName";
+        instantiateBuilder(builderClass)
+            .setVersionPlacement(VersionPlacement.CLASS_NAME_WITH_COMPLETE_VERSION)
+            .updateDirectory(TestConstants.DIRECTORY)
+            .updatePackageName(TestConstants.PACKAGE_NAME)
+            .updateClassName(className)
+            .commit() // Version 1.0.0
+            .commit() // Version 2.0.0
+            .commit(); // Version 3.0.0
+
+        assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME, className + "V1_0_0"));
+        assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME, className + "V2_0_0"));
+        assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME, className + "V3_0_0"));
+      }
+
+      @ParameterizedTest
+      @ValueSource(classes = {ClassBuilder.class, EnumBuilder.class})
+      void testMajorCommits(final Class<? extends AbstractBuilder<?>> builderClass)
+          throws Exception {
+        final var className = builderClass.getSimpleName() + "_Test_MajorCompleteClassName";
+        instantiateBuilder(builderClass)
+            .setVersionPlacement(VersionPlacement.CLASS_NAME_WITH_COMPLETE_VERSION)
+            .updateDirectory(TestConstants.DIRECTORY)
+            .updatePackageName(TestConstants.PACKAGE_NAME)
+            .updateClassName(className)
+            .commit(Change.MAJOR) // Version 1.0.0
+            .commit(Change.MAJOR) // Version 2.0.0
+            .commit(Change.MAJOR); // Version 3.0.0
+
+        assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME, className + "V1_0_0"));
+        assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME, className + "V2_0_0"));
+        assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME, className + "V3_0_0"));
+      }
+
+      @ParameterizedTest
+      @ValueSource(classes = {ClassBuilder.class, EnumBuilder.class})
+      void testMinorCommits(final Class<? extends AbstractBuilder<?>> builderClass)
+          throws Exception {
+        final var className = builderClass.getSimpleName() + "_Test_MinorCompleteClassName";
+        instantiateBuilder(builderClass)
+            .setVersionPlacement(Builder.VersionPlacement.CLASS_NAME_WITH_COMPLETE_VERSION)
+            .updateDirectory(TestConstants.DIRECTORY)
+            .updatePackageName(TestConstants.PACKAGE_NAME)
+            .updateClassName(className)
+            .commit(Change.MINOR) // Version 0.1.0
+            .commit(Change.MINOR) // Version 0.2.0
+            .commit(Change.MINOR); // Version 0.3.0
+
+        assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME, className + "V0_1_0"));
+        assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME, className + "V0_2_0"));
+        assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME, className + "V0_3_0"));
+      }
+
+      @ParameterizedTest
+      @ValueSource(classes = {ClassBuilder.class, EnumBuilder.class})
+      void testPatchCommits(final Class<? extends AbstractBuilder<?>> builderClass)
+          throws Exception {
+        final var className = builderClass.getSimpleName() + "_Test_PatchCompleteClassName";
+        instantiateBuilder(builderClass)
+            .setVersionPlacement(Builder.VersionPlacement.CLASS_NAME_WITH_COMPLETE_VERSION)
+            .updateDirectory(TestConstants.DIRECTORY)
+            .updatePackageName(TestConstants.PACKAGE_NAME)
+            .updateClassName(className)
+            .commit(Change.PATCH) // Version 0.0.1
+            .commit(Change.PATCH) // Version 0.0.2
+            .commit(Change.PATCH); // Version 0.0.3
+
+        assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME, className + "V0_0_1"));
+        assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME, className + "V0_0_2"));
+        assertNotNull(compileAndLoadClass(TestConstants.PACKAGE_NAME, className + "V0_0_3"));
+      }
+    }
   }
 }
