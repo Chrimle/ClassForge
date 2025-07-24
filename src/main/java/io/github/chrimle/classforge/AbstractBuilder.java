@@ -57,6 +57,9 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
   /** The {@code semVer} of the <em>previously committed</em> class. Starts at {@code 0.0.0}. */
   protected SemVer semVer = new SemVer(0, 0, 0);
 
+  /** The {@code versionFormat} of the <em>currently uncommitted</em> class. */
+  protected VersionFormat versionFormat = VersionFormat.COMPLETE;
+
   /** The {@code versionPlacement} of the <em>currently uncommitted</em> class. */
   protected VersionPlacement versionPlacement = VersionPlacement.NONE;
 
@@ -84,6 +87,17 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
       throw ExceptionFactory.nullException("semVer");
     }
     this.semVer = semVer;
+    return self();
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  @Contract("null -> fail; _ -> this")
+  public T setVersionFormat(final VersionFormat versionFormat) {
+    if (versionFormat == null) {
+      throw ExceptionFactory.nullException("versionFormat");
+    }
+    this.versionFormat = versionFormat;
     return self();
   }
 
@@ -222,17 +236,14 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
    */
   protected String resolveEffectivePackageName(final SemVer semVer) {
     return switch (versionPlacement) {
-      case NONE, CLASS_NAME_WITH_COMPLETE_VERSION, CLASS_NAME_WITH_SHORTENED_VERSION -> packageName;
-      case PACKAGE_NAME_WITH_COMPLETE_VERSION -> {
-        final String versionSubPackage = semVer.toCompleteVersionString().replace(".", "_");
-
-        yield Optional.ofNullable(packageName)
-            .filter(pN -> !pN.isBlank())
-            .map(pN -> String.join(".", pN, versionSubPackage))
-            .orElse(versionSubPackage);
-      }
-      case PACKAGE_NAME_WITH_SHORTENED_VERSION -> {
-        final String versionSubPackage = semVer.toShortVersionString().replace(".", "_");
+      case NONE, CLASS_NAME_SUFFIX -> packageName;
+      case PACKAGE_NAME_SUFFIX -> {
+        final String versionSubPackage =
+            (switch (versionFormat) {
+                  case COMPLETE -> semVer.toCompleteVersionString();
+                  case SHORT -> semVer.toShortVersionString();
+                })
+                .replace(".", "_");
 
         yield Optional.ofNullable(packageName)
             .filter(pN -> !pN.isBlank())
@@ -250,19 +261,17 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
    */
   protected String resolveEffectiveClassName(final SemVer semVer) {
     return switch (versionPlacement) {
-      case CLASS_NAME_WITH_COMPLETE_VERSION -> {
+      case CLASS_NAME_SUFFIX -> {
         final String versionClassSuffix =
-            semVer.toCompleteVersionString().replace(".", "_").toUpperCase();
-
+            (switch (versionFormat) {
+                  case COMPLETE -> semVer.toCompleteVersionString();
+                  case SHORT -> semVer.toShortVersionString();
+                })
+                .replace(".", "_")
+                .toUpperCase();
         yield className + versionClassSuffix;
       }
-      case CLASS_NAME_WITH_SHORTENED_VERSION -> {
-        final String versionClassSuffix =
-            semVer.toShortVersionString().replace(".", "_").toUpperCase();
-        yield className + versionClassSuffix;
-      }
-      case NONE, PACKAGE_NAME_WITH_COMPLETE_VERSION, PACKAGE_NAME_WITH_SHORTENED_VERSION ->
-          className;
+      case NONE, PACKAGE_NAME_SUFFIX -> className;
     };
   }
 
