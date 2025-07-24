@@ -70,12 +70,25 @@ public sealed interface Builder<T extends Builder<T>> permits AbstractBuilder {
   }
 
   /**
-   * The placement of version information in generated <em>classes</em>.
+   * The {@link SemVer} <em>placement</em> in generated <em>classes</em>.
+   *
+   * <p><strong>Default: </strong> {@link #NONE}.
    *
    * @since 0.3.0
    * @author Chrimle
+   * @see VersionFormat
    */
   enum VersionPlacement {
+
+    /**
+     * The {@link SemVer} is appended as a <em>suffix</em> to the generated <em>class</em> name.
+     *
+     * <p><strong>Example: </strong> {@code class ExampleV1_2_3 {}}.
+     *
+     * @since 0.9.0
+     */
+    CLASS_NAME_SUFFIX,
+
     /**
      * The <em>complete</em> version is included as a <em>suffix</em> in the <em>class</em>-name -
      * always consisting of {@code V{major}_{minor}_{patch}}.
