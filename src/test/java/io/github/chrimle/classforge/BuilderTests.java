@@ -193,7 +193,8 @@ public class BuilderTests {
               .updateDirectory(DIRECTORY)
               .updatePackageName(PACKAGE_NAME)
               .updateClassName(className)
-              .setVersionPlacement(Builder.VersionPlacement.PACKAGE_NAME_WITH_COMPLETE_VERSION);
+              .setVersionFormat(VersionFormat.COMPLETE)
+              .setVersionPlacement(VersionPlacement.PACKAGE_NAME_SUFFIX);
       assertDoesNotThrow(() -> classBuilder.setSemVer(new SemVer(42, 7, 10)));
       assertDoesNotThrow(() -> classBuilder.commit(Change.PATCH));
 
@@ -209,7 +210,8 @@ public class BuilderTests {
               .updateDirectory(DIRECTORY)
               .updatePackageName(PACKAGE_NAME)
               .updateClassName(className)
-              .setVersionPlacement(Builder.VersionPlacement.PACKAGE_NAME_WITH_COMPLETE_VERSION);
+              .setVersionFormat(VersionFormat.COMPLETE)
+              .setVersionPlacement(VersionPlacement.PACKAGE_NAME_SUFFIX);
       assertDoesNotThrow(() -> classBuilder.commit(new SemVer(3, 2, 1)));
 
       assertNotNull(compileAndLoadClass(PACKAGE_NAME + ".v3_2_1", className));
@@ -267,7 +269,8 @@ public class BuilderTests {
           throws Exception {
         final var className = builderClass.getSimpleName() + "_Test_DefaultCompletePackageName";
         instantiateBuilder(builderClass)
-            .setVersionPlacement(VersionPlacement.PACKAGE_NAME_WITH_COMPLETE_VERSION)
+            .setVersionFormat(VersionFormat.COMPLETE)
+            .setVersionPlacement(VersionPlacement.PACKAGE_NAME_SUFFIX)
             .updateDirectory(TestConstants.DIRECTORY)
             .updatePackageName(TestConstants.PACKAGE_NAME)
             .updateClassName(className)
@@ -286,7 +289,8 @@ public class BuilderTests {
           throws Exception {
         final var className = builderClass.getSimpleName() + "_Test_MajorCompletePackageName";
         instantiateBuilder(builderClass)
-            .setVersionPlacement(VersionPlacement.PACKAGE_NAME_WITH_COMPLETE_VERSION)
+            .setVersionFormat(VersionFormat.COMPLETE)
+            .setVersionPlacement(VersionPlacement.PACKAGE_NAME_SUFFIX)
             .updateDirectory(TestConstants.DIRECTORY)
             .updatePackageName(TestConstants.PACKAGE_NAME)
             .updateClassName(className)
@@ -305,7 +309,8 @@ public class BuilderTests {
           throws Exception {
         final var className = builderClass.getSimpleName() + "_Test_MinorCompletePackageName";
         instantiateBuilder(builderClass)
-            .setVersionPlacement(Builder.VersionPlacement.PACKAGE_NAME_WITH_COMPLETE_VERSION)
+            .setVersionFormat(VersionFormat.COMPLETE)
+            .setVersionPlacement(VersionPlacement.PACKAGE_NAME_SUFFIX)
             .updateDirectory(TestConstants.DIRECTORY)
             .updatePackageName(TestConstants.PACKAGE_NAME)
             .updateClassName(className)
@@ -324,7 +329,8 @@ public class BuilderTests {
           throws Exception {
         final var className = builderClass.getSimpleName() + "_Test_PatchCompletePackageName";
         instantiateBuilder(builderClass)
-            .setVersionPlacement(Builder.VersionPlacement.PACKAGE_NAME_WITH_COMPLETE_VERSION)
+            .setVersionFormat(VersionFormat.COMPLETE)
+            .setVersionPlacement(VersionPlacement.PACKAGE_NAME_SUFFIX)
             .updateDirectory(TestConstants.DIRECTORY)
             .updatePackageName(TestConstants.PACKAGE_NAME)
             .updateClassName(className)
@@ -347,7 +353,8 @@ public class BuilderTests {
           throws Exception {
         final var className = builderClass.getSimpleName() + "_Test_DefaultShortPackageName";
         instantiateBuilder(builderClass)
-            .setVersionPlacement(VersionPlacement.PACKAGE_NAME_WITH_SHORTENED_VERSION)
+            .setVersionFormat(VersionFormat.SHORT)
+            .setVersionPlacement(VersionPlacement.PACKAGE_NAME_SUFFIX)
             .updateDirectory(TestConstants.DIRECTORY)
             .updatePackageName(TestConstants.PACKAGE_NAME)
             .updateClassName(className)
@@ -366,7 +373,8 @@ public class BuilderTests {
           throws Exception {
         final var className = builderClass.getSimpleName() + "_Test_MajorShortPackageName";
         instantiateBuilder(builderClass)
-            .setVersionPlacement(VersionPlacement.PACKAGE_NAME_WITH_SHORTENED_VERSION)
+            .setVersionFormat(VersionFormat.SHORT)
+            .setVersionPlacement(VersionPlacement.PACKAGE_NAME_SUFFIX)
             .updateDirectory(TestConstants.DIRECTORY)
             .updatePackageName(TestConstants.PACKAGE_NAME)
             .updateClassName(className)
@@ -385,7 +393,8 @@ public class BuilderTests {
           throws Exception {
         final var className = builderClass.getSimpleName() + "_Test_MinorShortPackageName";
         instantiateBuilder(builderClass)
-            .setVersionPlacement(VersionPlacement.PACKAGE_NAME_WITH_SHORTENED_VERSION)
+            .setVersionFormat(VersionFormat.SHORT)
+            .setVersionPlacement(VersionPlacement.PACKAGE_NAME_SUFFIX)
             .updateDirectory(TestConstants.DIRECTORY)
             .updatePackageName(TestConstants.PACKAGE_NAME)
             .updateClassName(className)
@@ -404,7 +413,8 @@ public class BuilderTests {
           throws Exception {
         final var className = builderClass.getSimpleName() + "_Test_PatchShortPackageName";
         instantiateBuilder(builderClass)
-            .setVersionPlacement(VersionPlacement.PACKAGE_NAME_WITH_SHORTENED_VERSION)
+            .setVersionFormat(VersionFormat.SHORT)
+            .setVersionPlacement(VersionPlacement.PACKAGE_NAME_SUFFIX)
             .updateDirectory(TestConstants.DIRECTORY)
             .updatePackageName(TestConstants.PACKAGE_NAME)
             .updateClassName(className)

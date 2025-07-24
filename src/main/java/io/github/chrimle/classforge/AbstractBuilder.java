@@ -237,16 +237,13 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
   protected String resolveEffectivePackageName(final SemVer semVer) {
     return switch (versionPlacement) {
       case NONE, CLASS_NAME_SUFFIX -> packageName;
-      case PACKAGE_NAME_WITH_COMPLETE_VERSION -> {
-        final String versionSubPackage = semVer.toCompleteVersionString().replace(".", "_");
-
-        yield Optional.ofNullable(packageName)
-            .filter(pN -> !pN.isBlank())
-            .map(pN -> String.join(".", pN, versionSubPackage))
-            .orElse(versionSubPackage);
-      }
-      case PACKAGE_NAME_WITH_SHORTENED_VERSION -> {
-        final String versionSubPackage = semVer.toShortVersionString().replace(".", "_");
+      case PACKAGE_NAME_SUFFIX -> {
+        final String versionSubPackage =
+            (switch (versionFormat) {
+                  case COMPLETE -> semVer.toCompleteVersionString();
+                  case SHORT -> semVer.toShortVersionString();
+                })
+                .replace(".", "_");
 
         yield Optional.ofNullable(packageName)
             .filter(pN -> !pN.isBlank())
@@ -274,8 +271,7 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
                 .toUpperCase();
         yield className + versionClassSuffix;
       }
-      case NONE, PACKAGE_NAME_WITH_COMPLETE_VERSION, PACKAGE_NAME_WITH_SHORTENED_VERSION ->
-          className;
+      case NONE, PACKAGE_NAME_SUFFIX -> className;
     };
   }
 

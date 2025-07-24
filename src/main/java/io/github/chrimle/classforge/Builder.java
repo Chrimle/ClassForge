@@ -24,8 +24,8 @@ import org.jetbrains.annotations.Contract;
  * Builder of a Java <i>class</i> - which <b>MAY</b> generate a {@code class}, {@code enum} or
  * {@code record}.
  *
- * @since 0.1.0
  * @author Chrimle
+ * @since 0.1.0
  */
 @API(status = API.Status.STABLE, since = "0.6.0")
 public sealed interface Builder<T extends Builder<T>> permits AbstractBuilder {
@@ -33,9 +33,9 @@ public sealed interface Builder<T extends Builder<T>> permits AbstractBuilder {
   /**
    * The {@link SemVer} <em><strong>format</strong></em> of a generated <em>class</em>.
    *
-   * @since 0.9.0
    * @author Chrimle
    * @see VersionPlacement
+   * @since 0.9.0
    */
   enum VersionFormat {
     /**
@@ -74,9 +74,9 @@ public sealed interface Builder<T extends Builder<T>> permits AbstractBuilder {
    *
    * <p><strong>Default: </strong> {@link #NONE}.
    *
-   * @since 0.3.0
    * @author Chrimle
    * @see VersionFormat
+   * @since 0.3.0
    */
   enum VersionPlacement {
 
@@ -95,44 +95,16 @@ public sealed interface Builder<T extends Builder<T>> permits AbstractBuilder {
      * @since 0.3.0
      */
     NONE,
+
     /**
-     * The <em>complete</em> version is included in the {@code package}-name - always consisting of
-     * {@code v{major}_{minor}_{patch}}.
+     * The {@link SemVer} is appended as a <em>suffix</em> to the generated <em>class</em> {@code
+     * package}-name.
      *
-     * <p><strong>Example: </strong>{@code 1.2.3}
+     * <p><strong>Example: </strong> {@code package io.github.chrimle.v1_2_3;}.
      *
-     * <pre>{@code package com.example.v1_2_3;}</pre>
-     *
-     * <p><strong>Example: </strong>{@code 1.3.0}
-     *
-     * <pre>{@code package com.example.v1_3_0;}</pre>
-     *
-     * <p><strong>Example: </strong>{@code 2.0.0}
-     *
-     * <pre>{@code package com.example.v2_0_0;}</pre>
-     *
-     * @since 0.4.0
+     * @since 0.9.0
      */
-    PACKAGE_NAME_WITH_COMPLETE_VERSION,
-    /**
-     * The <em>shortened</em> version is included in the {@code package}-name - omitting trailing
-     * zeros i.e. {@code v2}.
-     *
-     * <p><strong>Example: </strong>{@code 1.2.3}
-     *
-     * <pre>{@code package com.example.v1_2_3;}</pre>
-     *
-     * <p><strong>Example: </strong>{@code 1.3.0}
-     *
-     * <pre>{@code package com.example.v1_3;}</pre>
-     *
-     * <p><strong>Example: </strong>{@code 2.0.0}
-     *
-     * <pre>{@code package com.example.v2;}</pre>
-     *
-     * @since 0.4.0
-     */
-    PACKAGE_NAME_WITH_SHORTENED_VERSION
+    PACKAGE_NAME_SUFFIX
   }
 
   /**
