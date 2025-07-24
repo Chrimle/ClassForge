@@ -31,6 +31,45 @@ import org.jetbrains.annotations.Contract;
 public sealed interface Builder<T extends Builder<T>> permits AbstractBuilder {
 
   /**
+   * The {@link SemVer} <em><strong>format</strong></em> of a generated <em>class</em>.
+   *
+   * @since 0.9.0
+   * @author Chrimle
+   * @see VersionPlacement
+   */
+  enum VersionFormat {
+    /**
+     * The <em><strong>complete</strong></em> version - always displayed as {@code
+     * {major}.{minor}.{patch}}.
+     *
+     * <p><strong>Examples</strong>
+     *
+     * <ul>
+     *   <li>{@code 1.2.3}
+     *   <li>{@code 1.3.0}
+     *   <li>{@code 2.0.0}
+     * </ul>
+     *
+     * @since 0.9.0
+     */
+    COMPLETE,
+    /**
+     * The <em><strong>short</strong></em> version - omitting trailing zeroes.
+     *
+     * <p><strong>Examples</strong>
+     *
+     * <ul>
+     *   <li>{@code 1.2.3}
+     *   <li>{@code 1.3}
+     *   <li>{@code 2}
+     * </ul>
+     *
+     * @since 0.9.0
+     */
+    SHORT
+  }
+
+  /**
    * The placement of version information in generated <em>classes</em>.
    *
    * @since 0.3.0
