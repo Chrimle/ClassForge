@@ -174,6 +174,17 @@ public sealed interface Builder<T extends Builder<T>> permits AbstractBuilder {
   }
 
   /**
+   * <em>Sets</em> the {@code versionFormat} of the <em>currently uncommitted</em> class.
+   *
+   * <p><strong>Default:</strong> {@link VersionFormat#COMPLETE}
+   *
+   * @param versionFormat for the class.
+   * @return <em>this</em> {@code Builder}.
+   * @since 0.9.0
+   */
+  T setVersionFormat(final VersionFormat versionFormat);
+
+  /**
    * <em>Sets</em> the {@code versionPlacement} of the <em>currently uncommitted</em> class.
    *
    * <p><strong>Default: </strong> {@link VersionPlacement#NONE}.

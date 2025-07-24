@@ -57,6 +57,9 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
   /** The {@code semVer} of the <em>previously committed</em> class. Starts at {@code 0.0.0}. */
   protected SemVer semVer = new SemVer(0, 0, 0);
 
+  /** The {@code versionFormat} of the <em>currently uncommitted</em> class. */
+  protected VersionFormat versionFormat = VersionFormat.COMPLETE;
+
   /** The {@code versionPlacement} of the <em>currently uncommitted</em> class. */
   protected VersionPlacement versionPlacement = VersionPlacement.NONE;
 
@@ -84,6 +87,17 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
       throw ExceptionFactory.nullException("semVer");
     }
     this.semVer = semVer;
+    return self();
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  @Contract("null -> fail; _ -> this")
+  public T setVersionFormat(final VersionFormat versionFormat) {
+    if (versionFormat == null) {
+      throw ExceptionFactory.nullException("versionFormat");
+    }
+    this.versionFormat = versionFormat;
     return self();
   }
 
