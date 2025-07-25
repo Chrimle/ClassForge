@@ -15,6 +15,7 @@
  */
 package io.github.chrimle.classforge;
 
+import io.github.chrimle.classforge.internal.ExceptionFactory;
 import java.util.Set;
 import org.apiguardian.api.API;
 import org.jetbrains.annotations.Contract;
@@ -35,11 +36,11 @@ import org.jetbrains.annotations.NotNull;
  *       </ul>
  * </ul>
  *
- * @since 0.1.0
  * @author Chrimle
  * @see #RESERVED_KEYWORDS
  * @see #newClassBuilder() Generating a Java class.
  * @see #newEnumBuilder() Generating an Enum class.
+ * @since 0.1.0
  */
 @API(status = API.Status.STABLE, since = "0.6.0")
 public final class ClassForge {
@@ -49,8 +50,8 @@ public final class ClassForge {
   /**
    * A <em>type</em> of <em>Java class</em> which can be generated.
    *
-   * @since 0.10.0
    * @author Chrimle
+   * @since 0.10.0
    */
   public enum ClassType {
     /**
@@ -84,10 +85,29 @@ public final class ClassForge {
   }
 
   /**
+   * Creates a new {@link Builder} instance for generating {@code classType}s.
+   *
+   * @param classType to generate.
+   * @return a new {@link Builder} instance.
+   * @since 0.10.0
+   */
+  @NotNull
+  @Contract("null -> fail; _ -> new")
+  public static Builder<?> newBuilder(final ClassType classType) {
+    if (classType == null) {
+      throw ExceptionFactory.nullException("classType");
+    }
+    return switch (classType) {
+      case CLASS -> newClassBuilder();
+      case ENUM -> newEnumBuilder();
+    };
+  }
+
+  /**
    * Creates a new {@link Builder} instance for generating Java <i>classes</i>.
    *
-   * @since 0.6.0
    * @return a new {@link Builder} instance.
+   * @since 0.6.0
    */
   @NotNull
   @Contract(" -> new")
