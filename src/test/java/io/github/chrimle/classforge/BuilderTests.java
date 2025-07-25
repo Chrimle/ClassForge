@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import io.github.chrimle.classforge.Builder.VersionFormat;
 import io.github.chrimle.classforge.Builder.VersionPlacement;
+import io.github.chrimle.classforge.ClassForge.ClassType;
 import io.github.chrimle.classforge.internal.ExceptionFactory;
 import io.github.chrimle.classforge.test.utils.DynamicClassLoader;
 import io.github.chrimle.classforge.test.utils.JavaSourceCompiler;
@@ -30,6 +31,7 @@ import io.github.chrimle.semver.SemVer;
 import java.io.IOException;
 import java.nio.file.Path;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -37,10 +39,10 @@ public class BuilderTests {
 
   static <T extends AbstractBuilder<?>> T instantiateBuilder(final Class<T> builderClass) {
     if (builderClass == ClassBuilder.class) {
-      return builderClass.cast(ClassForge.newClassBuilder());
+      return builderClass.cast(ClassForge.newBuilder(ClassType.CLASS));
     }
     if (builderClass == EnumBuilder.class) {
-      return builderClass.cast(ClassForge.newEnumBuilder());
+      return builderClass.cast(ClassForge.newBuilder(ClassType.ENUM));
     }
     throw new UnsupportedOperationException();
   }
@@ -64,6 +66,13 @@ public class BuilderTests {
 
   static Class<?> loadClass(final String fullyQualifiedName) throws Exception {
     return DynamicClassLoader.loadClass(Path.of(TestConstants.DIRECTORY), fullyQualifiedName);
+  }
+
+  @Test
+  void testNullClassTypeThrows() {
+    final var exception =
+        assertThrows(IllegalArgumentException.class, () -> ClassForge.newBuilder(null));
+    assertEquals(ExceptionFactory.nullException("classType").getMessage(), exception.getMessage());
   }
 
   @Nested
