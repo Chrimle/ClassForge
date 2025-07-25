@@ -260,6 +260,17 @@ public class BuilderTests {
   @Nested
   class VersionPlacementTests {
 
+    @ParameterizedTest
+    @ValueSource(classes = {ClassBuilder.class, EnumBuilder.class})
+    void testNull(final Class<? extends AbstractBuilder<?>> builderClass) {
+      final var abstractBuilder = instantiateBuilder(builderClass);
+      final var exception =
+          assertThrows(
+              IllegalArgumentException.class, () -> abstractBuilder.setVersionPlacement(null));
+      assertEquals(
+          ExceptionFactory.nullException("versionPlacement").getMessage(), exception.getMessage());
+    }
+
     @Nested
     class CompletePackageNameTests {
 

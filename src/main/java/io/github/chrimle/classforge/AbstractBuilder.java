@@ -103,9 +103,12 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
 
   /** {@inheritDoc} */
   @Override
-  @Contract("_ -> this")
+  @Contract("null -> fail; _ -> this")
   public T setVersionPlacement(final VersionPlacement versionPlacement) {
-    this.versionPlacement = Optional.ofNullable(versionPlacement).orElse(VersionPlacement.NONE);
+    if (versionPlacement == null) {
+      throw ExceptionFactory.nullException("versionPlacement");
+    }
+    this.versionPlacement = versionPlacement;
     return self();
   }
 
