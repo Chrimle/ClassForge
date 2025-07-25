@@ -47,6 +47,43 @@ public final class ClassForge {
   private ClassForge() {}
 
   /**
+   * A <em>type</em> of <em>Java class</em> which can be generated.
+   *
+   * @since 0.10.0
+   * @author Chrimle
+   */
+  public enum ClassType {
+    /**
+     * A Java {@code class}.
+     *
+     * <p><strong>Example</strong>
+     *
+     * <pre>{@code
+     * class Example {
+     *
+     * }
+     * }</pre>
+     *
+     * @since 0.10.0
+     */
+    CLASS,
+    /**
+     * A Java {@code enum} <em>class</em>.
+     *
+     * <p><strong>Example</strong>
+     *
+     * <pre>{@code
+     * enum Example {
+     *
+     * }
+     * }</pre>
+     *
+     * @since 0.10.0
+     */
+    ENUM;
+  }
+
+  /**
    * Creates a new {@link Builder} instance for generating Java <i>classes</i>.
    *
    * @since 0.6.0
