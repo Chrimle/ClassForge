@@ -15,6 +15,10 @@
  */
 package io.github.chrimle.classforge.internal;
 
+import static io.github.chrimle.exceptionfactory.ExceptionFactory.illegalArgumentOf;
+import static io.github.chrimle.exceptionfactory.MessageTemplates.OneArgTemplate.*;
+import static io.github.chrimle.exceptionfactory.MessageTemplates.TwoArgTemplate.MUST_MATCH_REGEX;
+
 import org.apiguardian.api.API;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -43,7 +47,7 @@ public final class ExceptionFactory {
   @NotNull
   @Contract("_ -> new")
   public static IllegalArgumentException nullException(final String key) {
-    return new IllegalArgumentException("`%s` MUST NOT be `null`".formatted(key));
+    return illegalArgumentOf(key, MUST_NOT_BE_NULL);
   }
 
   /**
@@ -62,20 +66,6 @@ public final class ExceptionFactory {
 
   /**
    * Creates a new {@link IllegalArgumentException}-instance with a {@code message} representing a
-   * <em>Less Than Zero</em>-exception.
-   *
-   * @param key which had a <em>less than zero</em> value.
-   * @return the exception.
-   * @since 0.5.0
-   */
-  @NotNull
-  @Contract("_ -> new")
-  public static IllegalArgumentException lessThanZeroException(final String key) {
-    return new IllegalArgumentException("`%s` MUST NOT be less than `0`".formatted(key));
-  }
-
-  /**
-   * Creates a new {@link IllegalArgumentException}-instance with a {@code message} representing a
    * <em>Not Matching RegEx</em>-exception.
    *
    * @param key which had a <em>non-matching</em> value.
@@ -87,7 +77,7 @@ public final class ExceptionFactory {
   @Contract("_, _ -> new")
   public static IllegalArgumentException notMatchingRegExException(
       final String key, final String regEx) {
-    return new IllegalArgumentException("`%s` MUST match the RegEx `%s`".formatted(key, regEx));
+    return illegalArgumentOf(key, MUST_MATCH_REGEX, regEx);
   }
 
   /**
