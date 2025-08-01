@@ -16,9 +16,10 @@
 package io.github.chrimle.classforge.internal;
 
 import static io.github.chrimle.exceptionfactory.ExceptionFactory.illegalArgumentOf;
-import static io.github.chrimle.exceptionfactory.MessageTemplates.OneArgTemplate.*;
+import static io.github.chrimle.exceptionfactory.MessageTemplates.OneArgTemplate.MUST_NOT_BE_NULL;
 import static io.github.chrimle.exceptionfactory.MessageTemplates.TwoArgTemplate.MUST_MATCH_REGEX;
 
+import io.github.chrimle.exceptionfactory.ExceptionBuilder;
 import org.apiguardian.api.API;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -61,7 +62,9 @@ public final class ExceptionFactory {
   @NotNull
   @Contract("_ -> new")
   public static IllegalArgumentException nullOrEmptyException(final String key) {
-    return new IllegalArgumentException("`%s` MUST NOT be `null` or empty".formatted(key));
+    return ExceptionBuilder.of(IllegalArgumentException.class)
+        .setMessage("`%s` MUST NOT be `null` or empty".formatted(key))
+        .build();
   }
 
   /**
@@ -93,7 +96,9 @@ public final class ExceptionFactory {
   @Contract(value = "_, _ -> new")
   public static IllegalArgumentException alreadyExistsException(
       final String type, final String name) {
-    return new IllegalArgumentException("`%s` named `%s` already exists".formatted(type, name));
+    return ExceptionBuilder.of(IllegalArgumentException.class)
+        .setMessage("`%s` named `%s` already exists".formatted(type, name))
+        .build();
   }
 
   /**
@@ -109,7 +114,9 @@ public final class ExceptionFactory {
   @Contract("_, _ -> new")
   public static IllegalArgumentException doesNotExistException(
       final String type, final String name) {
-    return new IllegalArgumentException("`%s` named `%s` does not exist".formatted(type, name));
+    return ExceptionBuilder.of(IllegalArgumentException.class)
+        .setMessage("`%s` named `%s` does not exist".formatted(type, name))
+        .build();
   }
 
   /**
@@ -123,6 +130,8 @@ public final class ExceptionFactory {
   @NotNull
   @Contract("_ -> new")
   public static IllegalArgumentException reservedJavaKeywordException(final String key) {
-    return new IllegalArgumentException("`%s` MUST NOT be a Reserved Java Keyword".formatted(key));
+    return ExceptionBuilder.of(IllegalArgumentException.class)
+        .setMessage("`%s` MUST NOT be a Reserved Java Keyword".formatted(key))
+        .build();
   }
 }
