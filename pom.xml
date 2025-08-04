@@ -82,7 +82,7 @@
         <jetbrains-annotations.version>26.0.2</jetbrains-annotations.version>
         <apiguardian-api.version>1.1.2</apiguardian-api.version>
         <semantic-versioning.version>1.1.0</semantic-versioning.version>
-        <exception-factory.version>0.3.0</exception-factory.version>
+        <exception-factory.version>0.4.0</exception-factory.version>
     </properties>
 
     <!-- === Dependencies === -->
