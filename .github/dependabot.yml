@@ -9,3 +9,7 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily" # How often Dependabot shall scan and push dependency updates to the repository.
+    assignees:
+      - "Chrimle"
+    labels:
+      - "dependencies"
