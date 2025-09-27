@@ -22,7 +22,7 @@ import org.apiguardian.api.API;
  * <em>default strategy</em>, with respect to {@link Enum#valueOf(Class, String)}, will {@link
  * #THROW} when {@code null} is provided.
  *
- * <h5>Use Cases</h5>
+ * <h3>Use Cases</h3>
  *
  * <ul>
  *   <li><strong>FALLBACK</strong> - when the value <em>may</em> be nullable, and there is a
