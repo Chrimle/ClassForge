@@ -66,8 +66,12 @@ public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
    *     {@code null}.
    * @throws IllegalArgumentException if {@code enumConstantNames} contain a {@code String} which
    *     does not match the RegEx {@value VALID_ENUM_CONSTANT_NAME_REGEX}.
+   * @throws IllegalArgumentException if {@code enumConstantNames} contain a {@code String} which is
+   *     a <em>reserved Java keyword</em>.
+   * @throws IllegalArgumentException if {@code enumConstantNames} contain duplicate {@code
+   *     String}s.
    * @throws IllegalArgumentException if {@code enumConstantNames} contain a {@code String} which
-   *     does not exist in the <em>currently uncommitted</em> class.
+   *     already exists in the <em>currently uncommitted</em> class.
    * @since 0.3.0
    */
   @Contract("null -> fail; _ -> this")
