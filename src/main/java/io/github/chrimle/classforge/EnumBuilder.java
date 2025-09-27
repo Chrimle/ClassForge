@@ -196,14 +196,9 @@ public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
         .map("package %s;\n\n"::formatted)
         .ifPresent(codeBuilder::append);
 
-    codeBuilder.append(
-        """
-        public enum %s {
-          %s
-        }
-        """
-            .formatted(
-                resolveEffectiveClassName(semVer), String.join(",\n\t", enumConstants) + ";"));
+    codeBuilder.append("public enum %s {".formatted(resolveEffectiveClassName(semVer)));
+    codeBuilder.append("\n\t").append(String.join(",\n\t", enumConstants)).append(";");
+    codeBuilder.append("\n}");
 
     return codeBuilder.toString();
   }
