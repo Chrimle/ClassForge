@@ -4,8 +4,14 @@
 
     <modelVersion>4.0.0</modelVersion>
 
+    <!-- === Parent === -->
+    <parent>
+        <groupId>io.github.chrimle</groupId>
+        <artifactId>chrimle-oss-parent</artifactId>
+        <version>0.0.0</version>
+    </parent>
+
     <!-- === Project Coordinates === -->
-    <groupId>io.github.chrimle</groupId>
     <artifactId>class-forge</artifactId>
     <version>0.10.1</version>
     <packaging>jar</packaging>
@@ -63,19 +69,11 @@
     <!-- === Project Properties === -->
     <properties>
         <!-- === Meta Properties === -->
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- === Maven Compiler === -->
-        <maven.compiler.release>17</maven.compiler.release>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
         <!-- === Spotless === -->
         <spotless.check.skip>false</spotless.check.skip>
         <spotless-maven-plugin.version>3.1.0</spotless-maven-plugin.version>
         <!-- Publish to Maven Central Repository -->
-        <maven-gpg-plugin.version>3.2.8</maven-gpg-plugin.version>
-        <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
         <maven-javadoc-plugin.version>3.12.0</maven-javadoc-plugin.version>
-        <central-publishing-maven-plugin.version>0.9.0</central-publishing-maven-plugin.version>
         <!-- === Dependency Versions === -->
         <junit.version>6.0.1</junit.version>
         <jetbrains-annotations.version>26.0.2</jetbrains-annotations.version>
@@ -156,21 +154,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- Attach sources.jar -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>${maven-source-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
             <!-- Attach javadoc.jar -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -195,44 +178,5 @@
         </plugins>
     </build>
     <!-- === Profiles === -->
-    <profiles>
-        <profile>
-            <id>deploy-to-maven-central</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.sonatype.central</groupId>
-                        <artifactId>central-publishing-maven-plugin</artifactId>
-                        <version>${central-publishing-maven-plugin.version}</version>
-                        <extensions>true</extensions>
-                        <configuration>
-                            <publishingServerId>central</publishingServerId>
-                            <tokenAuth>true</tokenAuth>
-                            <autoPublish>true</autoPublish>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>${maven-gpg-plugin.version}</version>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <gpgArguments>
-                                <arg>--pinentry-mode</arg>
-                                <arg>loopback</arg>
-                            </gpgArguments>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
+    <profiles/>
 </project>
