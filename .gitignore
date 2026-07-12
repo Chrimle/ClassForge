@@ -16,4 +16,7 @@ buildNumber.properties
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
 # IntelliJ
-.idea
+.idea/*
+
+# Track Copyright header Settings
+!.idea/copyright/
