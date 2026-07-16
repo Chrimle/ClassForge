@@ -32,7 +32,6 @@ public final class ClassBuilder extends AbstractBuilder<ClassBuilder> {
 
   private ClassBuilder() {}
 
-  @NotNull
   @Contract(" -> new")
   static ClassBuilder newClass() {
     return new ClassBuilder();
@@ -44,7 +43,6 @@ public final class ClassBuilder extends AbstractBuilder<ClassBuilder> {
     return this;
   }
 
-  @NotNull
   @Override
   protected String generateFileContent(final SemVer semVer) {
     final var classModel =
