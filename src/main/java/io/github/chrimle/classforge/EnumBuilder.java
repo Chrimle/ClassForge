@@ -42,6 +42,7 @@ public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
   public static final String VALID_ENUM_CONSTANT_NAME_REGEX =
       "^([A-Za-z]|(_+[A-Za-z0-9]))[A-Z_a-z0-9]*$";
 
+  @SuppressWarnings("OptionalOfNullableMisuse")
   private static final Predicate<String> enumConstantNamePredicate =
       enumConstantName ->
           Optional.ofNullable(enumConstantName)
@@ -51,7 +52,6 @@ public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
 
   private EnumBuilder() {}
 
-  @NotNull
   @Contract(" -> new")
   static EnumBuilder newClass() {
     return new EnumBuilder();
@@ -77,6 +77,7 @@ public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
    * @since 0.3.0
    */
   @Contract("null -> fail; _ -> this")
+  @SuppressWarnings({"ConstantValue", "Contract", "OptionalOfNullableMisuse"})
   public EnumBuilder addEnumConstants(final String... enumConstantNames) {
 
     if (Optional.ofNullable(enumConstantNames)
@@ -117,6 +118,7 @@ public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
    * @since 0.3.0
    */
   @Contract("null -> fail; _ -> this")
+  @SuppressWarnings({"ConstantValue", "Contract", "OptionalOfNullableMisuse"})
   public EnumBuilder removeEnumConstants(final String... enumConstantNames) {
     if (Optional.ofNullable(enumConstantNames)
         .filter(enums -> enums.length >= 1)
@@ -151,6 +153,7 @@ public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
    * @since 0.5.0
    */
   @Contract("null, _ -> fail; _, null -> fail; _, _ -> this")
+  @SuppressWarnings({"ConstantValue", "Contract"})
   public EnumBuilder updateEnumConstant(
       final String oldEnumConstant, final String newEnumConstant) {
     if (oldEnumConstant == null) {
@@ -188,7 +191,6 @@ public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
     return this;
   }
 
-  @NotNull
   @Override
   protected String generateFileContent(final SemVer semVer) {
     final var enumModel =
