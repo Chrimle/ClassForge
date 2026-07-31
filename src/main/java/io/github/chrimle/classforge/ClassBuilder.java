@@ -19,7 +19,6 @@ import io.github.chrimle.classforge.classes.ClassModel;
 import io.github.chrimle.semver.SemVer;
 import org.apiguardian.api.API;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Builder of Java classes ({@code class}).
@@ -43,6 +42,7 @@ public final class ClassBuilder extends AbstractBuilder<ClassBuilder> {
     return this;
   }
 
+  @SuppressWarnings({"DataFlowIssue", "NullAway"})
   @Override
   protected String generateFileContent(final SemVer semVer) {
     final var classModel =
