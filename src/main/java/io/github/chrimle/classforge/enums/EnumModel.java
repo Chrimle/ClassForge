@@ -19,6 +19,7 @@ package io.github.chrimle.classforge.enums;
 import io.github.chrimle.classforge.Model;
 import java.util.List;
 import org.apiguardian.api.API;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents an {@code enum}-class.
@@ -31,7 +32,9 @@ import org.apiguardian.api.API;
  */
 @API(status = API.Status.INTERNAL, since = "0.11.0")
 public record EnumModel<ValueType>(
-    String packageName, String className, List<EnumConstantModel<ValueType>> enumConstants)
+    @Nullable String packageName,
+    String className,
+    List<EnumConstantModel<ValueType>> enumConstants)
     implements Model {
 
   /**
