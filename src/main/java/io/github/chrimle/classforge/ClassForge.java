@@ -19,7 +19,6 @@ import io.github.chrimle.classforge.internal.ExceptionFactory;
 import java.util.Set;
 import org.apiguardian.api.API;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * The single-entrypoint for generating Java <i>classes</i> via {@code
