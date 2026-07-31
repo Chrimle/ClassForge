@@ -16,7 +16,7 @@
 package io.github.chrimle.classforge.enums;
 
 import org.apiguardian.api.API;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * The <em>deserializing method</em> for an <strong>Enum class</strong>. A deserializing method may
@@ -51,7 +51,7 @@ public record DeserializingMethod(
    * @since 0.11.0
    */
   @API(status = API.Status.INTERNAL, since = "0.11.0")
-  public @NotNull String generateMethodCode(final String className, final String defaultValue) {
+  public String generateMethodCode(final String className, final @Nullable String defaultValue) {
     final var stringBuilder = new StringBuilder();
     stringBuilder
         .append(TAB)

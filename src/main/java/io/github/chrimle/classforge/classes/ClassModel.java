@@ -18,6 +18,7 @@ package io.github.chrimle.classforge.classes;
 
 import io.github.chrimle.classforge.Model;
 import org.apiguardian.api.API;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a {@code class}-class.
@@ -27,7 +28,7 @@ import org.apiguardian.api.API;
  * @since 0.11.0
  */
 @API(status = API.Status.INTERNAL, since = "0.11.0")
-public record ClassModel(String packageName, String className) implements Model {
+public record ClassModel(@Nullable String packageName, String className) implements Model {
 
   /**
    * Constructor.

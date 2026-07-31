@@ -1,4 +1,5 @@
 /** Forge Java Classes! */
+@org.jspecify.annotations.NullMarked
 module io.github.chrimle.classforge {
   exports io.github.chrimle.classforge;
   exports io.github.chrimle.classforge.classes;
@@ -14,4 +15,5 @@ module io.github.chrimle.classforge {
   requires static org.jetbrains.annotations;
   requires gg.jte.runtime;
   requires gg.jte;
+  requires org.jspecify;
 }

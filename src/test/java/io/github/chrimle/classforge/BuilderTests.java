@@ -35,6 +35,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+@SuppressWarnings({"DataFlowIssue", "NullAway"})
 public class BuilderTests {
 
   static <T extends AbstractBuilder<?>> T instantiateBuilder(final Class<T> builderClass) {

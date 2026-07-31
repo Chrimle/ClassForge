@@ -22,7 +22,7 @@ import static io.github.chrimle.exceptionfactory.MessageTemplates.TwoArgTemplate
 import io.github.chrimle.exceptionfactory.ExceptionBuilder;
 import org.apiguardian.api.API;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Factory-class for instantiating {@link Exception}-classes with <em>message presets</em>.
@@ -45,9 +45,8 @@ public final class ExceptionFactory {
    * @return the exception.
    * @since 0.5.0
    */
-  @NotNull
   @Contract("_ -> new")
-  public static IllegalArgumentException nullException(final String key) {
+  public static IllegalArgumentException nullException(final @Nullable String key) {
     return illegalArgumentOf(key, MUST_NOT_BE_NULL);
   }
 
@@ -59,9 +58,8 @@ public final class ExceptionFactory {
    * @return the exception.
    * @since 0.5.0
    */
-  @NotNull
   @Contract("_ -> new")
-  public static IllegalArgumentException nullOrEmptyException(final String key) {
+  public static IllegalArgumentException nullOrEmptyException(final @Nullable String key) {
     return ExceptionBuilder.of(IllegalArgumentException.class)
         .setMessage("`%s` MUST NOT be `null` or empty".formatted(key))
         .build();
@@ -76,10 +74,9 @@ public final class ExceptionFactory {
    * @return the exception.
    * @since 0.5.0
    */
-  @NotNull
   @Contract("_, _ -> new")
   public static IllegalArgumentException notMatchingRegExException(
-      final String key, final String regEx) {
+      final @Nullable String key, final @Nullable String regEx) {
     return illegalArgumentOf(key, MUST_MATCH_REGEX, regEx);
   }
 
@@ -92,10 +89,9 @@ public final class ExceptionFactory {
    * @return the exception.
    * @since 0.5.0
    */
-  @NotNull
   @Contract(value = "_, _ -> new")
   public static IllegalArgumentException alreadyExistsException(
-      final String type, final String name) {
+      final @Nullable String type, final @Nullable String name) {
     return ExceptionBuilder.of(IllegalArgumentException.class)
         .setMessage("`%s` named `%s` already exists".formatted(type, name))
         .build();
@@ -110,10 +106,9 @@ public final class ExceptionFactory {
    * @return the exception.
    * @since 0.5.0
    */
-  @NotNull
   @Contract("_, _ -> new")
   public static IllegalArgumentException doesNotExistException(
-      final String type, final String name) {
+      final @Nullable String type, final @Nullable String name) {
     return ExceptionBuilder.of(IllegalArgumentException.class)
         .setMessage("`%s` named `%s` does not exist".formatted(type, name))
         .build();
@@ -127,9 +122,8 @@ public final class ExceptionFactory {
    * @return the exception.
    * @since 0.5.0
    */
-  @NotNull
   @Contract("_ -> new")
-  public static IllegalArgumentException reservedJavaKeywordException(final String key) {
+  public static IllegalArgumentException reservedJavaKeywordException(final @Nullable String key) {
     return ExceptionBuilder.of(IllegalArgumentException.class)
         .setMessage("`%s` MUST NOT be a Reserved Java Keyword".formatted(key))
         .build();

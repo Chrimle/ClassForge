@@ -19,7 +19,6 @@ import io.github.chrimle.classforge.internal.ExceptionFactory;
 import java.util.Set;
 import org.apiguardian.api.API;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * The single-entrypoint for generating Java <i>classes</i> via {@code
@@ -91,8 +90,8 @@ public final class ClassForge {
    * @return a new {@link Builder} instance.
    * @since 0.10.0
    */
-  @NotNull
   @Contract("null -> fail; _ -> new")
+  @SuppressWarnings({"ConstantValue", "Contract"})
   public static Builder<?> newBuilder(final ClassType classType) {
     if (classType == null) {
       throw ExceptionFactory.nullException("classType");
@@ -109,7 +108,6 @@ public final class ClassForge {
    * @return a new {@link Builder} instance.
    * @since 0.6.0
    */
-  @NotNull
   @Contract(" -> new")
   public static Builder<?> newClassBuilder() {
     return ClassBuilder.newClass();
@@ -121,7 +119,6 @@ public final class ClassForge {
    * @return a new {@link Builder} instance.
    * @since 0.6.0
    */
-  @NotNull
   @Contract(" -> new")
   public static Builder<?> newEnumBuilder() {
     return EnumBuilder.newClass();
