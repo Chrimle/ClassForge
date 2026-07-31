@@ -26,7 +26,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 import org.apiguardian.api.API;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Abstract class for building and generating Java classes.
@@ -38,14 +38,14 @@ import org.jetbrains.annotations.NotNull;
 public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Builder<T>
     permits ClassBuilder, EnumBuilder {
 
-  private static final Predicate<String> directoryValidator =
+  private static final Predicate<@Nullable String> directoryValidator =
       string -> Optional.ofNullable(string).isPresent();
-  private static final Predicate<String> classNameValidator =
+  private static final Predicate<@Nullable String> classNameValidator =
       string ->
           Optional.ofNullable(string)
               .filter(className -> className.matches(ClassForge.VALID_CLASS_NAME_REGEX))
               .isPresent();
-  private static final Predicate<String> packageNameValidator =
+  private static final Predicate<@Nullable String> packageNameValidator =
       string ->
           Optional.ofNullable(string)
               .filter(packageName -> !packageName.isBlank())
@@ -65,24 +65,24 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
   protected VersionPlacement versionPlacement = VersionPlacement.NONE;
 
   /** The {@code directory} of the <em>currently uncommitted</em> class. */
-  protected String directory;
+  protected @Nullable String directory;
 
   /** The {@code packageName} of the <em>currently uncommitted</em> class. */
-  protected String packageName;
+  protected @Nullable String packageName;
 
   /** The {@code className} of the <em>currently uncommitted</em> class. */
-  protected String className;
+  protected @Nullable String className;
 
   /** {@inheritDoc} */
   @Override
-  @NotNull
   public SemVer getSemVer() {
     return semVer;
   }
 
   /** {@inheritDoc} */
-  @Contract("null -> fail; _ -> this")
   @Override
+  @Contract("null -> fail; _ -> this")
+  @SuppressWarnings({"Contract", "ConstantValue"})
   public T setSemVer(final SemVer semVer) {
     if (semVer == null) {
       throw ExceptionFactory.nullException("semVer");
@@ -94,6 +94,7 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
   /** {@inheritDoc} */
   @Override
   @Contract("null -> fail; _ -> this")
+  @SuppressWarnings({"Contract", "ConstantValue"})
   public T setVersionFormat(final VersionFormat versionFormat) {
     if (versionFormat == null) {
       throw ExceptionFactory.nullException("versionFormat");
@@ -105,6 +106,7 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
   /** {@inheritDoc} */
   @Override
   @Contract("null -> fail; _ -> this")
+  @SuppressWarnings({"Contract", "ConstantValue"})
   public T setVersionPlacement(final VersionPlacement versionPlacement) {
     if (versionPlacement == null) {
       throw ExceptionFactory.nullException("versionPlacement");
@@ -116,6 +118,7 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
   /** {@inheritDoc} */
   @Override
   @Contract("null -> fail; _ -> this")
+  @SuppressWarnings("Contract")
   public T updateDirectory(final String directory) {
     validateDirectory(directory);
     this.directory = directory;
@@ -125,6 +128,7 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
   /** {@inheritDoc} */
   @Override
   @Contract("null -> fail; _ -> this")
+  @SuppressWarnings("Contract")
   public T updatePackageName(final String packageName) {
     validatePackageName(packageName);
     this.packageName = packageName;
@@ -134,6 +138,7 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
   /** {@inheritDoc} */
   @Override
   @Contract("null -> fail; _ -> this")
+  @SuppressWarnings("Contract")
   public T updateClassName(final String className) {
     validateClassName(className);
     this.className = className;
@@ -150,6 +155,7 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
   /** {@inheritDoc} */
   @Override
   @Contract("null -> fail; _ -> this")
+  @SuppressWarnings({"Contract", "ConstantValue", "DataFlowIssue"})
   public T commit(final SemVer semVer) {
     if (semVer == null) {
       throw ExceptionFactory.nullException("semVer");
@@ -209,6 +215,7 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
    *
    * @param semVer for the new class.
    */
+  @SuppressWarnings({"DataFlowIssue", "NullAway"})
   protected void generateClassFile(final SemVer semVer) {
     FileWriter.writeToFile(
         directory, resolveFullyQualifiedClassName(semVer), generateFileContent(semVer));
@@ -224,7 +231,7 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
    * @param semVer for the new class.
    * @return the <em>FQCN</em>.
    */
-  protected String resolveFullyQualifiedClassName(final SemVer semVer) {
+  protected @Nullable String resolveFullyQualifiedClassName(final SemVer semVer) {
     final String effectiveClassName = resolveEffectiveClassName(semVer);
     return Optional.ofNullable(resolveEffectivePackageName(semVer))
         .filter(pN -> !pN.isBlank())
@@ -238,7 +245,7 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
    * @param semVer for the class.
    * @return the <em>effective package name</em>.
    */
-  protected String resolveEffectivePackageName(final SemVer semVer) {
+  protected @Nullable String resolveEffectivePackageName(final SemVer semVer) {
     return switch (versionPlacement) {
       case NONE, CLASS_NAME_SUFFIX -> packageName;
       case PACKAGE_NAME_SUFFIX -> {
@@ -263,7 +270,7 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
    * @param semVer for the class.
    * @return the <em>effective class name</em>.
    */
-  protected String resolveEffectiveClassName(final SemVer semVer) {
+  protected @Nullable String resolveEffectiveClassName(final SemVer semVer) {
     return switch (versionPlacement) {
       case CLASS_NAME_SUFFIX -> {
         final String versionClassSuffix =
@@ -290,20 +297,20 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
     return stringOutput.toString();
   }
 
-  private static void validateDirectory(final String directory) {
+  private static void validateDirectory(final @Nullable String directory) {
     if (!directoryValidator.test(directory)) {
       throw ExceptionFactory.nullException("directory");
     }
   }
 
-  private static void validatePackageName(final String packageName) {
+  private static void validatePackageName(final @Nullable String packageName) {
     if (!packageNameValidator.test(packageName)) {
       throw ExceptionFactory.notMatchingRegExException(
           "packageName", ClassForge.VALID_PACKAGE_NAME_REGEX);
     }
   }
 
-  private static void validateClassName(final String className) {
+  private static void validateClassName(final @Nullable String className) {
     if (!classNameValidator.test(className)) {
       throw ExceptionFactory.notMatchingRegExException(
           "className", ClassForge.VALID_CLASS_NAME_REGEX);
