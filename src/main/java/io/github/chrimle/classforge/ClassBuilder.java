@@ -15,8 +15,8 @@
  */
 package io.github.chrimle.classforge;
 
+import io.github.chrimle.classforge.classes.ClassModel;
 import io.github.chrimle.semver.SemVer;
-import java.util.Optional;
 import org.apiguardian.api.API;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -47,21 +47,9 @@ public final class ClassBuilder extends AbstractBuilder<ClassBuilder> {
   @NotNull
   @Override
   protected String generateFileContent(final SemVer semVer) {
-    final StringBuilder codeBuilder = new StringBuilder();
+    final var classModel =
+        new ClassModel(resolveEffectivePackageName(semVer), resolveEffectiveClassName(semVer));
 
-    Optional.ofNullable(resolveEffectivePackageName(semVer))
-        .filter(pN -> !pN.isBlank())
-        .map("package %s;\n\n"::formatted)
-        .ifPresent(codeBuilder::append);
-
-    codeBuilder.append(
-        """
-        public class %s {
-
-        }
-        """
-            .formatted(resolveEffectiveClassName(semVer)));
-
-    return codeBuilder.toString();
+    return generateCodeFromModel(classModel);
   }
 }

@@ -1,6 +1,7 @@
 /** Forge Java Classes! */
 module io.github.chrimle.classforge {
   exports io.github.chrimle.classforge;
+  exports io.github.chrimle.classforge.classes;
   exports io.github.chrimle.classforge.enums;
 
   // Requires (non-static)
@@ -11,4 +12,6 @@ module io.github.chrimle.classforge {
   // Requires (static)
   requires static org.apiguardian.api;
   requires static org.jetbrains.annotations;
+  requires gg.jte.runtime;
+  requires gg.jte;
 }

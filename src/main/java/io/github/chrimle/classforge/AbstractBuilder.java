@@ -17,6 +17,7 @@ package io.github.chrimle.classforge;
 
 import io.github.chrimle.classforge.internal.ExceptionFactory;
 import io.github.chrimle.classforge.internal.FileWriter;
+import io.github.chrimle.classforge.internal.JavaTemplateEngine;
 import io.github.chrimle.semver.Change;
 import io.github.chrimle.semver.SemVer;
 import java.util.HashSet;
@@ -276,6 +277,17 @@ public abstract sealed class AbstractBuilder<T extends Builder<T>> implements Bu
       }
       case NONE, PACKAGE_NAME_SUFFIX -> className;
     };
+  }
+
+  /**
+   * Generates the code contents from the given {@code Model}.
+   *
+   * @param model of which to generate code for.
+   * @return the {@code .java}-contents as a {@code String}.
+   */
+  protected String generateCodeFromModel(final Model model) {
+    final var stringOutput = JavaTemplateEngine.generateModelAsString(model);
+    return stringOutput.toString();
   }
 
   private static void validateDirectory(final String directory) {
