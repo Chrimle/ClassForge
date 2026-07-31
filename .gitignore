@@ -23,3 +23,6 @@ buildNumber.properties
 
 # Track The google-java-format Settings
 !.idea/google-java-format.xml
+
+# Exclude JTE-classes
+/jte-classes/**

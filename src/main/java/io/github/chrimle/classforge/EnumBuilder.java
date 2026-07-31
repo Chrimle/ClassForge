@@ -15,6 +15,8 @@
  */
 package io.github.chrimle.classforge;
 
+import io.github.chrimle.classforge.enums.EnumModel;
+import io.github.chrimle.classforge.enums.EnumModel.EnumConstantModel;
 import io.github.chrimle.classforge.internal.ExceptionFactory;
 import io.github.chrimle.semver.SemVer;
 import java.util.*;
@@ -189,17 +191,12 @@ public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
   @NotNull
   @Override
   protected String generateFileContent(final SemVer semVer) {
-    final StringBuilder codeBuilder = new StringBuilder();
+    final var enumModel =
+        new EnumModel<>(
+            resolveEffectivePackageName(semVer),
+            resolveEffectiveClassName(semVer),
+            enumConstants.stream().map(EnumConstantModel::new).toList());
 
-    Optional.ofNullable(resolveEffectivePackageName(semVer))
-        .filter(pN -> !pN.isBlank())
-        .map("package %s;\n\n"::formatted)
-        .ifPresent(codeBuilder::append);
-
-    codeBuilder.append("public enum %s {".formatted(resolveEffectiveClassName(semVer)));
-    codeBuilder.append("\n\t").append(String.join(",\n\t", enumConstants)).append(";");
-    codeBuilder.append("\n}");
-
-    return codeBuilder.toString();
+    return generateCodeFromModel(enumModel);
   }
 }
