@@ -23,7 +23,6 @@ import java.util.*;
 import java.util.function.Predicate;
 import org.apiguardian.api.API;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Builder of Java {@code enum} classes.
@@ -48,6 +47,7 @@ public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
           Optional.ofNullable(enumConstantName)
               .filter(name -> name.matches(VALID_ENUM_CONSTANT_NAME_REGEX))
               .isPresent();
+
   private final List<String> enumConstants = new ArrayList<>();
 
   private EnumBuilder() {}
@@ -192,6 +192,7 @@ public final class EnumBuilder extends AbstractBuilder<EnumBuilder> {
   }
 
   @Override
+  @SuppressWarnings({"DataFlowIssue", "NullAway"})
   protected String generateFileContent(final SemVer semVer) {
     final var enumModel =
         new EnumModel<>(
